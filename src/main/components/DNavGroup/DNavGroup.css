@@ -1,0 +1,66 @@
+/* Style du groupe de navigation */
+.DNavGroup {
+  margin-bottom: 10px;
+}
+
+/* Style du titre de chaque groupe de navigation */
+.DNav__Title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1abc9c;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Style général des éléments de navigation */
+.DNav__Elmt {
+  display: block;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #16a085;
+  background: rgba(26, 188, 156, 0.1); /* fond léger basé sur la couleur active */
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  white-space: nowrap;        /* Empêche le retour à la ligne */
+  overflow: hidden;           /* Cache le contenu qui dépasse */
+  text-overflow: ellipsis;
+}
+
+/* État au survol : léger décalage et fond semi-transparent */
+.DNav__Elmt:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ecf0f1;
+  transform: translateX(5px);
+}
+
+/* État actif pour l'élément courant */
+.isActive {
+  background: linear-gradient(135deg, #1abc9c, #16a085);
+  color: #fff;
+}
+
+/* Adaptation responsive pour les écrans plus petits */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 220px;
+  }
+  .DNav__Title {
+    font-size: 1rem;
+  }
+  .DNav__Elmt {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #ccc;
+  width: 180px;      /* Longueur fixe */
+   /* 20px d'espacement vertical et centré horizontalement */
+}

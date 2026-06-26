@@ -1,0 +1,32 @@
+@import "../../../resources/styles/imports.scss";
+
+#AuthLayout {
+    @include flex(column, center, center);
+    height: 100vh;
+    .AuthLayout {
+        &__title {
+            border-color: $color--primary;
+            margin-bottom: 40px;
+        }
+    }
+    >form {
+    min-width: 400px;
+    width: 35vw;
+    input[type=submit] {
+        width: 100%;
+    }
+    }
+    .infoText {
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    #AuthLayout {
+        padding: 10px;
+        >form {
+            min-width: 100%;
+            width: 100%;
+        }
+    }
+}

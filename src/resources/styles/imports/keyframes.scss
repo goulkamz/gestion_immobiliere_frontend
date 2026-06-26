@@ -1,0 +1,39 @@
+@keyframes fade__from__top {
+    0% {
+        opacity: 0;
+        transform: translateY(-10%);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes notif {
+    0% {
+        right: -100%;
+    }
+    50% {
+        right: 0%;
+    }
+    99% {
+        opacity: 1;
+    }
+    100% {
+        display: none;
+        opacity: 0;
+    }
+}

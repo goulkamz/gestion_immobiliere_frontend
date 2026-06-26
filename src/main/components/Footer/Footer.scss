@@ -1,0 +1,27 @@
+@import "../../../resources/styles/imports.scss";
+
+footer {
+  padding: 20px;
+  background-color: $color--primary;
+  @include flex(column, center, center, 10px);
+  color: $color--background;
+  font-size: 1rem;
+  .logo {
+    height: 100px;
+    img {
+        height: 100%;
+        width: auto;
+    }
+  }
+  .footer {
+    &__contacts {
+        @include flex(column, center, center, 0);
+    }
+    &__socials {
+        @include flex(row, center, center, 10px);
+    }
+  }
+  .copyright {
+    color: #747474;
+  }
+}

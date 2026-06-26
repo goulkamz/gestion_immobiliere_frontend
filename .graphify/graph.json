@@ -1,0 +1,3853 @@
+{
+  "edges": [
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_eslint.config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "target": "_eslint_js"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_eslint.config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "target": "globals"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_eslint.config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "target": "eslint_plugin_react_hooks"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_eslint.config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "target": "eslint_plugin_react_refresh"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_eslint.config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "target": "typescript_eslint"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_eslint.config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "target": "eslint_config"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "frontend_README",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/README.md",
+      "target": "frontend_README::react___typescript___vite"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "frontend_README::react___typescript___vite",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/README.md",
+      "target": "frontend_README::react_compiler"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "frontend_README::react___typescript___vite",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/README.md",
+      "target": "frontend_README::expanding_the_eslint_configuration"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_reportWebVitals",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/reportWebVitals.ts",
+      "target": "web_vitals"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "src_index",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/index.css",
+      "target": "tailwindcss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "APIRest_APIRoutes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/APIRoutes.ts",
+      "target": "__authroutes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "user_userSlice",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/redux/slices/user/userSlice.ts",
+      "target": "_reduxjs_toolkit"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "user_userSlice",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/redux/slices/user/userSlice.ts",
+      "target": "_reduxjs_toolkit"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "redux_store",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/redux/store.ts",
+      "target": "_reduxjs_toolkit"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "redux_store",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/redux/store.ts",
+      "target": "__slices_user_userslice"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "redux_store",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/redux/store.ts",
+      "target": "__slices_user_userslice"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "src_main",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "target": "react_dom_client"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "src_main",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "target": "__main_app"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "src_main",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "target": "___reportwebvitals"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "src_main",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "target": "react_redux"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "src_main",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "target": "__main_features_redux_store"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "src_main",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "target": "react_cookie"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "src_main",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_vite.config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/vite.config.ts",
+      "target": "vite"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_vite.config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/vite.config.ts",
+      "target": "_vitejs_plugin_react"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "frontend_vite.config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/vite.config.ts",
+      "target": "_tailwindcss_vite"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "frontend_CLAUDE",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/CLAUDE.md",
+      "target": "frontend_CLAUDE::graphify"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "DNavGroup_DNavGroup",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/DNavGroup/DNavGroup.scss",
+      "target": "_________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "DNavGroup_DNavGroup",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/DNavGroup/DNavGroup.tsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "DNavGroup_DNavGroup",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/DNavGroup/DNavGroup.tsx",
+      "target": "_fortawesome_react_fontawesome"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "DNavGroup_DNavGroup",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/DNavGroup/DNavGroup.tsx",
+      "target": "_fortawesome_fontawesome_svg_core"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Footer_Footer",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.scss",
+      "target": "_________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Footer_Footer",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.tsx",
+      "target": "_________resources_images_logo_svg"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Footer_Footer",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.tsx",
+      "target": "_fortawesome_react_fontawesome"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Footer_Footer",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.tsx",
+      "target": "_fortawesome_free_brands_svg_icons"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Footer_Footer",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.tsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Footer_Footer",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.tsx",
+      "target": "Footer_Footer::Footer"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Header_Header",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.scss",
+      "target": "_________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Header_Header",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.tsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Header_Header",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.tsx",
+      "target": "_________resources_images_logo_svg"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Header_Header",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.tsx",
+      "target": "_________resources_images_did_png"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Header_Header",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.tsx",
+      "target": "______features_utils"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Header_Header",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.tsx",
+      "target": "______modules_modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Header_Header",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.tsx",
+      "target": "react_redux"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Logout_Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.scss",
+      "target": "_________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Logout_Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "_fortawesome_react_fontawesome"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Logout_Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "_fortawesome_free_solid_svg_icons"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Logout_Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "react_hook_form"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Logout_Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Logout_Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "react_cookie"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Logout_Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "______features_apirest_apiroutes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Logout_Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "Logout_Logout::Logout"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Logout_Logout::Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "useform"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Logout_Logout::Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "usenavigate"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Logout_Logout::Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "usecookies"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Logout_Logout::Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "send"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Logout_Logout::Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "removecookies"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Logout_Logout::Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "navigate"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Logout_Logout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "Logout_Logout::handleLogout"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Logout_Logout::handleLogout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "send"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Logout_Logout::handleLogout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "removecookies"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Logout_Logout::handleLogout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "target": "navigate"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Notifications_Notifications",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Notifications/Notifications.scss",
+      "target": "_________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Notifications_Notifications",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Notifications/Notifications.tsx",
+      "target": "Notifications_Notifications::Notifications"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9,
+      "relation": "calls",
+      "source": "Notifications_Notifications::Notifications",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Notifications/Notifications.tsx",
+      "target": "Map_Map::Map"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Routes_RouteComponents",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/RouteComponents.tsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Routes_RouteComponents",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/RouteComponents.tsx",
+      "target": "Routes_RouteComponents::RouteComponents"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9,
+      "relation": "calls",
+      "source": "Routes_RouteComponents::RouteComponents",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/RouteComponents.tsx",
+      "target": "Map_Map::Map"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Routes_Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "react_cookie"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Routes_Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "______modules_modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Routes_Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "______features_utils"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Routes_Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "__routecomponents"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Routes_Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "Routes_Router::Router"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Routes_Router::Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "usecookies"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Routes_Router::Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "log"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9,
+      "relation": "calls",
+      "source": "Routes_Router::Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "features_utils::isObjectEmpty"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Routes_Router::Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "includes"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Routes_Router::Router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "target": "includes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "features_utils",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/utils.ts",
+      "target": "features_utils::isObjectEmpty"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "features_utils::isObjectEmpty",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/utils.ts",
+      "target": "isarray"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "features_utils::isObjectEmpty",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/utils.ts",
+      "target": "keys"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "AppLayout_AppLayout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AppLayout/AppLayout.tsx",
+      "target": "______components_header_header"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "AppLayout_AppLayout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AppLayout/AppLayout.tsx",
+      "target": "______components_footer_footer"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "AppLayout_AppLayout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AppLayout/AppLayout.tsx",
+      "target": "AppLayout_AppLayout::AppLayout"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "AuthLayout_AuthLayout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AuthLayout/AuthLayout.scss",
+      "target": "_________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "AuthLayout_AuthLayout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AuthLayout/AuthLayout.tsx",
+      "target": "AuthLayout_AuthLayout::AuthLayout"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "DashboardLayout_DashboardLayout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/DashboardLayout/DashboardLayout.jsx",
+      "target": "DashboardLayout_DashboardLayout::DashboardLayout"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "DashboardLayout_DashboardLayout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/DashboardLayout/DashboardLayout.scss",
+      "target": "_________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Dashboard_Dashboard",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Dashboard/Dashboard.tsx",
+      "target": "react_cookie"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Dashboard_Dashboard",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Dashboard/Dashboard.tsx",
+      "target": "Dashboard_Dashboard::Dashboard"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Dashboard_Dashboard::Dashboard",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Dashboard/Dashboard.tsx",
+      "target": "usecookies"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Partners_Agencies",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Agencies.tsx",
+      "target": "react_hook_form"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Partners_Agencies",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Agencies.tsx",
+      "target": "_________features_apirest_apiroutes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Partners_Agencies",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Agencies.tsx",
+      "target": "_________features_utils"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Partners_Agencies",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Agencies.tsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Partners_Agencies",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Agencies.tsx",
+      "target": "Partners_Agencies::CreateAgency"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Partners_Partners",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Partners.scss",
+      "target": "____________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Partners_Partners",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Partners.tsx",
+      "target": "Partners_Partners::Partners"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "admin_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "target": "___modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "admin_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "target": "___modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "admin_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "target": "__dashboard_dashboard"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "admin_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "target": "__partners_partners"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "admin_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "target": "__partners_agencies"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.scss",
+      "target": "____________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "_________layouts_authlayout_authlayout"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "react_hook_form"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "_________features_apirest_apiroutes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "react_cookie"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "______modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "_________features_apirest_axios"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "Login_Login::Login"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "useform"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "usenavigate"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "usecookies"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "send"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "log"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "log"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "setcookie"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "navigate"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "error"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "alert"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "error"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "alert"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "alert"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "alert"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Login_Login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "Login_Login::handleLogin"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "send"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "log"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "log"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "setcookie"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "navigate"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "error"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "alert"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "error"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "alert"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "alert"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "Login_Login::handleLogin",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "target": "alert"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Register_Register",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Register/Register.scss",
+      "target": "____________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Register_Register",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Register/Register.tsx",
+      "target": "_________layouts_authlayout_authlayout"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Register_Register",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Register/Register.tsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Register_Register",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Register/Register.tsx",
+      "target": "react_hook_form"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Register_Register",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Register/Register.tsx",
+      "target": "_________features_apirest_apiroutes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Register_Register",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Register/Register.tsx",
+      "target": "react_cookie"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Register_Register",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Register/Register.tsx",
+      "target": "______modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "auth_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/routes.ts",
+      "target": "___modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "auth_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/routes.ts",
+      "target": "___modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "auth_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/routes.ts",
+      "target": "__login_login"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "auth_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/routes.ts",
+      "target": "__register_register"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Profil_Profil",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/client/Profil/Profil.tsx",
+      "target": "Profil_Profil::Profil"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "client_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/client/routes.ts",
+      "target": "___modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "client_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/client/routes.ts",
+      "target": "___modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "client_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/client/routes.ts",
+      "target": "__profil_profil"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "modules_modules",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "target": "__public_routes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "modules_modules",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "target": "__client_routes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "modules_modules",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "target": "__admin_routes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "modules_modules",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "target": "__auth_routes"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "modules_modules",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "target": "modules_modules::setRoute"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Book_Book",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Book/Book.scss",
+      "target": "____________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "404_404",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/404/404.jsx",
+      "target": "_______________resources_images_navigation_amico_svg"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "404_404",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/404/404.jsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "404_404",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/404/404.jsx",
+      "target": "404_404::Errors404"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "404_404",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/404/404.scss",
+      "target": "_______________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Errors_Errors",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/Errors.jsx",
+      "target": "_________resources_images_navigation_amico_svg"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Errors_Errors",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/Errors.jsx",
+      "target": "react_router_dom"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Errors_Errors",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/Errors.jsx",
+      "target": "Errors_Errors::Errors"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Errors_Errors",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/Errors.scss",
+      "target": "_________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "IsPhone_IsPhone",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/IsPhone/IsPhone.jsx",
+      "target": "IsPhone_IsPhone::IsPhone"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Home_Home",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Home/Home.scss",
+      "target": "____________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Home_Home",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Home/Home.tsx",
+      "target": "_________layouts_applayout_applayout"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Home_Home",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Home/Home.tsx",
+      "target": "Home_Home::Home"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "Map_Map",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Map/Map.scss",
+      "target": "____________resources_styles_imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Map_Map",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Map/Map.tsx",
+      "target": "Map_Map::Map"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "public_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/routes.ts",
+      "target": "___modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "public_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/routes.ts",
+      "target": "___modules"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "public_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/routes.ts",
+      "target": "__book_book"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "public_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/routes.ts",
+      "target": "__home_home"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "public_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/routes.ts",
+      "target": "__map_map"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p0"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p1"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p2"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p3"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p4"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p5"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p6"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p7"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p8"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p9"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p10"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p11"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p12"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p13"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p14"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p15"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p16"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "Poppins_OFL",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "target": "Poppins_OFL::p17"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "images_Photo de a href=httpsunsplash.comfr",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/images/Photo de a href=httpsunsplash.comfr.txt",
+      "target": "images_Photo de a href=httpsunsplash.comfr::p0"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_all",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/all.scss",
+      "target": "__imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_all",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/all.scss",
+      "target": "__form_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_form",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/form.scss",
+      "target": "__imports_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "imports_buttons",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/buttons.scss",
+      "target": "__colors_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "imports_fonts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/fonts.scss",
+      "target": "__colors_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_imports",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "target": "__imports_colors_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_imports",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "target": "__imports_display_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_imports",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "target": "__imports_fonts_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_imports",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "target": "__imports_mixins_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_imports",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "target": "__imports_buttons_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_imports",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "target": "__imports_keyframes_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "styles_imports",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "target": "__imports_icons_scss"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "main_App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "react"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "main_App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "react_cookie"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "main_App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "__components_routes_router"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "main_App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "react_redux"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "main_App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "__features_utils"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "main_App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "__features_redux_slices_user_userslice"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "main_App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "main_App::App"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "usecookies"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "usedispatch"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "useeffect"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "use"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "error"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "reject"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "eject"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "useeffect"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 0.9,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "features_utils::isObjectEmpty"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "dispatch"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "main_App::App",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "target": "setuser"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "APIRest_AuthRoutes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/AuthRoutes.ts",
+      "target": "__axios"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "APIRest_AuthRoutes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/AuthRoutes.ts",
+      "target": "__axios"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "APIRest_axios",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "axios"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "imports",
+      "source": "APIRest_axios",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "axios"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "APIRest_axios",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "APIRest_axios::restGet"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restGet",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "setloading"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restGet",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "get"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restGet",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "setloading"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "APIRest_axios",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "APIRest_axios::restPost"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restPost",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "setloading"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restPost",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "post"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restPost",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "setloading"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "APIRest_axios",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "APIRest_axios::restUpdate"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restUpdate",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "setloading"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restUpdate",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "put"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restUpdate",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "setloading"
+    },
+    {
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "relation": "contains",
+      "source": "APIRest_axios",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "APIRest_axios::restDelete"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restDelete",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "setloading"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restDelete",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "delete"
+    },
+    {
+      "confidence": "INFERRED",
+      "confidence_score": 0.7,
+      "relation": "calls",
+      "source": "APIRest_axios::restDelete",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "target": "setloading"
+    }
+  ],
+  "nodes": [
+    {
+      "community": 151,
+      "docstring": null,
+      "file_type": "code",
+      "id": "frontend_eslint.config",
+      "label": "eslint.config.js",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "source_line": null
+    },
+    {
+      "community": 151,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_eslint_js",
+      "label": "_eslint_js",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "source_line": null
+    },
+    {
+      "community": 151,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "globals",
+      "label": "globals",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "source_line": null
+    },
+    {
+      "community": 151,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "eslint_plugin_react_hooks",
+      "label": "eslint_plugin_react_hooks",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "source_line": null
+    },
+    {
+      "community": 151,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "eslint_plugin_react_refresh",
+      "label": "eslint_plugin_react_refresh",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "source_line": null
+    },
+    {
+      "community": 151,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "typescript_eslint",
+      "label": "typescript_eslint",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "source_line": null
+    },
+    {
+      "community": 151,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "eslint_config",
+      "label": "eslint_config",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/eslint.config.js",
+      "source_line": null
+    },
+    {
+      "community": 149,
+      "docstring": null,
+      "file_type": "document",
+      "id": "frontend_README",
+      "label": "README.md",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/README.md",
+      "source_line": null
+    },
+    {
+      "community": 149,
+      "docstring": null,
+      "file_type": "document",
+      "id": "frontend_README::react___typescript___vite",
+      "label": "React + TypeScript + Vite",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/README.md",
+      "source_line": 1
+    },
+    {
+      "community": 149,
+      "docstring": null,
+      "file_type": "document",
+      "id": "frontend_README::react_compiler",
+      "label": "React Compiler",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/README.md",
+      "source_line": 10
+    },
+    {
+      "community": 149,
+      "docstring": null,
+      "file_type": "document",
+      "id": "frontend_README::expanding_the_eslint_configuration",
+      "label": "Expanding the ESLint configuration",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/README.md",
+      "source_line": 14
+    },
+    {
+      "community": 206,
+      "docstring": null,
+      "file_type": "code",
+      "id": "frontend_reportWebVitals",
+      "label": "reportWebVitals.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/reportWebVitals.ts",
+      "source_line": null
+    },
+    {
+      "community": 206,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "web_vitals",
+      "label": "web_vitals",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/reportWebVitals.ts",
+      "source_line": null
+    },
+    {
+      "community": 196,
+      "docstring": null,
+      "file_type": "code",
+      "id": "src_index",
+      "label": "index.css",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/index.css",
+      "source_line": null
+    },
+    {
+      "community": 196,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "tailwindcss",
+      "label": "tailwindcss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/index.css",
+      "source_line": null
+    },
+    {
+      "community": 93,
+      "docstring": null,
+      "file_type": "code",
+      "id": "APIRest_APIRoutes",
+      "label": "APIRoutes.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/APIRoutes.ts",
+      "source_line": null
+    },
+    {
+      "community": 93,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__authroutes",
+      "label": "__authroutes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/APIRoutes.ts",
+      "source_line": null
+    },
+    {
+      "community": 204,
+      "docstring": null,
+      "file_type": "code",
+      "id": "user_userSlice",
+      "label": "userSlice.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/redux/slices/user/userSlice.ts",
+      "source_line": null
+    },
+    {
+      "community": 204,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_reduxjs_toolkit",
+      "label": "_reduxjs_toolkit",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/redux/slices/user/userSlice.ts",
+      "source_line": null
+    },
+    {
+      "community": 184,
+      "docstring": null,
+      "file_type": "code",
+      "id": "redux_store",
+      "label": "store.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/redux/store.ts",
+      "source_line": null
+    },
+    {
+      "community": 184,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__slices_user_userslice",
+      "label": "__slices_user_userslice",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/redux/store.ts",
+      "source_line": null
+    },
+    {
+      "community": 192,
+      "docstring": null,
+      "file_type": "code",
+      "id": "src_main",
+      "label": "main.tsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "source_line": null
+    },
+    {
+      "community": 192,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "react_dom_client",
+      "label": "react_dom_client",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "source_line": null
+    },
+    {
+      "community": 192,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__main_app",
+      "label": "__main_app",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "source_line": null
+    },
+    {
+      "community": 192,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "___reportwebvitals",
+      "label": "___reportwebvitals",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "source_line": null
+    },
+    {
+      "community": 183,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "react_redux",
+      "label": "react_redux",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "source_line": null
+    },
+    {
+      "community": 192,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__main_features_redux_store",
+      "label": "__main_features_redux_store",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "react_cookie",
+      "label": "react_cookie",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "react_router_dom",
+      "label": "react_router_dom",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main.tsx",
+      "source_line": null
+    },
+    {
+      "community": 153,
+      "docstring": null,
+      "file_type": "code",
+      "id": "frontend_vite.config",
+      "label": "vite.config.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/vite.config.ts",
+      "source_line": null
+    },
+    {
+      "community": 153,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "vite",
+      "label": "vite",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/vite.config.ts",
+      "source_line": null
+    },
+    {
+      "community": 153,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_vitejs_plugin_react",
+      "label": "_vitejs_plugin_react",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/vite.config.ts",
+      "source_line": null
+    },
+    {
+      "community": 153,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_tailwindcss_vite",
+      "label": "_tailwindcss_vite",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/vite.config.ts",
+      "source_line": null
+    },
+    {
+      "community": 145,
+      "docstring": null,
+      "file_type": "document",
+      "id": "frontend_CLAUDE",
+      "label": "CLAUDE.md",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/CLAUDE.md",
+      "source_line": null
+    },
+    {
+      "community": 145,
+      "docstring": null,
+      "file_type": "document",
+      "id": "frontend_CLAUDE::graphify",
+      "label": "graphify",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/CLAUDE.md",
+      "source_line": 2
+    },
+    {
+      "community": 183,
+      "docstring": null,
+      "file_type": "code",
+      "id": "DNavGroup_DNavGroup",
+      "label": "DNavGroup.css",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/DNavGroup/DNavGroup.css",
+      "source_line": null
+    },
+    {
+      "community": 82,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_________resources_styles_imports_scss",
+      "label": "_________resources_styles_imports_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/DNavGroup/DNavGroup.scss",
+      "source_line": null
+    },
+    {
+      "community": 127,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_fortawesome_react_fontawesome",
+      "label": "_fortawesome_react_fontawesome",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/DNavGroup/DNavGroup.tsx",
+      "source_line": null
+    },
+    {
+      "community": 183,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_fortawesome_fontawesome_svg_core",
+      "label": "_fortawesome_fontawesome_svg_core",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/DNavGroup/DNavGroup.tsx",
+      "source_line": null
+    },
+    {
+      "community": 127,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Footer_Footer",
+      "label": "Footer.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.scss",
+      "source_line": null
+    },
+    {
+      "community": 127,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Footer_Footer::Footer",
+      "label": "Footer()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.tsx",
+      "source_line": 13
+    },
+    {
+      "community": 183,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_________resources_images_logo_svg",
+      "label": "_________resources_images_logo_svg",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.tsx",
+      "source_line": null
+    },
+    {
+      "community": 127,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_fortawesome_free_brands_svg_icons",
+      "label": "_fortawesome_free_brands_svg_icons",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Footer/Footer.tsx",
+      "source_line": null
+    },
+    {
+      "community": 183,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Header_Header",
+      "label": "Header.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.scss",
+      "source_line": null
+    },
+    {
+      "community": 183,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_________resources_images_did_png",
+      "label": "_________resources_images_did_png",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.tsx",
+      "source_line": null
+    },
+    {
+      "community": 121,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "______features_utils",
+      "label": "______features_utils",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.tsx",
+      "source_line": null
+    },
+    {
+      "community": 183,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "______modules_modules",
+      "label": "______modules_modules",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Header/Header.tsx",
+      "source_line": null
+    },
+    {
+      "community": 127,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Logout_Logout",
+      "label": "Logout.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.scss",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Logout_Logout::Logout",
+      "label": "Logout()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": 19
+    },
+    {
+      "community": 127,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Logout_Logout::handleLogout",
+      "label": "handleLogout()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": 24
+    },
+    {
+      "community": 127,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_fortawesome_free_solid_svg_icons",
+      "label": "_fortawesome_free_solid_svg_icons",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "react_hook_form",
+      "label": "react_hook_form",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 127,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "______features_apirest_apiroutes",
+      "label": "______features_apirest_apiroutes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "useform",
+      "label": "useform",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "usenavigate",
+      "label": "usenavigate",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "usecookies",
+      "label": "usecookies",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "send",
+      "label": "send",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 127,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "removecookies",
+      "label": "removecookies",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "navigate",
+      "label": "navigate",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Logout/Logout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 82,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Notifications_Notifications",
+      "label": "Notifications.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Notifications/Notifications.scss",
+      "source_line": null
+    },
+    {
+      "community": 82,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Notifications_Notifications::Notifications",
+      "label": "Notifications()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Notifications/Notifications.tsx",
+      "source_line": 23
+    },
+    {
+      "community": 35,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "Map_Map::Map",
+      "label": "Map_Map::Map",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Notifications/Notifications.tsx",
+      "source_line": null
+    },
+    {
+      "community": 67,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Routes_RouteComponents",
+      "label": "RouteComponents.tsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/RouteComponents.tsx",
+      "source_line": null
+    },
+    {
+      "community": 67,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Routes_RouteComponents::RouteComponents",
+      "label": "RouteComponents()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/RouteComponents.tsx",
+      "source_line": 20
+    },
+    {
+      "community": 121,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Routes_Router",
+      "label": "Router.tsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "source_line": null
+    },
+    {
+      "community": 166,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Routes_Router::Router",
+      "label": "Router()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "source_line": 5
+    },
+    {
+      "community": 121,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__routecomponents",
+      "label": "__routecomponents",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "log",
+      "label": "log",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "source_line": null
+    },
+    {
+      "community": 144,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "features_utils::isObjectEmpty",
+      "label": "features_utils::isObjectEmpty",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "source_line": null
+    },
+    {
+      "community": 166,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "includes",
+      "label": "includes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/components/Routes/Router.tsx",
+      "source_line": null
+    },
+    {
+      "community": 144,
+      "docstring": null,
+      "file_type": "code",
+      "id": "features_utils",
+      "label": "utils.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/utils.ts",
+      "source_line": null
+    },
+    {
+      "community": 144,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "isarray",
+      "label": "isarray",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/utils.ts",
+      "source_line": null
+    },
+    {
+      "community": 144,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "keys",
+      "label": "keys",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/utils.ts",
+      "source_line": null
+    },
+    {
+      "community": 10,
+      "docstring": null,
+      "file_type": "code",
+      "id": "AppLayout_AppLayout",
+      "label": "AppLayout.tsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AppLayout/AppLayout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 10,
+      "docstring": null,
+      "file_type": "code",
+      "id": "AppLayout_AppLayout::AppLayout",
+      "label": "AppLayout()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AppLayout/AppLayout.tsx",
+      "source_line": 8
+    },
+    {
+      "community": 10,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "______components_header_header",
+      "label": "______components_header_header",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AppLayout/AppLayout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 10,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "______components_footer_footer",
+      "label": "______components_footer_footer",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AppLayout/AppLayout.tsx",
+      "source_line": null
+    },
+    {
+      "community": 82,
+      "docstring": null,
+      "file_type": "code",
+      "id": "AuthLayout_AuthLayout",
+      "label": "AuthLayout.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AuthLayout/AuthLayout.scss",
+      "source_line": null
+    },
+    {
+      "community": 82,
+      "docstring": null,
+      "file_type": "code",
+      "id": "AuthLayout_AuthLayout::AuthLayout",
+      "label": "AuthLayout()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/AuthLayout/AuthLayout.tsx",
+      "source_line": 7
+    },
+    {
+      "community": 16,
+      "docstring": null,
+      "file_type": "code",
+      "id": "DashboardLayout_DashboardLayout",
+      "label": "DashboardLayout.jsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/DashboardLayout/DashboardLayout.jsx",
+      "source_line": null
+    },
+    {
+      "community": 16,
+      "docstring": null,
+      "file_type": "code",
+      "id": "DashboardLayout_DashboardLayout::DashboardLayout",
+      "label": "DashboardLayout()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/layouts/DashboardLayout/DashboardLayout.jsx",
+      "source_line": 3
+    },
+    {
+      "community": 18,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Dashboard_Dashboard",
+      "label": "Dashboard.tsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Dashboard/Dashboard.tsx",
+      "source_line": null
+    },
+    {
+      "community": 18,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Dashboard_Dashboard::Dashboard",
+      "label": "Dashboard()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Dashboard/Dashboard.tsx",
+      "source_line": 7
+    },
+    {
+      "community": 42,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Partners_agence",
+      "label": "agence.css",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/agence.css",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Partners_Agencies",
+      "label": "Agencies.tsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Agencies.tsx",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Partners_Agencies::CreateAgency",
+      "label": "CreateAgency()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Agencies.tsx",
+      "source_line": 24
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_________features_apirest_apiroutes",
+      "label": "_________features_apirest_apiroutes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Agencies.tsx",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_________features_utils",
+      "label": "_________features_utils",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Agencies.tsx",
+      "source_line": null
+    },
+    {
+      "community": 43,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Partners_customStyles",
+      "label": "customStyles.js",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/customStyles.js",
+      "source_line": null
+    },
+    {
+      "community": 44,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Partners_partners",
+      "label": "partners.css",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/partners.css",
+      "source_line": null
+    },
+    {
+      "community": 73,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Partners_Partners",
+      "label": "Partners.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Partners.scss",
+      "source_line": null
+    },
+    {
+      "community": 73,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "____________resources_styles_imports_scss",
+      "label": "____________resources_styles_imports_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Partners.scss",
+      "source_line": null
+    },
+    {
+      "community": 73,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Partners_Partners::Partners",
+      "label": "Partners()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/Partners/Partners.tsx",
+      "source_line": 7
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "code",
+      "id": "admin_routes",
+      "label": "routes.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "___modules",
+      "label": "___modules",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__dashboard_dashboard",
+      "label": "__dashboard_dashboard",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__partners_partners",
+      "label": "__partners_partners",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__partners_agencies",
+      "label": "__partners_agencies",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/admin/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Login_Login",
+      "label": "Login.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.scss",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Login_Login::Login",
+      "label": "Login()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "source_line": 31
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Login_Login::handleLogin",
+      "label": "handleLogin()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "source_line": 43
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_________layouts_authlayout_authlayout",
+      "label": "_________layouts_authlayout_authlayout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "______modules",
+      "label": "______modules",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_________features_apirest_axios",
+      "label": "_________features_apirest_axios",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "setcookie",
+      "label": "setcookie",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "error",
+      "label": "error",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "source_line": null
+    },
+    {
+      "community": 132,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "alert",
+      "label": "alert",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Login/Login.tsx",
+      "source_line": null
+    },
+    {
+      "community": 181,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Register_Register",
+      "label": "Register.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/Register/Register.scss",
+      "source_line": null
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "code",
+      "id": "auth_routes",
+      "label": "routes.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__login_login",
+      "label": "__login_login",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__register_register",
+      "label": "__register_register",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/auth/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 64,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Profil_Profil",
+      "label": "Profil.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/client/Profil/Profil.scss",
+      "source_line": null
+    },
+    {
+      "community": 64,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Profil_Profil::Profil",
+      "label": "Profil()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/client/Profil/Profil.tsx",
+      "source_line": 6
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "code",
+      "id": "client_routes",
+      "label": "routes.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/client/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 133,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__profil_profil",
+      "label": "__profil_profil",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/client/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 172,
+      "docstring": null,
+      "file_type": "code",
+      "id": "modules_modules",
+      "label": "modules.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "source_line": null
+    },
+    {
+      "community": 172,
+      "docstring": null,
+      "file_type": "code",
+      "id": "modules_modules::setRoute",
+      "label": "setRoute()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "source_line": 36
+    },
+    {
+      "community": 172,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__public_routes",
+      "label": "__public_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "source_line": null
+    },
+    {
+      "community": 172,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__client_routes",
+      "label": "__client_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "source_line": null
+    },
+    {
+      "community": 172,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__admin_routes",
+      "label": "__admin_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "source_line": null
+    },
+    {
+      "community": 172,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__auth_routes",
+      "label": "__auth_routes",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/modules.ts",
+      "source_line": null
+    },
+    {
+      "community": 73,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Book_Book",
+      "label": "Book.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Book/Book.scss",
+      "source_line": null
+    },
+    {
+      "community": 72,
+      "docstring": null,
+      "file_type": "code",
+      "id": "404_404",
+      "label": "404.jsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/404/404.jsx",
+      "source_line": null
+    },
+    {
+      "community": 72,
+      "docstring": null,
+      "file_type": "code",
+      "id": "404_404::Errors404",
+      "label": "Errors404()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/404/404.jsx",
+      "source_line": 5
+    },
+    {
+      "community": 72,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_______________resources_images_navigation_amico_svg",
+      "label": "_______________resources_images_navigation_amico_svg",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/404/404.jsx",
+      "source_line": null
+    },
+    {
+      "community": 72,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_______________resources_styles_imports_scss",
+      "label": "_______________resources_styles_imports_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/404/404.scss",
+      "source_line": null
+    },
+    {
+      "community": 82,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Errors_Errors",
+      "label": "Errors.jsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/Errors.jsx",
+      "source_line": null
+    },
+    {
+      "community": 82,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Errors_Errors::Errors",
+      "label": "Errors()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/Errors.jsx",
+      "source_line": 5
+    },
+    {
+      "community": 82,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_________resources_images_navigation_amico_svg",
+      "label": "_________resources_images_navigation_amico_svg",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/Errors.jsx",
+      "source_line": null
+    },
+    {
+      "community": 27,
+      "docstring": null,
+      "file_type": "code",
+      "id": "IsPhone_IsPhone",
+      "label": "IsPhone.jsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/IsPhone/IsPhone.jsx",
+      "source_line": null
+    },
+    {
+      "community": 27,
+      "docstring": null,
+      "file_type": "code",
+      "id": "IsPhone_IsPhone::IsPhone",
+      "label": "IsPhone()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Errors/IsPhone/IsPhone.jsx",
+      "source_line": 3
+    },
+    {
+      "community": 73,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Home_Home",
+      "label": "Home.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Home/Home.scss",
+      "source_line": null
+    },
+    {
+      "community": 73,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Home_Home::Home",
+      "label": "Home()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Home/Home.tsx",
+      "source_line": 7
+    },
+    {
+      "community": 73,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "_________layouts_applayout_applayout",
+      "label": "_________layouts_applayout_applayout",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Home/Home.tsx",
+      "source_line": null
+    },
+    {
+      "community": 35,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Map_Map",
+      "label": "Map.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/Map/Map.scss",
+      "source_line": null
+    },
+    {
+      "community": 176,
+      "docstring": null,
+      "file_type": "code",
+      "id": "public_routes",
+      "label": "routes.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 176,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__book_book",
+      "label": "__book_book",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 176,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__home_home",
+      "label": "__home_home",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 176,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__map_map",
+      "label": "__map_map",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/modules/public/routes.ts",
+      "source_line": null
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL",
+      "label": "OFL.txt",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": null
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p0",
+      "label": "Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Popp...",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 1
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p1",
+      "label": "This Font Software is licensed under the SIL Open Font License, Version 1.1.",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 3
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p2",
+      "label": "-----------------------------------------------------------",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 8
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p3",
+      "label": "PREAMBLE",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 12
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p4",
+      "label": "The OFL allows the licensed fonts to be used, studied, modified and",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 19
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p5",
+      "label": "DEFINITIONS",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 28
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p6",
+      "label": "\"Reserved Font Name\" refers to any names specified as such after the",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 33
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p7",
+      "label": "\"Original Version\" refers to the collection of Font Software components as",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 36
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p8",
+      "label": "\"Modified Version\" refers to any derivative made by adding to, deleting,",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 39
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p9",
+      "label": "\"Author\" refers to any designer, engineer, programmer, technical",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 44
+    },
+    {
+      "community": 48,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p10",
+      "label": "PERMISSION & CONDITIONS",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 47
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p11",
+      "label": "1) Neither the Font Software nor any of its individual components,",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 53
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p12",
+      "label": "2) Original or Modified Versions of the Font Software may be bundled,",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 56
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p13",
+      "label": "3) No Modified Version of the Font Software may use the Reserved Font",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 63
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p14",
+      "label": "4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 68
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p15",
+      "label": "5) The Font Software, modified or unmodified, in part or in whole,",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 74
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p16",
+      "label": "TERMINATION",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 80
+    },
+    {
+      "community": 57,
+      "docstring": null,
+      "file_type": "code",
+      "id": "Poppins_OFL::p17",
+      "label": "DISCLAIMER",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/fonts/Poppins/OFL.txt",
+      "source_line": 84
+    },
+    {
+      "community": 157,
+      "docstring": null,
+      "file_type": "code",
+      "id": "images_Photo de a href=httpsunsplash.comfr",
+      "label": "Photo de a href=httpsunsplash.comfr.txt",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/images/Photo de a href=httpsunsplash.comfr.txt",
+      "source_line": null
+    },
+    {
+      "community": 157,
+      "docstring": null,
+      "file_type": "code",
+      "id": "images_Photo de a href=httpsunsplash.comfr::p0",
+      "label": "Photo de <a href=\"https://unsplash.com/fr/@litvinov?utm_content=creditCopyTex...",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/images/Photo de a href=httpsunsplash.comfr.txt",
+      "source_line": 1
+    },
+    {
+      "community": 111,
+      "docstring": null,
+      "file_type": "code",
+      "id": "styles_all",
+      "label": "all.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/all.scss",
+      "source_line": null
+    },
+    {
+      "community": 111,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__imports_scss",
+      "label": "__imports_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/all.scss",
+      "source_line": null
+    },
+    {
+      "community": 111,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__form_scss",
+      "label": "__form_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/all.scss",
+      "source_line": null
+    },
+    {
+      "community": 111,
+      "docstring": null,
+      "file_type": "code",
+      "id": "styles_form",
+      "label": "form.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/form.scss",
+      "source_line": null
+    },
+    {
+      "community": 158,
+      "docstring": null,
+      "file_type": "code",
+      "id": "imports_buttons",
+      "label": "buttons.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/buttons.scss",
+      "source_line": null
+    },
+    {
+      "community": 158,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__colors_scss",
+      "label": "__colors_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/buttons.scss",
+      "source_line": null
+    },
+    {
+      "community": 159,
+      "docstring": null,
+      "file_type": "code",
+      "id": "imports_colors",
+      "label": "colors.js",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/colors.js",
+      "source_line": null
+    },
+    {
+      "community": 160,
+      "docstring": null,
+      "file_type": "code",
+      "id": "imports_display",
+      "label": "display.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/display.scss",
+      "source_line": null
+    },
+    {
+      "community": 158,
+      "docstring": null,
+      "file_type": "code",
+      "id": "imports_fonts",
+      "label": "fonts.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/fonts.scss",
+      "source_line": null
+    },
+    {
+      "community": 162,
+      "docstring": null,
+      "file_type": "code",
+      "id": "imports_icons",
+      "label": "icons.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/icons.scss",
+      "source_line": null
+    },
+    {
+      "community": 163,
+      "docstring": null,
+      "file_type": "code",
+      "id": "imports_keyframes",
+      "label": "keyframes.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/keyframes.scss",
+      "source_line": null
+    },
+    {
+      "community": 164,
+      "docstring": null,
+      "file_type": "code",
+      "id": "imports_mixins",
+      "label": "mixins.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/mixins.scss",
+      "source_line": null
+    },
+    {
+      "community": 165,
+      "docstring": null,
+      "file_type": "code",
+      "id": "imports_tables",
+      "label": "tables.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports/tables.scss",
+      "source_line": null
+    },
+    {
+      "community": 195,
+      "docstring": null,
+      "file_type": "code",
+      "id": "styles_imports",
+      "label": "imports.scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "source_line": null
+    },
+    {
+      "community": 195,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__imports_colors_scss",
+      "label": "__imports_colors_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "source_line": null
+    },
+    {
+      "community": 195,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__imports_display_scss",
+      "label": "__imports_display_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "source_line": null
+    },
+    {
+      "community": 195,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__imports_fonts_scss",
+      "label": "__imports_fonts_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "source_line": null
+    },
+    {
+      "community": 195,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__imports_mixins_scss",
+      "label": "__imports_mixins_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "source_line": null
+    },
+    {
+      "community": 195,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__imports_buttons_scss",
+      "label": "__imports_buttons_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "source_line": null
+    },
+    {
+      "community": 195,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__imports_keyframes_scss",
+      "label": "__imports_keyframes_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "source_line": null
+    },
+    {
+      "community": 195,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__imports_icons_scss",
+      "label": "__imports_icons_scss",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/resources/styles/imports.scss",
+      "source_line": null
+    },
+    {
+      "community": 170,
+      "docstring": null,
+      "file_type": "code",
+      "id": "main_App",
+      "label": "App.tsx",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 171,
+      "docstring": null,
+      "file_type": "code",
+      "id": "main_App::App",
+      "label": "App()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": 22
+    },
+    {
+      "community": 170,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "react",
+      "label": "react",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 170,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__components_routes_router",
+      "label": "__components_routes_router",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 170,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__features_utils",
+      "label": "__features_utils",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 170,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__features_redux_slices_user_userslice",
+      "label": "__features_redux_slices_user_userslice",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 171,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "usedispatch",
+      "label": "usedispatch",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 171,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "useeffect",
+      "label": "useeffect",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 171,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "use",
+      "label": "use",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 171,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "reject",
+      "label": "reject",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 171,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "eject",
+      "label": "eject",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 171,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "dispatch",
+      "label": "dispatch",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 171,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "setuser",
+      "label": "setuser",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/App.tsx",
+      "source_line": null
+    },
+    {
+      "community": 94,
+      "docstring": null,
+      "file_type": "code",
+      "id": "APIRest_AuthRoutes",
+      "label": "AuthRoutes.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/AuthRoutes.ts",
+      "source_line": null
+    },
+    {
+      "community": 94,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "__axios",
+      "label": "__axios",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/AuthRoutes.ts",
+      "source_line": null
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "code",
+      "id": "APIRest_axios",
+      "label": "axios.ts",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": null
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "code",
+      "id": "APIRest_axios::restGet",
+      "label": "restGet()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": 150
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "code",
+      "id": "APIRest_axios::restPost",
+      "label": "restPost()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": 174
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "code",
+      "id": "APIRest_axios::restUpdate",
+      "label": "restUpdate()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": 199
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "code",
+      "id": "APIRest_axios::restDelete",
+      "label": "restDelete()",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": 224
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "axios",
+      "label": "axios",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": null
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "setloading",
+      "label": "setloading",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": null
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "get",
+      "label": "get",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": null
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "post",
+      "label": "post",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": null
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "put",
+      "label": "put",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": null
+    },
+    {
+      "community": 189,
+      "docstring": null,
+      "file_type": "stub",
+      "id": "delete",
+      "label": "delete",
+      "source_file": "//?/C:/Users/Youssouf Zallé/Desktop/gestionImmobiliere/frontend/src/main/features/APIRest/axios.ts",
+      "source_line": null
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+@import "../../../../resources/styles/imports.scss";
+
+.book {
+  &__info {
+    border-radius: 10px;
+    background-color: $color--background;
+    padding: 10px;
+    width: 400px;
+    @include flex(column, flex-start, flex-start, 10px);
+
+    > div {
+      width: 100%;
+      @include flex(row, flex-start, center, 10px);
+
+      > div {
+        @include flex(row, flex-start, center, 5px);
+        width: 100%;
+
+        div[role="listbox"] {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

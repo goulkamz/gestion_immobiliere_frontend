@@ -1,0 +1,43 @@
+@import "../../../../resources/styles/imports.scss";
+
+#Partners {
+  .Partners {
+    &__section {
+      @include flex(row, space-between, flex-start, 10px);
+      width: 100%;
+    }
+    &__list {
+      width: calc(60% - 5px);
+      padding: 20px 0;
+      &__title,
+      &__table td {
+        padding: 10px 20px;
+      }
+      &__title {
+      }
+      &__table {
+        font-size: 0.85rem;
+      }
+    }
+    &__add {
+      @include flex(column, flex-start, flex-start, 10px);
+      width: calc(40% - 5px);
+      > * {
+        padding: 20px;
+        width: 100%;
+      }
+      form {
+        margin: 20px 0 0 0;
+      }
+      input[type="submit"] {
+        margin: 0;
+        width: 100%;
+      }
+    }
+    &__newPartner {
+      border: 1px solid;
+      border-color: $color--ok;
+      animation: fade__from__top 800ms ease-in-out forwards;
+    }
+  }
+}

@@ -1,24 +1,65 @@
-import { useState } from "react";
-import "../index.css";
+import React, { useEffect } from "react";
+import "../resources/styles/all.scss";
+import { useCookies } from "react-cookie";
+import Router from "./components/Routes/Router";
+import { useDispatch } from "react-redux";
+import { isObjectEmpty } from "./features/utils";
+import {
+  setUser,
+  type User as SliceUser,
+} from "./features/redux/slices/user/userSlice";
+import type { InternalAxiosRequestConfig } from "axios";
+import axios from "axios";
 
-function App() {
-  const [count, setCount] = useState<number>(0);
+// Réutiliser le type User du slice
+type User = SliceUser;
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-yellow-600 mb-4">
-          Vite + React + TS + Tailwind
-        </h1>
-        <button
-          onClick={() => setCount((c) => c + 1)}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-        >
-          Count: {count}
-        </button>
-      </div>
-    </div>
-  );
+// Interface pour les cookies - pas de type générique nécessaire
+interface CookieData {
+  user?: User;
+  JWTToken?: string;
 }
 
-export default App;
+export default function App(): React.ReactElement {
+  // Correction: Ne pas utiliser de type générique avec useCookies
+  const [cookies] = useCookies(["user", "JWTToken"]);
+  const dispatch = useDispatch();
+
+  // Récupération de l'utilisateur avec vérification et cast de type
+  const user = (cookies.user as User) || ({} as User);
+
+  // Configuration des intercepteurs axios
+  useEffect(() => {
+    // Intercepteur pour ajouter le token JWT
+    const interceptor = axios.interceptors.request.use(
+      (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+        const token = cookies.JWTToken as string;
+        if (token && config.headers) {
+          config.headers.Token = token;
+        }
+        return config;
+      },
+      (error): Promise<never> => {
+        console.error("Request interceptor error:", error);
+        return Promise.reject(error);
+      },
+    );
+
+    // Configuration globale d'axios
+    axios.defaults.withCredentials = true;
+
+    // Nettoyage de l'intercepteur
+    return (): void => {
+      axios.interceptors.request.eject(interceptor);
+    };
+  }, [cookies.JWTToken]);
+
+  // Dispatch de l'utilisateur dans le store Redux
+  useEffect((): void => {
+    if (user && !isObjectEmpty(user)) {
+      dispatch(setUser(user));
+    }
+  }, [user, dispatch]);
+
+  return <Router />;
+}

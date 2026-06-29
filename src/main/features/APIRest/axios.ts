@@ -80,7 +80,7 @@ api.interceptors.response.use(
       typeof response.data === "object" &&
       "success" in response.data
     ) {
-      return response.data;
+      return response;
     }
     // Sinon, envelopper dans le format standard
     response.data = {

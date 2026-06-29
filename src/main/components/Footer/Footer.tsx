@@ -1,5 +1,4 @@
 import "./Footer.scss";
-import logo from "../../../resources/images/logo.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "react-router-dom";
@@ -18,9 +17,9 @@ export default function Footer({
 }: FooterProps) {
   return (
     <footer>
-      <div className="logo">
+      {/* <div className="logo">
         <img src={logo} alt="Logo" />
-      </div>
+      </div> */}
       <div className="footer__contacts">
         <span>{email}</span>
         <span>{phone}</span>

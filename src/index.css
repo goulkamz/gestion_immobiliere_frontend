@@ -1,1 +1,344 @@
 @import "tailwindcss";
+
+@keyframes fade-from-top {
+  0% {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes notif {
+  0% {
+    right: -100%;
+  }
+  50% {
+    right: 0%;
+  }
+  99% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("./resources/fonts/Poppins/Poppins-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Poppins-italic";
+  src: url("./resources/fonts/Poppins/Poppins-Italic.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Poppins-thin";
+  src: url("./resources/fonts/Poppins/Poppins-Thin.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Poppins-thin-italic";
+  src: url("./resources/fonts/Poppins/Poppins-ThinItalic.ttf")
+    format("truetype");
+}
+@font-face {
+  font-family: "Poppins-medium";
+  src: url("./resources/fonts/Poppins/Poppins-Medium.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Poppins-medium-italic";
+  src: url("./resources/fonts/Poppins/Poppins-MediumItalic.ttf")
+    format("truetype");
+}
+
+@theme {
+  --color-primary: #252525;
+  --color-primary-light: #414141;
+  --color-secondary: #af0404;
+  --color-danger: #f21046;
+  --color-background: #f7f8f8;
+  --color-ok: #007a2a;
+  --color-ok-light: #008a30;
+  --color-background-dark: #e0e1e1;
+  --color-third: #060047;
+  --color-background-dark: #dddede;
+
+  --font-poppins: "Poppins", sans-serif;
+  --font-poppins-italic: "Poppins-italic", sans-serif;
+  --font-poppins-thin: "Poppins-thin", sans-serif;
+  --font-poppins-thin-italic: "Poppins-thin-italic", sans-serif;
+  --font-poppins-medium: "Poppins-medium", sans-serif;
+  --font-poppins-medium-italic: "Poppins-medium-italic", sans-serif;
+
+  --animate-fade-from-top: fade-from-top 500ms ease-in-out forwards;
+  --animate-fade-in: fade-in 300ms ease-in-out forwards;
+  --animate-notif: notif 3s ease-in-out forwards;
+
+  --color-primary-adjusted: #c8c8c8;
+  --color-secondary-adjusted: #050202;
+  --color-ok-adjusted: #003d15;
+  --color-background-adjusted: #585959;
+}
+
+@layer components {
+  .padding {
+    @apply px-[180px]
+           max-[1100px]:px-[100px]
+           max-[800px]:px-[50px]
+           max-[450px]:px-[15px];
+  }
+
+  .link {
+    @apply text-inherit no-underline;
+
+    &--secondary {
+      @apply text-secondary;
+    }
+  }
+
+  .table {
+    &__title {
+      @apply py-[10px] px-[20px];
+    }
+
+    table {
+      @apply border-collapse w-full text-[0.85rem];
+
+      thead {
+        @apply text-background bg-primary-light;
+      }
+
+      td {
+        @apply py-[10px] px-[20px];
+      }
+
+      tr {
+        @apply border-b border-background-dark;
+      }
+    }
+
+    &__buttons {
+      @apply py-[10px] px-0 w-full;
+    }
+  }
+
+  .form {
+    @apply flex flex-col justify-center items-center gap-[10px];
+
+    input[type="submit"] {
+      @apply mt-[10px];
+    }
+  }
+
+  .input {
+    @apply border border-primary-light rounded-[10px] h-[40px] p-[5px] w-full bg-background
+           max-[1000px]:h-[30px];
+
+    &::placeholder {
+      @apply text-primary;
+    }
+
+    &--reactSelect {
+      @apply rounded-[10px] h-[40px] p-0 w-full bg-background;
+
+      > div {
+        @apply w-full h-full border border-primary-light min-h-0;
+      }
+
+      div[role="listbox"] {
+        @apply bg-background -top-[9px];
+      }
+    }
+
+    &--info {
+      @apply bg-transparent text-primary;
+    }
+
+    &--disabled {
+      @apply opacity-20;
+
+      &::placeholder {
+        @apply opacity-0;
+      }
+    }
+
+    &--err {
+      @apply text-red-500 text-[0.8rem];
+    }
+  }
+
+  .textarea {
+    @apply resize-none rounded-[10px] w-full text-[1.05rem] p-[10px] bg-background;
+
+    &::placeholder {
+      @apply text-primary;
+    }
+  }
+
+  .select {
+    @apply w-full;
+  }
+
+  .checkbox {
+    @apply flex flex-row justify-between items-center gap-[10px] w-fit;
+  }
+
+  .tbl-wrap {
+    @apply w-full overflow-x-auto;
+  }
+
+  table {
+    @apply w-full border-collapse text-sm;
+  }
+
+  thead tr {
+    @apply border-b-2 border-primary bg-background;
+  }
+
+  thead th {
+    @apply px-4 py-3 text-left text-[13px] font-medium text-primary/60 whitespace-nowrap;
+  }
+
+  tbody tr {
+    @apply border-b border-primary/10 transition-colors duration-150 hover:bg-background/80;
+  }
+
+  tbody td {
+    @apply px-4 py-3 text-primary align-middle;
+  }
+
+  /* Badges de statut */
+  .badge {
+    @apply inline-flex items-center gap-1 px-[10px] py-[3px] rounded-full text-xs font-medium;
+  }
+  .badge--ok {
+    @apply bg-ok/10 text-ok;
+  }
+  .badge--warn {
+    @apply bg-secondary/10 text-secondary;
+  }
+  .badge--danger {
+    @apply bg-danger/10 text-danger;
+  }
+
+  /* Boutons d'action */
+  .tbl-btn {
+    @apply border-none bg-transparent cursor-pointer text-primary/40 p-1 rounded
+           hover:bg-primary/5 hover:text-primary transition-all duration-150;
+  }
+
+  .icon {
+    @apply h-[20px] min-w-[20px] w-auto;
+
+    &--circle {
+      @apply flex flex-col justify-center border border-solid p-[5px] rounded-[1000px];
+    }
+  }
+
+  .arrow--right {
+    @apply inline-block w-[25px] h-[15px];
+    background: url("./resources/images/Arrow-right.svg") no-repeat center;
+  }
+
+  /* Fonts */
+  .font {
+    @apply font-poppins;
+  }
+  .font-italic {
+    @apply font-poppins-italic;
+  }
+  .font-thin {
+    @apply font-poppins-thin;
+  }
+  .font-thin-italic {
+    @apply font-poppins-thin-italic;
+  }
+  .font-medium {
+    @apply font-poppins-medium;
+  }
+  .font-medium-italic {
+    @apply font-poppins-medium-italic;
+  }
+  .font--bold {
+    @apply font-bold;
+  }
+
+  /* Titres */
+  .title {
+    @apply text-[2.1rem] font-black;
+  }
+  .title--sub {
+    @apply text-[1.5rem] font-semibold;
+  }
+  .title--sub--sub {
+    @apply text-[1rem] font-semibold;
+  }
+
+  /* Text */
+  .text--underline {
+    @apply w-fit;
+    > hr {
+      @apply border border-current w-full scale-x-150;
+    }
+  }
+  .text--important {
+    @apply text-secondary;
+  }
+  .text--ok {
+    @apply text-ok;
+  }
+
+  .btn {
+    @apply rounded-[10px] p-[5px] transition-all duration-300 h-[40px] border border-solid cursor-pointer max-[1000px]:h-[30px];
+  }
+
+  .btn--primary--lt {
+    @apply bg-primary-light border-primary-light text-background
+           hover:bg-primary hover:border-primary;
+  }
+
+  .btn--primary--lt--hover--inverse:hover {
+    @apply bg-background-dark border-primary text-background;
+  }
+
+  .btn--primary--inverse {
+    @apply bg-transparent border-primary
+           hover:bg-primary-light hover:border-primary hover:text-background!;
+  }
+
+  .btn--cancel {
+    @apply bg-transparent;
+  }
+
+  .btn--delete {
+    @apply bg-danger text-background;
+  }
+
+  .btn--delete--reverse {
+    @apply bg-transparent border-none hover:text-danger;
+  }
+
+  .btn--ok {
+    @apply bg-ok text-background border border-ok
+           hover:bg-ok-light hover:border-ok-light;
+  }
+
+  .btn--35px {
+    @apply h-[35px];
+  }
+}

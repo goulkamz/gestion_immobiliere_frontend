@@ -1,9 +1,6 @@
 import "./Header.scss";
-import { NavLink } from "react-router-dom";
-import logo from "../../../resources/images/logo.svg";
-import DIDLogo from "../../../resources/images/did.png";
+import { NavLink, Link } from "react-router-dom";
 import { isObjectEmpty } from "../../features/utils";
-
 import modules from "../../modules/modules";
 import { useSelector } from "react-redux";
 
@@ -52,9 +49,9 @@ export default function Header() {
 
   return (
     <header>
-      <div className="header__logo">
+      {/* <div className="header__logo">
         <img src={logo} alt="Logo" />
-      </div>
+      </div> */}
       <nav>
         <div className="nav__menu">
           <span></span>
@@ -74,29 +71,20 @@ export default function Header() {
             name={modules.public.routes.Book.name}
             path={modules.public.routes.Book.path}
           />
+          <NavChild
+            name={modules.public.routes.Service.name}
+            path={modules.public.routes.Service.path}
+          />
+          <NavChild
+            name={modules.public.routes.Location.name}
+            path={modules.public.routes.Location.path}
+          />
+          <NavChild
+            name={modules.public.routes.Offers.name}
+            path={modules.public.routes.Offers.path}
+          />
 
-          <div className="header__about">
-            A propos
-            <div className="header__about__display">
-              <div className="header__about__logo">
-                <img
-                  src={DIDLogo}
-                  alt="Logo de Digitalisation et Décisionnel"
-                />
-              </div>
-              <div className="header__about__content">
-                Site Officiel:{" "}
-                <a
-                  href="http://did-itech.com/"
-                  className="link link--secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  did-itech.com
-                </a>
-              </div>
-            </div>
-          </div>
+          <div className="header__about">A propos</div>
           <form action=""></form>
           {isObjectEmpty(user) ? (
             <NavChild
@@ -104,11 +92,11 @@ export default function Header() {
               path={modules.auth.routes.Signin.path}
             />
           ) : (
-            ""
+            "Déconnexion"
           )}
-          {/* <Link to={modules.client.routes.Profil.path} className="link">
-                        <FontAwesomeIcon className="icon icon--circle" icon={faUser} />
-                    </Link> */}
+          <Link to={modules.client.routes.Profil.path} className="link">
+            profil
+          </Link>
         </div>
       </nav>
     </header>

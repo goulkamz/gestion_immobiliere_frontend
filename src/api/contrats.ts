@@ -1,0 +1,42 @@
+import { http } from "./http";
+import type {
+  ApiSuccessResponse,
+  ContratLocationResponse,
+  DecompteSortieResponse,
+  PageParams,
+  PagedResponse,
+  ReglerDecompteSortieRequest,
+  ResilierLocationRequest,
+  TerminerLocationRequest,
+  UpdateContratLocationRequest,
+} from "./types";
+
+async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
+  const { data } = await promise;
+  return data.data as T;
+}
+
+export interface ContratLocationListParams extends PageParams {
+  idMaison?: number;
+  /** Recherche serveur (agent/admin) sur le nom de la maison ou du locataire. */
+  recherche?: string;
+}
+
+export const contratsApi = {
+  getContratsLocation: (params?: ContratLocationListParams) =>
+    unwrap<PagedResponse<ContratLocationResponse>>(http.get("/contrats-location", { params })),
+
+  modifier: (id: number, body: UpdateContratLocationRequest) =>
+    unwrap<ContratLocationResponse>(http.patch(`/contrats-location/${id}/modifier`, body)),
+
+  terminer: (id: number, body: TerminerLocationRequest) =>
+    unwrap<DecompteSortieResponse>(http.patch(`/contrats-location/${id}/terminer`, body)),
+
+  resilier: (id: number, body: ResilierLocationRequest) =>
+    unwrap<DecompteSortieResponse>(http.patch(`/contrats-location/${id}/resilier`, body)),
+
+  getDecompteSortie: (idContrat: number) => unwrap<DecompteSortieResponse>(http.get(`/contrats-location/${idContrat}/decompte-sortie`)),
+
+  reglerDecompteSortie: (idDecompte: number, body: ReglerDecompteSortieRequest) =>
+    unwrap<DecompteSortieResponse>(http.patch(`/contrats-location/decomptes-sortie/${idDecompte}/regler`, body)),
+};

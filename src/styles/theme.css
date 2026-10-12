@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+/*
+ * Système de thème : les tokens Tailwind (--color-*) pointent vers des
+ * variables CSS "brutes" (--c-*) définies dans styles/themes/*.css et
+ * sélectionnées via [data-theme="..."] sur <html>. Les composants ne
+ * doivent JAMAIS utiliser de couleur en dur : uniquement ces tokens
+ * (bg-primary-600, text-accent-600, bg-success, etc.), pour permettre
+ * un changement de thème complet sans toucher au code.
+ */
+@theme {
+  --font-heading: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --color-primary-50: var(--c-primary-50);
+  --color-primary-100: var(--c-primary-100);
+  --color-primary-200: var(--c-primary-200);
+  --color-primary-300: var(--c-primary-300);
+  --color-primary-400: var(--c-primary-400);
+  --color-primary-500: var(--c-primary-500);
+  --color-primary-600: var(--c-primary-600);
+  --color-primary-700: var(--c-primary-700);
+  --color-primary-800: var(--c-primary-800);
+  --color-primary-900: var(--c-primary-900);
+  --color-primary-950: var(--c-primary-950);
+
+  --color-accent-50: var(--c-accent-50);
+  --color-accent-100: var(--c-accent-100);
+  --color-accent-200: var(--c-accent-200);
+  --color-accent-300: var(--c-accent-300);
+  --color-accent-400: var(--c-accent-400);
+  --color-accent-500: var(--c-accent-500);
+  --color-accent-600: var(--c-accent-600);
+  --color-accent-700: var(--c-accent-700);
+  --color-accent-800: var(--c-accent-800);
+  --color-accent-900: var(--c-accent-900);
+
+  /* Sémantiques génériques : communes à toute plateforme, indépendantes du thème */
+  --color-success-50: var(--c-success-50);
+  --color-success-500: var(--c-success-500);
+  --color-success-600: var(--c-success-600);
+  --color-success-700: var(--c-success-700);
+
+  --color-warning-50: var(--c-warning-50);
+  --color-warning-500: var(--c-warning-500);
+  --color-warning-600: var(--c-warning-600);
+  --color-warning-700: var(--c-warning-700);
+
+  --color-danger-50: var(--c-danger-50);
+  --color-danger-500: var(--c-danger-500);
+  --color-danger-600: var(--c-danger-600);
+  --color-danger-700: var(--c-danger-700);
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+  body {
+    @apply bg-white text-slate-800;
+  }
+  /* Anneau de focus visible et cohérent partout (accessibilité clavier) */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-600;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .sr-only-focusable {
+    @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-primary-700 focus:px-4 focus:py-2 focus:text-white focus:shadow-lg;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1.1) translate(0, 0);
+  }
+  to {
+    transform: scale(1.22) translate(-1.5%, -1.5%);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-18px) translateX(10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[fade-up_0\.6s_ease-out\],
+  .animate-\[kenburns_22s_ease-in-out_infinite_alternate\],
+  .animate-\[float_9s_ease-in-out_infinite\],
+  .animate-\[float_11s_ease-in-out_infinite_1s\],
+  .animate-\[float_13s_ease-in-out_infinite_0\.5s\] {
+    animation: none;
+  }
+}

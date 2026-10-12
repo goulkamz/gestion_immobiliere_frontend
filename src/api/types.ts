@@ -1,0 +1,817 @@
+/**
+ * Types partagés, retranscrits depuis gestionImmobiliere/docs/api-frontend.md (§16).
+ * Complété au fil des phases à mesure que de nouveaux modules sont branchés.
+ */
+
+// ─── Rôles ──────────────────────────────────────────────────────────────
+// ERole a 9 valeurs en base ; seules ces 4 sont utilisées par la logique
+// métier actuelle (@PreAuthorize) — les autres sont réservées, pas de vue
+// à construire pour elles.
+export type Role = "ROLE_CLIENT" | "ROLE_BAILLEUR" | "ROLE_AGENT" | "ROLE_ADMIN";
+
+export type Sexe = "M" | "F";
+
+// ─── Enveloppes génériques ──────────────────────────────────────────────
+export interface ApiSuccessResponse<T = unknown> {
+  success: true;
+  message: string;
+  code: string;
+  timestamp: string;
+  data?: T;
+}
+
+export interface ApiErrorResponse {
+  success: false;
+  message: string;
+  code: string;
+  timestamp: string;
+  debug_message?: string;
+  exception_type?: string;
+}
+
+export interface ApiValidationErrorResponse {
+  success: false;
+  message: string;
+  code: "VALIDATION_ERROR";
+  timestamp: string;
+  errors: Record<string, string>;
+}
+
+export type ApiErrorPayload = ApiErrorResponse | ApiValidationErrorResponse;
+
+export interface PagedResponse<T> {
+  content: T[];
+  page: {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+  };
+}
+
+export interface PageParams {
+  page?: number;
+  size?: number;
+  sort?: string;
+}
+
+// ─── Enums de statut (valeurs exactes du backend) ──────────────────────
+export type StatutAnnonce = "ACTIVE" | "EXPIREE" | "SUSPENDUE";
+export type StatutContact = "NON_LU" | "LU" | "TRAITE";
+export type StatutDemande = "EN_ATTENTE" | "EN_COURS" | "SATISFAITE" | "ANNULEE";
+export type StatutOffre = "EN_ATTENTE" | "TRAITEE" | "REFUSEE";
+
+export type StatutBienService = "DISPONIBLE" | "RESERVEE" | "LOUEE" | "EN_MAINTENANCE";
+export type StatutLocationBienService = "EN_ATTENTE" | "ACTIF" | "TERMINE" | "ANNULE";
+export type StatutMaison = "DISPONIBLE" | "RESERVEE" | "LOUEE" | "EN_MAINTENANCE";
+
+export type StatutDecompteSortie = "EN_ATTENTE" | "REGLE";
+export type StatutLocation = "EN_ATTENTE" | "ACTIF" | "TERMINE" | "RESILIE";
+export type StatutMandat = "EN_ATTENTE" | "ACTIF" | "RESILIE" | "EXPIRE";
+export type TypeMandat = "GESTION" | "LOCATION" | "VENTE";
+
+export type StatutThumbnail = "EN_COURS" | "PRET" | "ECHEC";
+
+export type StatutEcheance = "EN_ATTENTE" | "PAYE" | "EN_RETARD" | "ANNULE";
+export type TypeEcheance = "MANDAT" | "LOCATION";
+export type SensPaiement = "ENTREE" | "SORTIE";
+export type TypePaiementLocationBienService = "NORMAL" | "PROLONGATION";
+
+export type StatutReservation = "EN_ATTENTE" | "CONFIRMEE" | "ANNULEE" | "CONVERTIE";
+
+export type TypeEntiteMedia = "COUR" | "ANNONCE" | "MAISON" | "BIEN_SERVICE" | "OFFRE";
+
+export type TypeValeurParametre = "ENTIER" | "DECIMAL" | "BOOLEEN" | "TEXTE";
+
+export interface ParametreResponse {
+  idParametre: number;
+  cle: string;
+  valeur: string;
+  typeValeur: TypeValeurParametre;
+  description: string | null;
+}
+
+// ─── Auth (§2) ──────────────────────────────────────────────────────────
+export interface AuthenticateRequest {
+  email: string;
+  password: string;
+}
+
+export interface CreateUserRequest {
+  nom: string;
+  prenom: string;
+  sexe?: Sexe;
+  email: string;
+  password: string;
+  dateNaissance: string; // yyyy-MM-dd
+  telephone: string;
+  telephone1?: string;
+  idRole: number;
+}
+
+export interface UserInfoResponse {
+  username: string;
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  roles: string[];
+}
+
+export interface ResetPasswordRequest {
+  code: string;
+  newPassword: string;
+}
+
+// ─── Profil (§3) ────────────────────────────────────────────────────────
+export interface ProfileResponse {
+  idUser: number;
+  email: string;
+  nom: string;
+  prenom: string;
+  sexe: Sexe | null;
+  telephone: string | null;
+  telephone1: string | null;
+  dateNaissance: string;
+  role: string;
+}
+
+export interface UpdateProfileRequest {
+  nom?: string;
+  prenom?: string;
+  telephone?: string;
+  telephone1?: string;
+  dateNaissance?: string;
+}
+
+// ─── Catalogue public : maisons / biens-services (§6) ──────────────────
+export interface MaisonResponse {
+  idMaison: number;
+  typeMaison: string | null;
+  nomCommunMaison: string | null;
+  nombrePiece: number | null;
+  loyer: number | null;
+  caution: number | null;
+  avance: number | null;
+  nombreMoisCaution: number | null;
+  statut: StatutMaison;
+  idCour: number;
+  referenceCour: string;
+}
+
+export interface BienServiceResponse {
+  idBienService: number;
+  libelle: string;
+  description: string | null;
+  prixJournalier: number | null;
+  prixMensuel: number | null;
+  disponibilite: StatutBienService;
+  idSecteur: number;
+  nomSecteur: string;
+  idCategorie: number;
+  libelleCategorie: string;
+  idGestionnaire: number;
+  nomGestionnaire: string;
+}
+
+// ─── Annonces / contacts / demandes / offres (§9) ──────────────────────
+export interface AnnonceResponse {
+  idAnnonce: number;
+  titre: string;
+  description: string | null;
+  typeAnnonce: string | null;
+  datePublication: string;
+  dateExpiration: string;
+  statut: StatutAnnonce;
+  prix: number | null;
+  localisation: string | null;
+}
+
+export interface CreateContactRequest {
+  nomComplet: string;
+  email: string;
+  telephone?: string;
+  sujet?: string;
+  message: string;
+}
+
+export interface ContactResponse {
+  idContact: number;
+  nomComplet: string;
+  email: string;
+  telephone: string | null;
+  sujet: string | null;
+  message: string;
+  dateEnvoi: string;
+  statut: StatutContact;
+}
+
+export interface CreateDemandeRequest {
+  nomComplet: string;
+  email?: string;
+  telephone?: string;
+  typeBien?: string;
+  localisationSouhaite?: string;
+  budgetMax?: number;
+  description?: string;
+}
+
+export interface DemandeResponse {
+  idDemande: number;
+  nomComplet: string;
+  email: string | null;
+  telephone: string | null;
+  typeBien: string | null;
+  localisationSouhaite: string | null;
+  budgetMax: number | null;
+  description: string | null;
+  dateDemande: string;
+  statut: StatutDemande;
+}
+
+export interface CreateOffreRequest {
+  nomComplet: string;
+  email?: string;
+  telephone?: string;
+  typeOffre?: string;
+  titre?: string;
+  description?: string;
+  adresse?: string;
+}
+
+export interface OffreResponse {
+  idOffre: number;
+  nomComplet: string;
+  email: string | null;
+  telephone: string | null;
+  typeOffre: string | null;
+  titre: string | null;
+  description: string | null;
+  adresse: string | null;
+  dateOffre: string;
+  statut: StatutOffre;
+}
+
+/** Réponse à la création publique : `jetonDepotPhotos` n'apparaît qu'ici (valable 1 h) et autorise l'envoi des photos. */
+export interface OffreDepotResponse extends OffreResponse {
+  jetonDepotPhotos: string;
+}
+
+// ─── Statistiques publiques (§15) ───────────────────────────────────────
+export interface PublicStatsResponse {
+  maisonsDisponibles: number;
+  biensDisponibles: number;
+  villesCouvertes: number;
+  secteursCouverts: number;
+  proprietesGerees: number;
+  locationsRealisees: number;
+}
+
+// ─── Localisation (§5) ──────────────────────────────────────────────────
+export interface PaysResponse {
+  idPays: number;
+  codePays: string;
+  nomPays: string;
+}
+
+export interface VilleResponse {
+  idVille: number;
+  codeVille: string;
+  nomVille: string;
+  idPays: number;
+  nomPays: string;
+}
+
+export interface SecteurResponse {
+  idSecteur: number;
+  codeSecteur: string;
+  nomSecteur: string;
+  idVille: number;
+  nomVille: string;
+}
+
+// ─── Témoignages (voir docs/api-temoignages.md) ──
+export type TemoignageRole = "PROPRIETAIRE" | "LOCATAIRE" | "AGENCE" | "AUTRE";
+export type TemoignageStatut = "EN_ATTENTE" | "PUBLIE" | "RETIRE";
+
+export interface Temoignage {
+  idTemoignage: number;
+  nomAuteur: string;
+  role: TemoignageRole;
+  texte: string;
+  /** Note sur 5, optionnelle (un témoignage n'est pas toujours noté). */
+  note?: number;
+  /** URL de la photo/avatar ; absente ou nulle → avatar par initiales. */
+  photoUrl?: string | null;
+  /** Date du témoignage, ISO 8601 (yyyy-MM-dd). */
+  date: string;
+}
+
+/** Réponse admin/agent : mêmes champs que `Temoignage`, plus le statut de modération. */
+export interface TemoignageAdminResponse extends Temoignage {
+  statut: TemoignageStatut;
+}
+
+export interface CreateTemoignageRequest {
+  nomAuteur: string;
+  role: Exclude<TemoignageRole, "AGENCE">;
+  texte: string;
+  note?: number;
+  /** Champ piège anti-robot : toujours envoyé, doit rester vide. */
+  siteWeb: string;
+}
+
+export interface CreateTemoignageAdminRequest {
+  nomAuteur: string;
+  role: TemoignageRole;
+  texte: string;
+  note?: number;
+  photoUrl?: string;
+  date?: string;
+}
+
+export interface UpdateStatutTemoignageRequest {
+  statut: TemoignageStatut;
+}
+
+// ─── Espace client : réservations (§7), locations biens-services (§7),
+// contrats de location (§7), échéances/paiements (§8), stats client (§15) ──
+export interface ReservationResponse {
+  idReservation: number;
+  idUser: number;
+  nomUser: string;
+  emailUser: string | null;
+  telephoneUser: string | null;
+  idMaison: number;
+  nomCommunMaison: string;
+  dateDebut: string;
+  /** Marqueur technique d'expiration du blocage (dateDebut + délai système), pas une date de sortie. */
+  dateFin: string;
+  statut: StatutReservation;
+}
+
+export interface CreateReservationRequest {
+  idMaison: number;
+  /** Agent/admin uniquement : réserve pour le compte de ce client. */
+  idClient?: number;
+  dateDebut: string;
+}
+
+export interface PaiementLocationBienServiceResponse {
+  idPaiement: number;
+  montant: number;
+  modePaiement: string;
+  typePaiement: TypePaiementLocationBienService;
+  datePaiement: string;
+}
+
+export interface LocationBienServiceResponse {
+  idLocationBienService: number;
+  idClient: number;
+  nomClient: string;
+  idBienService: number;
+  libelleBienService: string;
+  destination: string | null;
+  dateDebut: string;
+  dateFin: string;
+  duree: number;
+  montantTotal: number;
+  statut: StatutLocationBienService;
+  historiquePaiements: PaiementLocationBienServiceResponse[];
+  totalEncaisse: number;
+  totalRembourse: number;
+  /** montantTotal - totalEncaisse + totalRembourse : négatif = trop-perçu à rembourser. */
+  solde: number;
+}
+
+export interface ModifierDureeLocationRequest {
+  /** ISO LocalDateTime (yyyy-MM-ddTHH:mm:ss). */
+  nouvelleDateFin: string;
+  montantComplement?: number;
+  modePaiementComplement?: string;
+  referencePaiementComplement?: string;
+}
+
+export interface ModifierDureeLocationResponse {
+  location: LocationBienServiceResponse;
+  totalEncaisse: number;
+  totalRembourse: number;
+  solde: number;
+}
+
+export interface CreerRemboursementRequest {
+  montant: number;
+  modeRemboursement: string;
+  reference?: string;
+  motif?: string;
+}
+
+export interface CreateLocationBienServiceRequest {
+  idBienService: number;
+  /** Agent/admin uniquement : loue pour le compte de ce client. */
+  idClient?: number;
+  destination?: string;
+  /** ISO LocalDateTime (yyyy-MM-ddTHH:mm:ss). */
+  dateDebut: string;
+  dateFin: string;
+}
+
+export interface ConfirmerLocationRequest {
+  montantPaiement: number;
+  modePaiement: string;
+  referencePaiement?: string;
+  /** Ajustement des dates négociées au comptoir (ISO LocalDateTime). */
+  dateDebut?: string;
+  dateFin?: string;
+}
+
+export interface RemboursementResponse {
+  idRemboursement: number;
+  montant: number;
+  modeRemboursement: string;
+  reference: string | null;
+  motif: string | null;
+  dateRemboursement: string;
+}
+
+export interface ContratLocationResponse {
+  idContratLocation: number;
+  idLocataire: number;
+  nomLocataire: string;
+  idMaison: number;
+  nomCommunMaison: string;
+  dateEntree: string;
+  dateSortie: string | null;
+  montantLoyer: number;
+  statut: StatutLocation;
+}
+
+export interface EcheanceResponse {
+  idEcheance: number;
+  type: TypeEcheance;
+  entiteId: number;
+  dateEcheance: string;
+  moisLibelle: string | null;
+  montantDu: number;
+  montantPaye: number;
+  penalite: number | null;
+  commissionDeduite: number | null;
+  statut: StatutEcheance;
+  /** Libellés renvoyés par la liste agent : maison et locataire (LOCATION). */
+  nomCommunMaison?: string | null;
+  nomLocataire?: string | null;
+  /** Cour, propriétaire et commission du mandat (MANDAT). */
+  referenceCour?: string | null;
+  nomProprietaire?: string | null;
+  commissionMandat?: number | null;
+}
+
+export interface EcheanceMandatResponse {
+  idEcheance: number;
+  idMandat: number;
+  referenceCour?: string | null;
+  periodeMois: string;
+  montantLoyersDus: number | null;
+  commissionDeduite: number | null;
+  montantNetAReverser: number | null;
+  statut: StatutEcheance;
+}
+
+export interface ConfirmerVirementRequest {
+  modeVersement: string;
+  reference?: string;
+}
+
+export interface PaiementResponse {
+  idPaiement: number;
+  datePaiement: string;
+  montantPaiement: number;
+  sens: SensPaiement;
+  modePaiement: string;
+  referencePaiement: string | null;
+  idEcheancesCouvertes: number[];
+}
+
+export interface CreatePaiementRequest {
+  montantPaiement: number;
+  modePaiement: string;
+  referencePaiement?: string;
+  datePaiement?: string;
+  idEcheances: number[];
+}
+
+export interface ClientLocationDTO {
+  idLocation: number;
+  libelleBien: string;
+  dateDebut: string;
+  dateFin: string;
+  montantTotal: number;
+  totalEncaisse: number;
+  solde: number;
+  statut: StatutLocationBienService;
+}
+
+export interface ClientEcheanceDTO {
+  idEcheance: number;
+  moisLibelle: string | null;
+  dateEcheance: string;
+  montantDu: number;
+  montantPaye: number;
+  statut: StatutEcheance;
+}
+
+export interface ClientRemboursementDTO {
+  idRemboursement: number;
+  montant: number;
+  motif: string | null;
+  dateRemboursement: string;
+}
+
+// ─── Espace bailleur (cours, mandat, stats bailleur) ───────────────────
+export interface CourResponse {
+  idCour: number;
+  referenceCour: string;
+  lotCour: string | null;
+  numeroPorte: number | null;
+  idSecteur: number;
+  nomSecteur: string;
+  idProprietaire: number;
+  nomProprietaire: string;
+}
+
+export interface ContratMandatResponse {
+  idMandat: number;
+  idCour: number;
+  referenceCour: string;
+  nomProprietaire: string;
+  idAgent: number;
+  nomAgent: string;
+  dateDebut: string;
+  dateFin: string | null;
+  typeMandat: TypeMandat;
+  commission: number | null;
+  statut: StatutMandat;
+  motifResiliation: string | null;
+}
+
+export interface BailleurPatrimoineDTO {
+  nbCours: number;
+  nbMaisons: number;
+  maisonsParStatut: Record<string, number>;
+  tauxOccupation: number | null;
+}
+
+export interface BailleurRevenuDTO {
+  periodeMois: string;
+  montantDu: number | null;
+  montantRecu: number | null;
+  statut: string;
+}
+
+// ─── Espace agent : gestion cours/maisons/catégories/biens-services ────
+export interface CreateCourRequest {
+  idSecteur: number;
+  idProprietaire: number;
+  referenceCour: string;
+  lotCour?: string;
+  numeroPorte?: number;
+}
+
+export interface UpdateCourRequest {
+  idSecteur?: number;
+  referenceCour?: string;
+  lotCour?: string;
+  numeroPorte?: number;
+}
+
+export interface CreateMaisonRequest {
+  idCour: number;
+  typeMaison?: string;
+  nomCommunMaison?: string;
+  nombrePiece?: number;
+  loyer?: number;
+  caution?: number;
+  avance?: number;
+  nombreMoisCaution?: number;
+}
+
+export interface UpdateMaisonRequest {
+  typeMaison?: string;
+  nomCommunMaison?: string;
+  nombrePiece?: number;
+  loyer?: number;
+  caution?: number;
+  avance?: number;
+  nombreMoisCaution?: number;
+}
+
+export interface UpdateStatutMaisonRequest {
+  statut: StatutMaison;
+}
+
+/** Transitions de statut autorisées (RG3, appliquées côté serveur) — sert à ne proposer que les choix valides. */
+export const MAISON_STATUT_TRANSITIONS: Record<StatutMaison, StatutMaison[]> = {
+  DISPONIBLE: ["RESERVEE", "EN_MAINTENANCE"],
+  RESERVEE: ["LOUEE", "DISPONIBLE"],
+  LOUEE: ["DISPONIBLE"],
+  EN_MAINTENANCE: ["DISPONIBLE"],
+};
+
+export interface CategorieResponse {
+  idCategorie: number;
+  libelle: string;
+  description: string | null;
+  nbBiensServices: number;
+}
+
+export interface CreateCategorieRequest {
+  libelle: string;
+  description?: string;
+}
+
+export interface UpdateCategorieRequest {
+  libelle?: string;
+  description?: string;
+}
+
+export interface CreateBienServiceRequest {
+  idSecteur: number;
+  idCategorie: number;
+  idGestionnaire: number;
+  libelle: string;
+  description?: string;
+  prixJournalier?: number;
+  prixMensuel?: number;
+}
+
+export interface UpdateBienServiceRequest {
+  idSecteur?: number;
+  idCategorie?: number;
+  libelle?: string;
+  description?: string;
+  prixJournalier?: number;
+  prixMensuel?: number;
+}
+
+export interface UpdateDisponibiliteBienServiceRequest {
+  disponibilite: StatutBienService;
+}
+
+/** `GET /api/admin/users?role=` — accessible en lecture à ROLE_AGENT et ROLE_ADMIN, utilisé pour peupler les
+ * sélecteurs "propriétaire" (cour) / "gestionnaire" (bien-service). Champs retenus parmi ceux renvoyés. */
+export interface UserAdminResponse {
+  idUser: number;
+  nom: string;
+  prenom: string;
+  email: string;
+  telephone: string | null;
+  role: Role;
+  flagActif: boolean;
+}
+
+export interface CreateUserByAdminRequest {
+  email: string;
+  password: string;
+  nom: string;
+  prenom: string;
+  sexe?: Sexe;
+  telephone?: string;
+  telephone1?: string;
+  dateNaissance?: string;
+  role: Role;
+}
+
+// ─── Espace agent : contrats de mandat, réservations, contrats de location ──
+
+export interface CreateContratMandatRequest {
+  idCour: number;
+  idAgent: number;
+  dateDebut: string;
+  dateFin?: string;
+  typeMandat: TypeMandat;
+  commission?: number;
+  modeFacturation?: string;
+}
+
+export interface ResilierMandatRequest {
+  motifResiliation: string;
+}
+
+export interface ConvertirReservationParams {
+  montantLoyer: number;
+  typeContrat?: string;
+  dateSortie?: string;
+}
+
+export interface TerminerLocationRequest {
+  etatDesLieuxSortie: string;
+  dateSortie?: string;
+  fraisReparation: number;
+}
+
+export interface ResilierLocationRequest {
+  etatDesLieuxSortie: string;
+  dateSortie?: string;
+  coutReparation: number;
+}
+
+/** Modifie un mandat EN_ATTENTE/ACTIF sans le résilier (409 sinon). Tous les champs optionnels (merge partiel). */
+export interface UpdateContratMandatRequest {
+  dateFin?: string;
+  commission?: number;
+  modeFacturation?: string;
+  typeMandat?: TypeMandat;
+}
+
+/** Prolonge/réduit un bail ACTIF (dateSortie) et/ou corrige le loyer, sans clôturer le contrat (409 si non ACTIF). */
+export interface UpdateContratLocationRequest {
+  dateSortie?: string;
+  montantLoyer?: number;
+}
+
+export interface DecompteSortieResponse {
+  idDecompte: number;
+  idContratLocation: number;
+  dateSortie: string;
+  montantAvanceReference: number;
+  montantCautionReference: number;
+  montantArrieres: number;
+  coutReparation: number;
+  montantDeduitAvance: number;
+  montantDeduitCaution: number;
+  montantManquant: number;
+  montantARembourser: number;
+  statut: StatutDecompteSortie;
+}
+
+export interface ReglerDecompteSortieRequest {
+  modePaiement: string;
+  reference?: string;
+}
+
+// ─── Espace agent : annonces, contacts, demandes, offres ───────────────
+export interface CreateAnnonceRequest {
+  titre: string;
+  description?: string;
+  typeAnnonce?: string;
+  dateExpiration: string;
+  prix?: number;
+  localisation?: string;
+}
+
+export interface UpdateAnnonceRequest {
+  titre?: string;
+  description?: string;
+  typeAnnonce?: string;
+  dateExpiration?: string;
+  prix?: number;
+  localisation?: string;
+}
+
+export interface UpdateStatutAnnonceRequest {
+  statut: StatutAnnonce;
+}
+
+export interface UpdateStatutContactRequest {
+  statut: StatutContact;
+}
+
+export interface UpdateStatutDemandeRequest {
+  statut: StatutDemande;
+}
+
+export interface UpdateStatutOffreRequest {
+  statut: StatutOffre;
+}
+
+// ─── Stats agent (tableau de bord) ─────────────────────────────────────
+export interface DemandeEnAttenteDTO {
+  idLocation: number;
+  libelleBien: string;
+  nomClient: string;
+  dateDebut: string;
+  dateFin: string;
+  montantEstime: number;
+  statut: StatutLocationBienService;
+}
+
+export interface ReservationEnAttenteDTO {
+  idReservation: number;
+  nomMaison: string;
+  nomClient: string;
+  dateDebut: string;
+  dateFin: string;
+}
+
+// Note : la doc annonçait `BailleurMandatDTO[]` pour /api/stats/agent/mes-mandats, mais le
+// backend réel (AgentStatsService.java) renvoie un décompte par statut (ex. {"ACTIF":2}),
+// confirmé par test direct le 2026-10-06. On type donc selon la réponse observée.
+export type MesMandatsParStatutDTO = Record<string, number>;
+
+export interface EcheanceRetardAgentDTO {
+  idEcheance: number;
+  type: "LOCATION" | "MANDAT";
+  libelleContrat: string;
+  montantDu: number;
+  dateEcheance: string;
+}
+

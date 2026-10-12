@@ -18,5 +18,16 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // Autorise le pattern `const { champ, ...reste } = obj` pour omettre un champ sans le lire.
+      '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true, argsIgnorePattern: '^_' }],
+    },
+  },
+  {
+    // Fichiers de config de routes : n'exportent que des éléments <Route>, pas des composants.
+    files: ['src/routes/**/*.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
   },
 ])

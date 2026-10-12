@@ -1,39 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
-import App from "./main/App";
-import reportWebVitals from "../reportWebVitals";
-import { Provider } from "react-redux";
-import store from "./main/features/redux/store";
-import { CookiesProvider } from "react-cookie";
 import { BrowserRouter } from "react-router-dom";
+import { QueryClientProvider } from "@tanstack/react-query";
+import "./index.css";
+import "@/store/themeStore"; // applique le thème avant le premier rendu
+import { App } from "@/app/App";
+import { queryClient } from "@/app/queryClient";
 
-// Création du root avec typage
 const rootElement = document.getElementById("root") as HTMLElement;
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(
-  <Provider store={store}>
-    <CookiesProvider defaultSetOptions={{ path: "/" }}>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
+        <App />
       </BrowserRouter>
-    </CookiesProvider>
-  </Provider>,
+    </QueryClientProvider>
+  </React.StrictMode>,
 );
-
-// Mesure des performances
-reportWebVitals((metric) => {
-  // En développement : afficher dans la console
-  if (process.env.NODE_ENV === "development") {
-    console.log(`${metric.name}: ${metric.value}`);
-  }
-
-  // En production : envoyer à un service d'analyse
-  if (process.env.NODE_ENV === "production") {
-    //Exemple avec Google Analytics
-    // gtag("event", metric.name, { value: metric.value });
-  }
-});

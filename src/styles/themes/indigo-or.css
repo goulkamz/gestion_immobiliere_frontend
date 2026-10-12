@@ -1,0 +1,46 @@
+/*
+ * Thème par défaut : bleu indigo (couleur de base) + jaune or (accent),
+ * blanc en surface. Pour ajouter un thème, dupliquer ce fichier sous un
+ * autre nom, changer les valeurs, l'importer dans index.css et le
+ * proposer dans useThemeStore — aucun composant n'a besoin d'être modifié.
+ */
+:root,
+[data-theme="indigo-or"] {
+  --c-primary-50: #eef2ff;
+  --c-primary-100: #e0e7ff;
+  --c-primary-200: #c7d2fe;
+  --c-primary-300: #a5b4fc;
+  --c-primary-400: #818cf8;
+  --c-primary-500: #6366f1;
+  --c-primary-600: #4f46e5;
+  --c-primary-700: #4338ca;
+  --c-primary-800: #3730a3;
+  --c-primary-900: #312e81;
+  --c-primary-950: #1e1b4b;
+
+  --c-accent-50: #fffbeb;
+  --c-accent-100: #fef3c7;
+  --c-accent-200: #fde68a;
+  --c-accent-300: #fcd34d;
+  --c-accent-400: #fbbf24;
+  --c-accent-500: #f59e0b;
+  --c-accent-600: #d97706;
+  --c-accent-700: #b45309;
+  --c-accent-800: #92400e;
+  --c-accent-900: #78350f;
+
+  --c-success-50: #ecfdf5;
+  --c-success-500: #22c55e;
+  --c-success-600: #16a34a;
+  --c-success-700: #15803d;
+
+  --c-warning-50: #fff7ed;
+  --c-warning-500: #f97316;
+  --c-warning-600: #ea580c;
+  --c-warning-700: #c2410c;
+
+  --c-danger-50: #fef2f2;
+  --c-danger-500: #ef4444;
+  --c-danger-600: #dc2626;
+  --c-danger-700: #b91c1c;
+}

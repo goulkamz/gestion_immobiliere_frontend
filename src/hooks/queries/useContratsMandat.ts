@@ -14,6 +14,14 @@ export function useContratsMandatQuery(params?: ContratMandatListParams, options
   });
 }
 
+export function useModesFacturationQuery() {
+  return useQuery({
+    queryKey: ["contrats-mandat", "modes-facturation"] as const,
+    queryFn: () => contratsMandatApi.getModesFacturation(),
+    staleTime: Infinity,
+  });
+}
+
 export function useContratMandatQuery(id: number | undefined) {
   return useQuery({
     queryKey: ["contrats-mandat", "detail", id] as const,

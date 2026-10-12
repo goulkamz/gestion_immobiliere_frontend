@@ -10,6 +10,7 @@ import {
   useActiverContratMandatMutation,
   useContratsMandatQuery,
   useCreateContratMandatMutation,
+  useModesFacturationQuery,
   useModifierContratMandatMutation,
   useResilierContratMandatMutation,
 } from "@/hooks/queries/useContratsMandat";
@@ -29,9 +30,12 @@ import {
 } from "../schemas";
 import { ApiError } from "@/api/http";
 import { statutLabel } from "@/utils/statut";
-import type { ContratMandatResponse, StatutMandat, TypeMandat } from "@/api/types";
+import { MODE_FACTURATION_LABELS } from "@/utils/mandat";
+import type { ContratMandatResponse, ModeFacturation, StatutMandat, TypeMandat } from "@/api/types";
 
 const TYPE_MANDAT_LABELS: Record<TypeMandat, string> = { GESTION: "Gestion", LOCATION: "Location", VENTE: "Vente" };
+// LOCATION et VENTE traitées hors système (annonces) pour l'instant : non proposées à la création ni à la modification
+const TYPES_DISPONIBLES: TypeMandat[] = ["GESTION"];
 const STATUTS: StatutMandat[] = ["EN_ATTENTE", "ACTIF", "RESILIE", "EXPIRE"];
 const MODIFIABLE: StatutMandat[] = ["EN_ATTENTE", "ACTIF"];
 
@@ -78,6 +82,33 @@ export function AgentMandatsPage() {
   // échouerait) : le sélecteur n'interroge que les cours sans mandat actif, côté serveur.
   const courChoisie = createForm.watch("idCour");
 
+  // Modes de facturation proposés selon le type de mandat choisi (liste fournie par le serveur)
+  const modesQuery = useModesFacturationQuery();
+  const typeCree = createForm.watch("typeMandat");
+  const typeEdite = editForm.watch("typeMandat");
+  const modesCree: ModeFacturation[] = (typeCree && modesQuery.data?.[typeCree]) || [];
+  const modesEdite: ModeFacturation[] = (typeEdite && modesQuery.data?.[typeEdite]) || [];
+  const modeOptions = (modes: ModeFacturation[]) => modes.map((m) => ({ value: m, label: MODE_FACTURATION_LABELS[m] }));
+
+  // Un seul mode possible : présélectionné. Mode devenu invalide après changement de type : vidé.
+  useEffect(() => {
+    if (!typeCree || !modesQuery.data) return;
+    const courant = createForm.getValues("modeFacturation");
+    const unique = modesCree.length === 1 ? modesCree[0] : undefined;
+    if (unique) createForm.setValue("modeFacturation", unique);
+    else if (courant && !modesCree.includes(courant)) createForm.resetField("modeFacturation");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [typeCree, modesQuery.data]);
+
+  useEffect(() => {
+    if (!typeEdite || !modesQuery.data) return;
+    const courant = editForm.getValues("modeFacturation");
+    const unique = modesEdite.length === 1 ? modesEdite[0] : undefined;
+    if (unique) editForm.setValue("modeFacturation", unique);
+    else if (courant && !modesEdite.includes(courant)) editForm.resetField("modeFacturation");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [typeEdite, modesQuery.data]);
+
   async function onCreate(values: MandatCreateFormValues) {
     if (!idUser) return;
     try {
@@ -104,7 +135,7 @@ export function AgentMandatsPage() {
       typeMandat: mandat.typeMandat,
       dateFin: mandat.dateFin ? mandat.dateFin.slice(0, 10) : "",
       commission: mandat.commission ?? undefined,
-      modeFacturation: "",
+      modeFacturation: mandat.modeFacturation ?? undefined,
     });
   }
 
@@ -177,6 +208,7 @@ export function AgentMandatsPage() {
     },
     { key: "agent", header: "Agent", render: (m) => m.nomAgent },
     { key: "type", header: "Type", render: (m) => TYPE_MANDAT_LABELS[m.typeMandat] },
+    { key: "facturation", header: "Facturation", render: (m) => (m.modeFacturation ? MODE_FACTURATION_LABELS[m.modeFacturation] : "-") },
     { key: "commission", header: "Commission", align: "right", render: (m) => (m.commission !== null ? `${m.commission} %` : "-") },
     { key: "statut", header: "Statut", render: (m) => <StatutBadge statut={m.statut} /> },
     {
@@ -315,7 +347,7 @@ export function AgentMandatsPage() {
             required
             placeholder="Sélectionner"
             defaultValue=""
-            options={Object.entries(TYPE_MANDAT_LABELS).map(([value, label]) => ({ value, label }))}
+            options={TYPES_DISPONIBLES.map((value) => ({ value, label: TYPE_MANDAT_LABELS[value] }))}
             error={createForm.formState.errors.typeMandat?.message}
             {...createForm.register("typeMandat")}
           />
@@ -325,7 +357,16 @@ export function AgentMandatsPage() {
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Input label="Commission (%)" type="number" min={0} step="0.01" {...createForm.register("commission")} />
-            <Input label="Mode de facturation" placeholder="Mensuel, à la transaction…" {...createForm.register("modeFacturation")} />
+            <Select
+              label="Mode de facturation"
+              required
+              placeholder={typeCree ? "Sélectionner" : "Choisissez d'abord un type"}
+              defaultValue=""
+              disabled={!typeCree}
+              options={modeOptions(modesCree)}
+              error={createForm.formState.errors.modeFacturation?.message}
+              {...createForm.register("modeFacturation")}
+            />
           </div>
           <Button type="submit" fullWidth loading={createMutation.isPending}>
             Créer le mandat
@@ -339,7 +380,7 @@ export function AgentMandatsPage() {
             <Select
               label="Type de mandat"
               required
-              options={Object.entries(TYPE_MANDAT_LABELS).map(([value, label]) => ({ value, label }))}
+              options={TYPES_DISPONIBLES.map((value) => ({ value, label: TYPE_MANDAT_LABELS[value] }))}
               error={editForm.formState.errors.typeMandat?.message}
               {...editForm.register("typeMandat")}
             />
@@ -347,7 +388,14 @@ export function AgentMandatsPage() {
               <Input label="Date de fin" type="date" error={editForm.formState.errors.dateFin?.message} {...editForm.register("dateFin")} />
               <Input label="Commission (%)" type="number" min={0} step="0.01" {...editForm.register("commission")} />
             </div>
-            <Input label="Mode de facturation" placeholder="Mensuel, à la transaction…" {...editForm.register("modeFacturation")} />
+            <Select
+              label="Mode de facturation"
+              required
+              placeholder="Sélectionner"
+              options={modeOptions(modesEdite)}
+              error={editForm.formState.errors.modeFacturation?.message}
+              {...editForm.register("modeFacturation")}
+            />
             <Button type="submit" fullWidth loading={modifierMutation.isPending}>
               Enregistrer
             </Button>

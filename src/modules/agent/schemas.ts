@@ -60,7 +60,7 @@ export const mandatCreateSchema = z
     dateDebut: z.string().min(1, "La date de début est requise"),
     dateFin: z.string().optional(),
     commission: z.coerce.number().min(0).optional().or(z.literal("").transform(() => undefined)),
-    modeFacturation: z.string().optional(),
+    modeFacturation: z.enum(["MENSUEL", "CUMUL", "COMMISSION"], { message: "Choisissez un mode de facturation" }),
   })
   .refine((d) => !d.dateFin || d.dateFin > d.dateDebut, { message: "La date de fin doit être après la date de début", path: ["dateFin"] });
 export type MandatCreateFormValues = z.infer<typeof mandatCreateSchema>;
@@ -70,7 +70,7 @@ export const mandatEditSchema = z.object({
   typeMandat: z.enum(["GESTION", "LOCATION", "VENTE"], { message: "Choisissez un type" }),
   dateFin: z.string().optional(),
   commission: z.coerce.number().min(0).optional().or(z.literal("").transform(() => undefined)),
-  modeFacturation: z.string().optional(),
+  modeFacturation: z.enum(["MENSUEL", "CUMUL", "COMMISSION"], { message: "Choisissez un mode de facturation" }),
 });
 export type MandatEditFormValues = z.infer<typeof mandatEditSchema>;
 export type MandatEditFormInput = z.input<typeof mandatEditSchema>;

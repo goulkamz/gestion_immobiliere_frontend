@@ -62,6 +62,26 @@ export function useCalculerReversementsTousMutation() {
   });
 }
 
+export function useCalculerCumulMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ idMandat, jusquA }: { idMandat: number; jusquA: string }) => echeancesApi.calculerCumul(idMandat, jusquA),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["echeances"] });
+    },
+  });
+}
+
+export function useCalculerCumulTousMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ jusquA }: { jusquA: string }) => echeancesApi.calculerCumulTous(jusquA),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["echeances"] });
+    },
+  });
+}
+
 export function useConfirmerVirementMutation() {
   const queryClient = useQueryClient();
   return useMutation({

@@ -6,6 +6,7 @@ import { useContratsMandatQuery } from "@/hooks/queries/useContratsMandat";
 import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { documentsApi } from "@/api/documents";
 import { formatDate } from "@/utils/format";
+import { MODE_FACTURATION_LABELS } from "@/utils/mandat";
 import type { ContratMandatResponse } from "@/api/types";
 
 const TYPE_LABELS: Record<ContratMandatResponse["typeMandat"], string> = {
@@ -40,6 +41,7 @@ export function BailleurMandatsPage() {
     },
     { key: "agent", header: "Agent en charge", render: (m) => m.nomAgent },
     { key: "type", header: "Type", render: (m) => <Badge>{TYPE_LABELS[m.typeMandat]}</Badge> },
+    { key: "facturation", header: "Facturation", render: (m) => (m.modeFacturation ? MODE_FACTURATION_LABELS[m.modeFacturation] : "-") },
     { key: "commission", header: "Commission", align: "right", render: (m) => (m.commission !== null ? `${m.commission} %` : "-") },
     { key: "debut", header: "Début", render: (m) => formatDate(m.dateDebut) },
     { key: "fin", header: "Fin", render: (m) => formatDate(m.dateFin) },

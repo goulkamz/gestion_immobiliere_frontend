@@ -4,6 +4,7 @@ import type {
   ConfirmerVirementRequest,
   EcheanceMandatResponse,
   EcheanceResponse,
+  ModeFacturation,
   PageParams,
   PagedResponse,
   StatutEcheance,
@@ -25,6 +26,8 @@ export interface EcheanceListParams extends PageParams {
   referenceCour?: string;
   /** Agent/admin : mois au format yyyy-MM. */
   periode?: string;
+  /** Agent/admin : mode de facturation du mandat (échéances de mandat seulement). */
+  modeFacturation?: ModeFacturation;
 }
 
 /** Résultat du calcul groupé des reversements (tous les mandats actifs, traité côté serveur). */
@@ -33,6 +36,16 @@ export interface CalculGroupeMandatsResponse {
   succes: number;
   ignores: number;
   raisons: { message: string; nombre: number }[];
+}
+
+/** Résultat du calcul cumulé d'un mandat : une échéance MANDAT par mois, du début du mandat jusqu'au mois choisi. */
+export interface CalculCumulResponse {
+  idMandat: number;
+  nombreMois: number;
+  montantLoyersDus: number;
+  commissionDeduite: number;
+  montantNetAReverser: number;
+  echeances: EcheanceMandatResponse[];
 }
 
 export const echeancesApi = {
@@ -44,6 +57,10 @@ export const echeancesApi = {
     unwrap<EcheanceMandatResponse>(http.post(`/echeances/mandats/${idMandat}/calculer`, null, { params: { periode } })),
   calculerReversementsTous: (periode: string) =>
     unwrap<CalculGroupeMandatsResponse>(http.post("/echeances/mandats/calculer", null, { params: { periode } })),
+  calculerCumul: (idMandat: number, jusquA: string) =>
+    unwrap<CalculCumulResponse>(http.post(`/echeances/mandats/${idMandat}/calculer-cumul`, null, { params: { jusquA } })),
+  calculerCumulTous: (jusquA: string) =>
+    unwrap<CalculGroupeMandatsResponse>(http.post("/echeances/mandats/calculer-cumul", null, { params: { jusquA } })),
   getReversementsEnAttente: (idMandat: number) =>
     unwrap<EcheanceMandatResponse[]>(http.get(`/echeances/mandats/${idMandat}/en-attente`)),
   confirmerVirement: (idEcheance: number, body: ConfirmerVirementRequest) =>

@@ -9,7 +9,7 @@ export function AgentLayout() {
 
   return (
     <PageLayout>
-      <div className={`grid gap-6 ${collapsed ? "lg:grid-cols-[64px_1fr]" : "lg:grid-cols-[240px_1fr]"}`}>
+      <div className={`grid grid-cols-1 gap-6 ${collapsed ? "lg:grid-cols-[64px_1fr]" : "lg:grid-cols-[240px_1fr]"}`}>
         <AgentSidebar />
         <div className="min-w-0">
           <Outlet />

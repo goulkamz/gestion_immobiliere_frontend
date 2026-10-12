@@ -3,6 +3,7 @@ import type {
   ApiSuccessResponse,
   ContratMandatResponse,
   CreateContratMandatRequest,
+  ModesFacturationParType,
   PageParams,
   PagedResponse,
   ResilierMandatRequest,
@@ -25,6 +26,8 @@ export const contratsMandatApi = {
   // idCour/statut ignorés côté serveur pour un bailleur (toujours filtré sur ses propres cours) ; honorés pour un agent.
   getContratsMandat: (params?: ContratMandatListParams) =>
     unwrap<PagedResponse<ContratMandatResponse>>(http.get("/contrats-mandat", { params })),
+
+  getModesFacturation: () => unwrap<ModesFacturationParType>(http.get("/contrats-mandat/modes-facturation")),
 
   getContratMandat: (id: number) => unwrap<ContratMandatResponse>(http.get(`/contrats-mandat/${id}`)),
 

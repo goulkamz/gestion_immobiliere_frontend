@@ -69,6 +69,9 @@ export type StatutDecompteSortie = "EN_ATTENTE" | "REGLE";
 export type StatutLocation = "EN_ATTENTE" | "ACTIF" | "TERMINE" | "RESILIE";
 export type StatutMandat = "EN_ATTENTE" | "ACTIF" | "RESILIE" | "EXPIRE";
 export type TypeMandat = "GESTION" | "LOCATION" | "VENTE";
+export type ModeFacturation = "MENSUEL" | "CUMUL" | "COMMISSION";
+/** Modes de facturation autorisés par type de mandat (GET /contrats-mandat/modes-facturation). */
+export type ModesFacturationParType = Partial<Record<TypeMandat, ModeFacturation[]>>;
 
 export type StatutThumbnail = "EN_COURS" | "PRET" | "ECHEC";
 
@@ -549,6 +552,7 @@ export interface ContratMandatResponse {
   dateFin: string | null;
   typeMandat: TypeMandat;
   commission: number | null;
+  modeFacturation: ModeFacturation | null;
   statut: StatutMandat;
   motifResiliation: string | null;
 }
@@ -689,7 +693,7 @@ export interface CreateContratMandatRequest {
   dateFin?: string;
   typeMandat: TypeMandat;
   commission?: number;
-  modeFacturation?: string;
+  modeFacturation: ModeFacturation;
 }
 
 export interface ResilierMandatRequest {
@@ -718,7 +722,7 @@ export interface ResilierLocationRequest {
 export interface UpdateContratMandatRequest {
   dateFin?: string;
   commission?: number;
-  modeFacturation?: string;
+  modeFacturation?: ModeFacturation;
   typeMandat?: TypeMandat;
 }
 

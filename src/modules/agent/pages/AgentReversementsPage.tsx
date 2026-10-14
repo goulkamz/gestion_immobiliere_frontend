@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { AlertTriangle, Banknote, Calculator, Calendar, Layers } from "lucide-react";
-import { Button, DataTable, EmptyState, Input, Modal, PageHeader, Pagination, RemoteCombobox, Select, StatutBadge } from "@/components/ui";
+import { AlertTriangle, Banknote, Calculator, Calendar, CheckCircle2, Clock, Layers, List } from "lucide-react";
+import { Button, DataTable, EmptyState, Input, Modal, PageHeader, Pagination, RemoteCombobox, Select, StatCard, StatutBadge } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import { ActionGroup } from "@/components/ui";
 import { useContratsMandatQuery } from "@/hooks/queries/useContratsMandat";
@@ -14,6 +14,7 @@ import {
   useCalculerReversementMutation,
   useCalculerReversementsTousMutation,
   useConfirmerVirementMutation,
+  useEcheancesCompteurs,
   useEcheancesEnRetardMandatQuery,
   useEcheancesQuery,
 } from "@/hooks/queries/useEcheances";
@@ -71,6 +72,13 @@ export function AgentReversementsPage() {
     page,
     size: 20,
     sort: "dateEcheance,desc",
+    periode: periodeFiltre || undefined,
+    modeFacturation: modeFiltre || undefined,
+    entiteId: idMandatSelectionne === "" ? undefined : idMandatSelectionne,
+  });
+
+  const compteurs = useEcheancesCompteurs({
+    type: "MANDAT",
     periode: periodeFiltre || undefined,
     modeFacturation: modeFiltre || undefined,
     entiteId: idMandatSelectionne === "" ? undefined : idMandatSelectionne,
@@ -345,6 +353,12 @@ export function AgentReversementsPage() {
         <p className="mb-3 text-xs text-slate-500">
           Une échéance datée du 1er d'un mois correspond à l'occupation du mois précédent. Videz le champ du mois pour voir toutes les périodes.
         </p>
+        <div className="mb-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <StatCard label="Total" value={compteurs.loading ? "-" : compteurs.total} icon={<List size={20} aria-hidden="true" />} tone="primary" />
+          <StatCard label="Versés" value={compteurs.loading ? "-" : compteurs.paye} icon={<CheckCircle2 size={20} aria-hidden="true" />} tone="success" />
+          <StatCard label="En retard" value={compteurs.loading ? "-" : compteurs.retard} icon={<AlertTriangle size={20} aria-hidden="true" />} tone="danger" />
+          <StatCard label="En attente" value={compteurs.loading ? "-" : compteurs.attente} icon={<Clock size={20} aria-hidden="true" />} tone="warning" />
+        </div>
         <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
           <div className="sm:w-44">
             <Input

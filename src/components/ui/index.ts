@@ -34,6 +34,7 @@ export { Pagination } from "./Pagination";
 export { PageHeader } from "./PageHeader";
 export { PageLayout } from "./PageLayout";
 export { StatCard } from "./StatCard";
+export { CompteursStatut } from "./CompteursStatut";
 export type { StatCardTone } from "./StatCard";
 export { DataTable } from "./DataTable";
 export type { DataTableColumn } from "./DataTable";

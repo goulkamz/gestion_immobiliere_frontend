@@ -1,4 +1,7 @@
-import { useMemo, useState } from "react";
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { useRechercheServeur } from "@/hooks/useRechercheServeur";
+import { statutLabel } from "@/utils/statut";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import type { AxiosResponse } from "axios";
 import {
@@ -14,14 +17,17 @@ import {
 } from "lucide-react";
 import {
   ActionGroup,
+  CompteursStatut,
   DataTable,
   DocumentPreviewModal,
   EmptyState,
+  MaisonDetailModal,
   Modal,
   PageHeader,
+  Pagination,
   SearchInput,
+  Select,
   StatutBadge,
-  MaisonDetailModal,
 } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import { useContratsLocationQuery } from "@/hooks/queries/useContrats";
@@ -29,7 +35,7 @@ import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { useClientUiStore } from "@/store/clientUiStore";
 import { documentsApi } from "@/api/documents";
 import { formatDate, formatMontant } from "@/utils/format";
-import type { ContratLocationResponse } from "@/api/types";
+import type { ContratLocationResponse, StatutLocation } from "@/api/types";
 
 const SORTIE_DISPONIBLE: ContratLocationResponse["statut"][] = [
   "TERMINE",
@@ -44,13 +50,29 @@ interface DocumentDescriptor {
   filename: string;
 }
 
+const STATUTS = ["EN_ATTENTE", "ACTIF", "TERMINE", "RESILIE"] as const;
+
 export function ClientContratsPage() {
   const [detailMaison, setDetailMaison] = useState<number | null>(null);
-  const [search, setSearch] = useState("");
+  const { search, setSearch, recherche, page, setPage } = useRechercheServeur();
+  const [statutFilter, setStatutFilter] = useState<StatutLocation | "">("");
   const [openContrat, setOpenContrat] =
     useState<ContratLocationResponse | null>(null);
   const sidebarCollapsed = useClientUiStore((s) => s.sidebarCollapsed);
-  const contratsQuery = useContratsLocationQuery({ size: 50 });
+  // Périmètre (mes données), recherche, statut et pagination sont appliqués côté serveur
+  const contratsQuery = useContratsLocationQuery({
+    page,
+    size: 20,
+    sort: "dateEntree,desc",
+    statut: statutFilter || undefined,
+    recherche: recherche || undefined,
+  });
+  const compteurs = useCompteursStatut(
+    useContratsLocationQuery,
+    { recherche: recherche || undefined },
+    STATUTS,
+  );
+  const contrats = contratsQuery.data?.content ?? [];
   const {
     openPreview,
     download,
@@ -59,13 +81,6 @@ export function ClientContratsPage() {
     preview,
     isPending,
   } = useDocumentDownload();
-
-  const filtered = useMemo(() => {
-    const list = contratsQuery.data?.content ?? [];
-    const term = search.trim().toLowerCase();
-    if (!term) return list;
-    return list.filter((c) => c.nomCommunMaison.toLowerCase().includes(term));
-  }, [contratsQuery.data, search]);
 
   function documentsFor(c: ContratLocationResponse): DocumentDescriptor[] {
     return [
@@ -240,6 +255,8 @@ export function ClientContratsPage() {
         title="Mes contrats"
         description="Vos contrats de location et documents associés."
       />
+
+      <CompteursStatut compteurs={compteurs} statuts={STATUTS} />
       {contratsQuery.isError ? (
         <EmptyState
           icon={<AlertTriangle size={32} />}
@@ -248,25 +265,50 @@ export function ClientContratsPage() {
         />
       ) : (
         <>
-          <div className="mb-4">
-            <SearchInput
-              value={search}
-              onChange={setSearch}
-              placeholder="Rechercher une maison…"
-              ariaLabel="Rechercher parmi mes contrats"
-            />
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+            <div className="sm:w-44">
+              <Select
+                aria-label="Filtrer par statut"
+                value={statutFilter}
+                onChange={(e) => {
+                  setStatutFilter(e.target.value as StatutLocation | "");
+                  setPage(0);
+                }}
+                placeholder="Tous les statuts"
+                options={STATUTS.map((st) => ({
+                  value: st,
+                  label: statutLabel(st),
+                }))}
+              />
+            </div>
+            <div className="sm:w-72">
+              <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Rechercher une maison…"
+                ariaLabel="Rechercher parmi mes contrats"
+              />
+            </div>
           </div>
           <DataTable
-            data={filtered}
+            data={contrats}
             columns={columns}
             keyExtractor={(c) => c.idContratLocation}
             loading={contratsQuery.isLoading}
             emptyMessage={
-              search
+              search || statutFilter
                 ? "Aucun contrat ne correspond à votre recherche"
                 : "Aucun contrat de location pour le moment"
             }
           />
+          {contratsQuery.data && (
+            <Pagination
+              currentPage={contratsQuery.data.page.number}
+              totalPages={contratsQuery.data.page.totalPages}
+              totalElements={contratsQuery.data.page.totalElements}
+              onPageChange={setPage}
+            />
+          )}
         </>
       )}
 

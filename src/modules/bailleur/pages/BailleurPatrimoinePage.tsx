@@ -1,74 +1,62 @@
-import { useMemo, useState } from "react";
-import { useQueries } from "@tanstack/react-query";
+import { useState } from "react";
 import { AlertTriangle, Building2, DoorOpen, Eye, MapPin } from "lucide-react";
 import {
   ActionGroup,
+  CompteursStatut,
   CourDetailModal,
   DataTable,
   EmptyState,
   MaisonDetailModalFromData,
   PageHeader,
+  Pagination,
   SearchInput,
+  Select,
   StatutBadge,
 } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import { useCoursQuery } from "@/hooks/queries/useCours";
-import { maisonsQueryKeys } from "@/hooks/queries/useMaisons";
-import { maisonsApi } from "@/api/maisons";
+import { useMaisonsGestionQuery } from "@/hooks/queries/useMaisons";
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { useRechercheServeur } from "@/hooks/useRechercheServeur";
+import { statutLabel } from "@/utils/statut";
 import { formatMontant } from "@/utils/format";
-import type { CourResponse, MaisonResponse } from "@/api/types";
+import type { CourResponse, MaisonResponse, StatutMaison } from "@/api/types";
+
+const STATUTS = ["DISPONIBLE", "RESERVEE", "LOUEE", "EN_MAINTENANCE"] as const;
 
 export function BailleurPatrimoinePage() {
-  const [search, setSearch] = useState("");
+  const {
+    search,
+    setSearch,
+    recherche,
+    page: pageCours,
+    setPage: setPageCours,
+  } = useRechercheServeur();
+  const [pageMaisons, setPageMaisons] = useState(0);
+  const [statutFilter, setStatutFilter] = useState<StatutMaison | "">("");
   const [detailCour, setDetailCour] = useState<CourResponse | null>(null);
   const [detailMaison, setDetailMaison] = useState<MaisonResponse | null>(null);
-  const coursQuery = useCoursQuery({ size: 100 });
-  const cours = useMemo(
-    () => coursQuery.data?.content ?? [],
-    [coursQuery.data],
-  );
 
-  const maisonsQueries = useQueries({
-    queries: cours.map((cour) => ({
-      queryKey: maisonsQueryKeys.list({ idCour: cour.idCour, size: 100 }),
-      queryFn: () => maisonsApi.list({ idCour: cour.idCour, size: 100 }),
-      enabled: cours.length > 0,
-    })),
+  // Périmètre (mon patrimoine), recherche, statut et pagination sont appliqués côté serveur
+  const coursQuery = useCoursQuery({
+    page: pageCours,
+    size: 20,
+    recherche: recherche || undefined,
   });
-
-  const maisonsLoading = maisonsQueries.some((q) => q.isLoading);
-  const maisons = useMemo(
-    () => maisonsQueries.flatMap((q) => q.data?.content ?? []),
-    [maisonsQueries],
+  const maisonsQuery = useMaisonsGestionQuery({
+    page: pageMaisons,
+    size: 20,
+    recherche: recherche || undefined,
+    statut: statutFilter || undefined,
+  });
+  const compteurs = useCompteursStatut(
+    useMaisonsGestionQuery,
+    { recherche: recherche || undefined },
+    STATUTS,
   );
-
-  const term = search.trim().toLowerCase();
-  const coursFiltrees = useMemo(
-    () =>
-      term
-        ? cours.filter((c) =>
-            [c.referenceCour, c.lotCour, c.nomSecteur]
-              .filter(Boolean)
-              .join(" ")
-              .toLowerCase()
-              .includes(term),
-          )
-        : cours,
-    [cours, term],
-  );
-  const maisonsFiltrees = useMemo(
-    () =>
-      term
-        ? maisons.filter((m) =>
-            [m.nomCommunMaison, m.typeMaison, m.referenceCour]
-              .filter(Boolean)
-              .join(" ")
-              .toLowerCase()
-              .includes(term),
-          )
-        : maisons,
-    [maisons, term],
-  );
+  const cours = coursQuery.data?.content ?? [];
+  const maisons = maisonsQuery.data?.content ?? [];
+  const term = recherche;
 
   const courColumns: DataTableColumn<CourResponse>[] = [
     {
@@ -182,6 +170,8 @@ export function BailleurPatrimoinePage() {
         title="Mon patrimoine"
         description="Vos cours et les maisons qui les composent."
       />
+
+      <CompteursStatut compteurs={compteurs} statuts={STATUTS} />
       {coursQuery.isError ? (
         <EmptyState
           icon={<AlertTriangle size={32} />}
@@ -190,13 +180,33 @@ export function BailleurPatrimoinePage() {
         />
       ) : (
         <div className="space-y-8">
-          <div className="max-w-sm">
-            <SearchInput
-              value={search}
-              onChange={setSearch}
-              placeholder="Rechercher une cour ou une maison…"
-              ariaLabel="Rechercher dans mon patrimoine"
-            />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="max-w-sm flex-1">
+              <SearchInput
+                value={search}
+                onChange={(v) => {
+                  setSearch(v);
+                  setPageMaisons(0);
+                }}
+                placeholder="Rechercher une cour ou une maison…"
+                ariaLabel="Rechercher dans mon patrimoine"
+              />
+            </div>
+            <div className="sm:w-44">
+              <Select
+                aria-label="Filtrer les maisons par statut"
+                value={statutFilter}
+                onChange={(e) => {
+                  setStatutFilter(e.target.value as StatutMaison | "");
+                  setPageMaisons(0);
+                }}
+                placeholder="Tous les statuts"
+                options={STATUTS.map((st) => ({
+                  value: st,
+                  label: statutLabel(st),
+                }))}
+              />
+            </div>
           </div>
 
           <section>
@@ -204,7 +214,7 @@ export function BailleurPatrimoinePage() {
               Mes cours
             </h2>
             <DataTable
-              data={coursFiltrees}
+              data={cours}
               columns={courColumns}
               keyExtractor={(c) => c.idCour}
               loading={coursQuery.isLoading}
@@ -214,6 +224,14 @@ export function BailleurPatrimoinePage() {
                   : "Aucune cour enregistrée à votre nom pour le moment"
               }
             />
+            {coursQuery.data && (
+              <Pagination
+                currentPage={coursQuery.data.page.number}
+                totalPages={coursQuery.data.page.totalPages}
+                totalElements={coursQuery.data.page.totalElements}
+                onPageChange={setPageCours}
+              />
+            )}
           </section>
 
           <section>
@@ -221,16 +239,24 @@ export function BailleurPatrimoinePage() {
               Mes maisons
             </h2>
             <DataTable
-              data={maisonsFiltrees}
+              data={maisons}
               columns={maisonColumns}
               keyExtractor={(m) => m.idMaison}
-              loading={coursQuery.isLoading || maisonsLoading}
+              loading={maisonsQuery.isLoading}
               emptyMessage={
                 term
                   ? "Aucune maison ne correspond à votre recherche"
                   : "Aucune maison dans votre patrimoine pour le moment"
               }
             />
+            {maisonsQuery.data && (
+              <Pagination
+                currentPage={maisonsQuery.data.page.number}
+                totalPages={maisonsQuery.data.page.totalPages}
+                totalElements={maisonsQuery.data.page.totalElements}
+                onPageChange={setPageMaisons}
+              />
+            )}
           </section>
         </div>
       )}

@@ -22,6 +22,7 @@ import {
   PhotoManager,
   PhotoPicker,
   SearchInput,
+  Textarea,
   RemoteCombobox,
   CourDetailModal,
 } from "@/components/ui";
@@ -35,7 +36,10 @@ import {
 import { useContratsMandatQuery } from "@/hooks/queries/useContratsMandat";
 import { useMaisonsGestionQuery } from "@/hooks/queries/useMaisons";
 import { useAttachPhotos } from "@/hooks/queries/useMedias";
-import { useBailleursOptions, useSecteursOptions } from "@/hooks/useOptionsSelection";
+import {
+  useBailleursOptions,
+  useSecteursOptions,
+} from "@/hooks/useOptionsSelection";
 import {
   courCreateSchema,
   courEditSchema,
@@ -149,6 +153,7 @@ export function AgentCoursPage() {
       referenceCour: cour.referenceCour,
       lotCour: cour.lotCour ?? "",
       numeroPorte: cour.numeroPorte ?? undefined,
+      description: cour.description ?? "",
     });
   }
 
@@ -318,21 +323,23 @@ export function AgentCoursPage() {
             error={createForm.formState.errors.idProprietaire?.message}
             {...createForm.register("idProprietaire")}
           />
-          <RemoteCombobox
-            label="Secteur"
-            required
-            placeholder="Rechercher un secteur (nom, code, ville)"
-            useOptions={useSecteursOptions}
-            value={secteurCreation}
-            error={createForm.formState.errors.idSecteur?.message}
-            {...createForm.register("idSecteur")}
-          />
-          <Input
-            label="Référence"
-            required
-            error={createForm.formState.errors.referenceCour?.message}
-            {...createForm.register("referenceCour")}
-          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <RemoteCombobox
+              label="Secteur"
+              required
+              placeholder="Rechercher un secteur (nom, code, ville)"
+              useOptions={useSecteursOptions}
+              value={secteurCreation}
+              error={createForm.formState.errors.idSecteur?.message}
+              {...createForm.register("idSecteur")}
+            />
+            <Input
+              label="Référence"
+              required
+              error={createForm.formState.errors.referenceCour?.message}
+              {...createForm.register("referenceCour")}
+            />
+          </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Input label="Lot" {...createForm.register("lotCour")} />
             <Input
@@ -342,6 +349,12 @@ export function AgentCoursPage() {
               {...createForm.register("numeroPorte")}
             />
           </div>
+          <Textarea
+            label="Description"
+            placeholder="État des lieux, équipements communs, atouts…"
+            rows={4}
+            {...createForm.register("description")}
+          />
           <PhotoPicker files={photos} onChange={setPhotos} />
           <Button
             type="submit"
@@ -364,23 +377,29 @@ export function AgentCoursPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          <RemoteCombobox
-            key={editing?.idCour}
-            label="Secteur"
-            required
-            placeholder="Rechercher un secteur (nom, code, ville)"
-            useOptions={useSecteursOptions}
-            value={secteurEdition}
-            initialOption={editing ? { value: editing.idSecteur, label: editing.nomSecteur } : undefined}
-            error={errors.idSecteur?.message}
-            {...register("idSecteur")}
-          />
-          <Input
-            label="Référence"
-            required
-            error={errors.referenceCour?.message}
-            {...register("referenceCour")}
-          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <RemoteCombobox
+              key={editing?.idCour}
+              label="Secteur"
+              required
+              placeholder="Rechercher un secteur (nom, code, ville)"
+              useOptions={useSecteursOptions}
+              value={secteurEdition}
+              initialOption={
+                editing
+                  ? { value: editing.idSecteur, label: editing.nomSecteur }
+                  : undefined
+              }
+              error={errors.idSecteur?.message}
+              {...register("idSecteur")}
+            />
+            <Input
+              label="Référence"
+              required
+              error={errors.referenceCour?.message}
+              {...register("referenceCour")}
+            />
+          </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Input label="Lot" {...register("lotCour")} />
             <Input
@@ -390,6 +409,12 @@ export function AgentCoursPage() {
               {...register("numeroPorte")}
             />
           </div>
+          <Textarea
+            label="Description"
+            placeholder="État des lieux, équipements communs, atouts…"
+            rows={4}
+            {...register("description")}
+          />
           {editing && (
             <PhotoManager entiteType="COUR" entiteId={editing.idCour} />
           )}

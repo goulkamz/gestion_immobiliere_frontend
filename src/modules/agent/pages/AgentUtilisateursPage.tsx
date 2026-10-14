@@ -2,10 +2,11 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { AlertTriangle, Plus, UserCheck, Users } from "lucide-react";
-import { Badge, Button, DataTable, EmptyState, Input, Modal, PageHeader, SearchInput, Select } from "@/components/ui";
-import type { DataTableColumn } from "@/components/ui";
-import { useCreateUserAdminMutation, useUsersByRoleQuery } from "@/hooks/queries/useUsersAdmin";
+import { AlertTriangle, Ban, CheckCircle2, List, Plus, RotateCcw, UserCheck, UserX, Users, XCircle } from "lucide-react";
+import { ActionGroup, Badge, Button, DataTable, EmptyState, Input, Modal, PageHeader, SearchInput, Select, StatCard } from "@/components/ui";
+import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
+import { useCreateUserAdminMutation, useRestaurerUserMutation, useUpdateUserStatusMutation, useUsersByRoleQuery } from "@/hooks/queries/useUsersAdmin";
+import { useSessionStore, selectRole } from "@/store/sessionStore";
 import { creerUtilisateurSchema, type CreerUtilisateurFormInput, type CreerUtilisateurFormValues } from "../schemas";
 import { passwordStrengthMessage } from "@/utils/validation";
 import { ApiError } from "@/api/http";
@@ -16,12 +17,16 @@ type RoleOnglet = "ROLE_BAILLEUR" | "ROLE_CLIENT";
 const ROLE_LABEL: Record<RoleOnglet, string> = { ROLE_BAILLEUR: "Bailleur", ROLE_CLIENT: "Client" };
 
 export function AgentUtilisateursPage() {
-  const [onglet, setOnglet] = useState<RoleOnglet>("ROLE_BAILLEUR");
+  const isAdmin = useSessionStore(selectRole) === "ROLE_ADMIN";
+  const [onglet, setOnglet] = useState<RoleOnglet | "SUPPRIMES">("ROLE_BAILLEUR");
   const [search, setSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
 
-  const usersQuery = useUsersByRoleQuery(onglet);
+  const supprimes = onglet === "SUPPRIMES";
+  const usersQuery = useUsersByRoleQuery(supprimes ? undefined : onglet, supprimes ? { supprimes: true } : undefined);
   const createMutation = useCreateUserAdminMutation();
+  const restaurerMutation = useRestaurerUserMutation();
+  const statusMutation = useUpdateUserStatusMutation();
 
   const form = useForm<CreerUtilisateurFormInput, unknown, CreerUtilisateurFormValues>({
     resolver: zodResolver(creerUtilisateurSchema),
@@ -35,8 +40,11 @@ export function AgentUtilisateursPage() {
     return list.filter((u) => [u.nom, u.prenom, u.email, u.telephone].filter(Boolean).join(" ").toLowerCase().includes(term));
   }, [usersQuery.data, search]);
 
+  const tousLesComptes = usersQuery.data?.content ?? [];
+  const nbActifs = tousLesComptes.filter((u) => u.flagActif).length;
+
   function openCreate() {
-    form.reset({ role: onglet, nom: "", prenom: "", sexe: "" as "M", dateNaissance: "", email: "", telephone: "", telephone1: "", password: "" });
+    form.reset({ role: supprimes ? "ROLE_BAILLEUR" : onglet, nom: "", prenom: "", sexe: "" as "M", dateNaissance: "", email: "", telephone: "", telephone1: "", password: "" });
     setCreateOpen(true);
   }
 
@@ -51,15 +59,67 @@ export function AgentUtilisateursPage() {
     }
   }
 
+  async function onRestaurer(u: UserAdminResponse) {
+    try {
+      await restaurerMutation.mutateAsync(u.idUser);
+      toast.success(`Le compte de ${u.prenom} ${u.nom} a été réactivé.`);
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : "Réactivation du compte impossible.");
+    }
+  }
+
+  async function onToggleActif(u: UserAdminResponse) {
+    try {
+      await statusMutation.mutateAsync({ id: u.idUser, flagActif: !u.flagActif });
+      toast.success(u.flagActif ? `Le compte de ${u.prenom} ${u.nom} est désactivé.` : `Le compte de ${u.prenom} ${u.nom} est activé.`);
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : "Modification du statut impossible.");
+    }
+  }
+
   const columns: DataTableColumn<UserAdminResponse>[] = [
     { key: "nom", header: "Nom", render: (u) => `${u.prenom} ${u.nom}` },
     { key: "email", header: "Email", render: (u) => u.email },
     { key: "telephone", header: "Téléphone", render: (u) => u.telephone ?? "-" },
-    {
-      key: "statut",
-      header: "Statut",
-      render: (u) => <Badge variant={u.flagActif ? "success" : "neutral"}>{u.flagActif ? "Actif" : "Inactif"}</Badge>,
-    },
+    ...(supprimes
+      ? [
+          { key: "role", header: "Rôle", render: (u: UserAdminResponse) => u.role.replace("ROLE_", "").toLowerCase() },
+          {
+            key: "actions",
+            header: "Actions",
+            align: "right" as const,
+            render: (u: UserAdminResponse) => {
+              const items: ActionGroupItem[] = [
+                { label: "Réactiver le compte", text: "Réactiver", icon: <RotateCcw size={15} aria-hidden="true" />, onClick: () => onRestaurer(u) },
+              ];
+              return <ActionGroup items={items} />;
+            },
+          },
+        ]
+      : [
+          {
+            key: "statut",
+            header: "Statut",
+            render: (u: UserAdminResponse) => <Badge variant={u.flagActif ? "success" : "neutral"}>{u.flagActif ? "Actif" : "Inactif"}</Badge>,
+          },
+          ...(isAdmin
+            ? [
+                {
+                  key: "actions",
+                  header: "Actions",
+                  align: "right" as const,
+                  render: (u: UserAdminResponse) => {
+                    const items: ActionGroupItem[] = [
+                      u.flagActif
+                        ? { label: "Désactiver le compte", text: "Désactiver", icon: <Ban size={15} aria-hidden="true" />, onClick: () => onToggleActif(u) }
+                        : { label: "Activer le compte", text: "Activer", icon: <CheckCircle2 size={15} aria-hidden="true" />, onClick: () => onToggleActif(u) },
+                    ];
+                    return <ActionGroup items={items} />;
+                  },
+                },
+              ]
+            : []),
+        ]),
   ];
 
   const tabClass = (actif: boolean) =>
@@ -80,6 +140,16 @@ export function AgentUtilisateursPage() {
         }
       />
 
+      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-[repeat(auto-fit,minmax(11rem,1fr))]">
+        <StatCard label="Total" value={usersQuery.data ? tousLesComptes.length : "-"} icon={<List size={20} aria-hidden="true" />} tone="primary" />
+        {!supprimes && (
+          <>
+            <StatCard label="Actifs" value={usersQuery.data ? nbActifs : "-"} icon={<CheckCircle2 size={20} aria-hidden="true" />} tone="success" />
+            <StatCard label="Inactifs" value={usersQuery.data ? tousLesComptes.length - nbActifs : "-"} icon={<XCircle size={20} aria-hidden="true" />} tone="danger" />
+          </>
+        )}
+      </div>
+
       <div className="mb-4 inline-flex rounded-xl border border-primary-100 bg-primary-50/60 p-1">
         <button type="button" onClick={() => setOnglet("ROLE_BAILLEUR")} className={tabClass(onglet === "ROLE_BAILLEUR")}>
           <UserCheck size={15} aria-hidden="true" />
@@ -89,6 +159,12 @@ export function AgentUtilisateursPage() {
           <Users size={15} aria-hidden="true" />
           Clients
         </button>
+        {isAdmin && (
+          <button type="button" onClick={() => setOnglet("SUPPRIMES")} className={tabClass(supprimes)}>
+            <UserX size={15} aria-hidden="true" />
+            Supprimés
+          </button>
+        )}
       </div>
 
       {usersQuery.isError ? (

@@ -79,6 +79,9 @@ export function MaisonDetailPage() {
             {maison.nombrePiece ? `, composée de ${maison.nombrePiece} pièce(s)` : ""}, située dans la cour{" "}
             {maison.referenceCour}. Statut actuel : <strong>{maison.statut.toLowerCase()}</strong>.
           </p>
+          {maison.description && (
+            <p className="mt-3 whitespace-pre-line text-slate-600">{maison.description}</p>
+          )}
 
           <dl className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <DetailFact icon={DoorOpen} label="Pièces" value={maison.nombrePiece ?? "-"} />

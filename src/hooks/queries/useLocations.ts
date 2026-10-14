@@ -73,7 +73,8 @@ export function useRembourserLocationMutation() {
 export function useUpdateStatutLocationMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, statut }: { id: number; statut: StatutLocationBienService }) => locationsApi.updateStatut(id, statut),
+    mutationFn: ({ id, statut, raccourcir }: { id: number; statut: StatutLocationBienService; raccourcir?: boolean }) =>
+      locationsApi.updateStatut(id, statut, raccourcir),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["locations-biens-services"] }),
   });
 }

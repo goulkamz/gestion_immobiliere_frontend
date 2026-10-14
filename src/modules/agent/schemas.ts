@@ -6,6 +6,7 @@ export const courEditSchema = z.object({
   referenceCour: z.string().min(1, "La référence est requise"),
   lotCour: z.string().optional(),
   numeroPorte: z.coerce.number().int().positive().optional().or(z.literal("").transform(() => undefined)),
+  description: z.string().optional(),
 });
 export type CourEditFormValues = z.infer<typeof courEditSchema>;
 export type CourEditFormInput = z.input<typeof courEditSchema>;
@@ -25,6 +26,7 @@ export const maisonSchema = z.object({
   caution: z.coerce.number().positive().optional().or(z.literal("").transform(() => undefined)),
   avance: z.coerce.number().positive().optional().or(z.literal("").transform(() => undefined)),
   nombreMoisCaution: z.coerce.number().int().positive().optional().or(z.literal("").transform(() => undefined)),
+  description: z.string().optional(),
 });
 export type MaisonFormValues = z.infer<typeof maisonSchema>;
 export type MaisonFormInput = z.input<typeof maisonSchema>;
@@ -219,11 +221,11 @@ export type ConfirmerLocationFormInput = z.input<typeof confirmerLocationSchema>
 export const modifierDureeLocationSchema = z
   .object({
     nouvelleDateFin: z.string().min(1, "La nouvelle date de fin est requise"),
-    montantComplement: z.coerce.number().positive("Le montant doit être positif").optional().or(z.literal("").transform(() => undefined)),
+    montantComplement: z.coerce.number().min(0, "Le montant ne peut pas être négatif").optional().or(z.literal("").transform(() => undefined)),
     modePaiementComplement: z.string().optional(),
     referencePaiementComplement: z.string().optional(),
   })
-  .refine((d) => d.montantComplement === undefined || !!d.modePaiementComplement?.trim(), {
+  .refine((d) => !d.montantComplement || !!d.modePaiementComplement?.trim(), {
     message: "Le mode de paiement est requis avec un complément",
     path: ["modePaiementComplement"],
   });

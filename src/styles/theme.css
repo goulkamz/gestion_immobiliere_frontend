@@ -62,6 +62,33 @@
   body {
     @apply bg-white text-slate-800;
   }
+  /* Barres de défilement fines et discrètes, teintées selon le thème */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--c-primary-400) 45%, transparent) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: color-mix(in srgb, var(--c-primary-400) 40%, transparent);
+    border-radius: 9999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--c-primary-500) 75%, transparent);
+  }
+  *::-webkit-scrollbar-button {
+    display: none;
+  }
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
   /* Anneau de focus visible et cohérent partout (accessibilité clavier) */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-primary-600;

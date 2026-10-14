@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -66,6 +68,7 @@ export function AgentAnnoncesPage() {
     statut: statutFilter || undefined,
     recherche: recherche || undefined,
   });
+  const compteurs = useCompteursStatut(useAnnoncesQuery, { recherche: recherche || undefined }, ["ACTIVE", "SUSPENDUE", "EXPIREE"] as const);
   const createMutation = useCreateAnnonceMutation();
   const [photos, setPhotos] = useState<File[]>([]);
   const { attach: attachPhotos, isPending: photosPending } = useAttachPhotos();
@@ -255,6 +258,8 @@ export function AgentAnnoncesPage() {
           </Button>
         }
       />
+
+      <CompteursStatut compteurs={compteurs} statuts={["ACTIVE", "SUSPENDUE", "EXPIREE"] as const} />
 
       {annoncesQuery.isError ? (
         <EmptyState

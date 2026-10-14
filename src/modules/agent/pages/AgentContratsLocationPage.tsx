@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { AxiosResponse } from "axios";
@@ -75,6 +77,7 @@ export function AgentContratsLocationPage() {
     sort: "dateEntree,desc",
     recherche: rechercheDebounced || undefined,
   });
+  const compteurs = useCompteursStatut(useContratsLocationQuery, { recherche: rechercheDebounced || undefined }, ["EN_ATTENTE", "ACTIF", "TERMINE", "RESILIE"] as const);
   const modifierMutation = useModifierContratLocationMutation();
   const terminerMutation = useTerminerLocationMutation();
   const resilierMutation = useResilierLocationMutation();
@@ -255,6 +258,8 @@ export function AgentContratsLocationPage() {
     <div>
       <MaisonDetailModal idMaison={detailMaison} onClose={() => setDetailMaison(null)} />
       <PageHeader tone="indigo" title="Contrats de location" description="Les contrats de location gérés par l'agence." />
+
+      <CompteursStatut compteurs={compteurs} statuts={["EN_ATTENTE", "ACTIF", "TERMINE", "RESILIE"] as const} />
 
       {contratsQuery.isError ? (
         <EmptyState

@@ -156,6 +156,7 @@ export interface MaisonResponse {
   caution: number | null;
   avance: number | null;
   nombreMoisCaution: number | null;
+  description: string | null;
   statut: StatutMaison;
   idCour: number;
   referenceCour: string;
@@ -346,6 +347,7 @@ export interface ReservationResponse {
   telephoneUser: string | null;
   idMaison: number;
   nomCommunMaison: string;
+  loyerMaison: number | null;
   dateDebut: string;
   /** Marqueur technique d'expiration du blocage (dateDebut + délai système), pas une date de sortie. */
   dateFin: string;
@@ -371,12 +373,15 @@ export interface LocationBienServiceResponse {
   idLocationBienService: number;
   idClient: number;
   nomClient: string;
+  emailClient: string | null;
+  telephoneClient: string | null;
   idBienService: number;
   libelleBienService: string;
   destination: string | null;
   dateDebut: string;
   dateFin: string;
   duree: number;
+  prixJournalier: number | null;
   montantTotal: number;
   statut: StatutLocationBienService;
   historiquePaiements: PaiementLocationBienServiceResponse[];
@@ -442,6 +447,7 @@ export interface ContratLocationResponse {
   nomLocataire: string;
   idMaison: number;
   nomCommunMaison: string;
+  referenceCour: string;
   dateEntree: string;
   dateSortie: string | null;
   montantLoyer: number;
@@ -535,6 +541,7 @@ export interface CourResponse {
   referenceCour: string;
   lotCour: string | null;
   numeroPorte: number | null;
+  description: string | null;
   idSecteur: number;
   nomSecteur: string;
   idProprietaire: number;
@@ -614,9 +621,9 @@ export interface UpdateStatutMaisonRequest {
 
 /** Transitions de statut autorisées (RG3, appliquées côté serveur) — sert à ne proposer que les choix valides. */
 export const MAISON_STATUT_TRANSITIONS: Record<StatutMaison, StatutMaison[]> = {
-  DISPONIBLE: ["RESERVEE", "EN_MAINTENANCE"],
-  RESERVEE: ["LOUEE", "DISPONIBLE"],
-  LOUEE: ["DISPONIBLE"],
+  DISPONIBLE: ["EN_MAINTENANCE"],
+  RESERVEE: [],
+  LOUEE: [],
   EN_MAINTENANCE: ["DISPONIBLE"],
 };
 
@@ -670,6 +677,7 @@ export interface UserAdminResponse {
   telephone: string | null;
   role: Role;
   flagActif: boolean;
+  supprime: boolean;
 }
 
 export interface CreateUserByAdminRequest {
@@ -819,3 +827,16 @@ export interface EcheanceRetardAgentDTO {
   dateEcheance: string;
 }
 
+
+// ─── Notifications in-app ───────────────────────────────────────────────
+export type NotificationType = "INFO" | "ECHEANCE" | "DEMANDE";
+
+export interface NotificationResponse {
+  idNotification: number;
+  type: NotificationType;
+  titre: string;
+  message?: string | null;
+  lien?: string | null;
+  lue: boolean;
+  dateCreation: string;
+}

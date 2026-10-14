@@ -1,5 +1,6 @@
 import { http } from "./http";
 import type {
+  StatutLocation,
   ApiSuccessResponse,
   ContratLocationResponse,
   DecompteSortieResponse,
@@ -20,6 +21,10 @@ export interface ContratLocationListParams extends PageParams {
   idMaison?: number;
   /** Recherche serveur (agent/admin) sur le nom de la maison ou du locataire. */
   recherche?: string;
+  /** Agent/admin : filtre serveur sur le statut du contrat. */
+  statut?: StatutLocation;
+  /** Filtre serveur sur la référence de cour (bailleur, agent). */
+  referenceCour?: string;
 }
 
 export const contratsApi = {

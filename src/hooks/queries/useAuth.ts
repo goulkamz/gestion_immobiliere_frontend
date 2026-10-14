@@ -7,6 +7,7 @@ import type {
   UpdateProfileRequest,
 } from "@/api/types";
 import { useSessionStore } from "@/store/sessionStore";
+import { notificationQueryKeys } from "./useNotifications";
 import { logger } from "@/utils/logger";
 
 export const authQueryKeys = {
@@ -90,6 +91,7 @@ export function useLogoutMutation() {
     onSettled: () => {
       clear();
       queryClient.removeQueries({ queryKey: authQueryKeys.me });
+      queryClient.removeQueries({ queryKey: notificationQueryKeys.root });
       logger.log("Déconnexion effectuée.");
     },
   });

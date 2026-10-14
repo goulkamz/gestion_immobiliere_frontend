@@ -1,4 +1,4 @@
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import { echeancesApi, type EcheanceListParams } from "@/api/echeances";
 import type { ConfirmerVirementRequest } from "@/api/types";
 
@@ -15,6 +15,29 @@ export function useEcheancesQuery(params?: EcheanceListParams) {
     queryFn: () => echeancesApi.getEcheances(params),
     placeholderData: keepPreviousData,
   });
+}
+
+/** Compteurs par statut (total, payé, en retard, en attente) : une requête d'une ligne par statut, on lit seulement totalElements. */
+export function useEcheancesCompteurs(params: Omit<EcheanceListParams, "statut" | "page" | "size" | "sort">) {
+  const results = useQueries({
+    queries: ([undefined, "PAYE", "EN_RETARD", "EN_ATTENTE"] as const).map((statut) => {
+      const p: EcheanceListParams = { ...params, statut, page: 0, size: 1 };
+      return {
+        queryKey: echeancesQueryKeys.list(p),
+        queryFn: () => echeancesApi.getEcheances(p),
+        placeholderData: keepPreviousData,
+      };
+    }),
+  });
+  const [total, paye, retard, attente] = results.map((r) => r.data?.page.totalElements);
+  const pret = [total, paye, retard, attente].every((n) => n !== undefined);
+  return {
+    loading: !pret,
+    total: total ?? 0,
+    paye: paye ?? 0,
+    retard: retard ?? 0,
+    attente: attente ?? 0,
+  };
 }
 
 export function useEcheancesEnRetardLocationQuery(options?: { enabled?: boolean }) {

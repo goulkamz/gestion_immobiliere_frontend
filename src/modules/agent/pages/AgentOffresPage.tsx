@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -45,6 +47,7 @@ export function AgentOffresPage() {
   const [creatingAccountFor, setCreatingAccountFor] = useState<OffreResponse | null>(null);
 
   const offresQuery = useOffresQuery({ page, size: 20, sort: "dateOffre,desc", statut: statutFilter || undefined, recherche: recherche || undefined });
+  const compteurs = useCompteursStatut(useOffresQuery, { recherche: recherche || undefined }, ["EN_ATTENTE", "TRAITEE", "REFUSEE"] as const);
   const statutMutation = useUpdateStatutOffreMutation();
   const createAccountMutation = useCreateUserAdminMutation();
 
@@ -121,6 +124,8 @@ export function AgentOffresPage() {
   return (
     <div>
       <PageHeader tone="indigo" title="Offres" description="Les offres de biens proposées par le public à l'agence." />
+
+      <CompteursStatut compteurs={compteurs} statuts={["EN_ATTENTE", "TRAITEE", "REFUSEE"] as const} />
 
       {offresQuery.isError ? (
         <EmptyState

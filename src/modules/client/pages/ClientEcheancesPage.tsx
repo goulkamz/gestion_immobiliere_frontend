@@ -1,3 +1,5 @@
+import { compterParStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useMemo, useState } from "react";
 import { AlertTriangle, Calendar } from "lucide-react";
 import {
@@ -76,6 +78,8 @@ export function ClientEcheancesPage() {
     },
   ];
 
+  const compteurs = compterParStatut(echeancesQuery.data, ["EN_ATTENTE", "PAYE", "EN_RETARD"] as const);
+
   return (
     <div>
       <PageHeader
@@ -83,6 +87,8 @@ export function ClientEcheancesPage() {
         title="Mes échéances"
         description="Le suivi de vos échéances de loyer."
       />
+
+      <CompteursStatut compteurs={compteurs} statuts={["EN_ATTENTE", "PAYE", "EN_RETARD"] as const} />
       {echeancesQuery.isError ? (
         <EmptyState
           icon={<AlertTriangle size={32} />}

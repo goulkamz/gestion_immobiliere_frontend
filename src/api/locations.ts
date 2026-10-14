@@ -22,6 +22,8 @@ export interface LocationListParams extends PageParams {
   /** Recherche serveur (bien, client, destination). */
   recherche?: string;
   statut?: StatutLocationBienService;
+  /** Locations ACTIF qui se terminent bientôt ou sont échues. */
+  aEcheance?: boolean;
 }
 
 export const locationsApi = {
@@ -44,8 +46,8 @@ export const locationsApi = {
   rembourser: (id: number, body: CreerRemboursementRequest) =>
     unwrap<RemboursementResponse>(http.post(`/locations-biens-services/${id}/rembourser`, body)),
 
-  updateStatut: (id: number, statut: StatutLocationBienService) =>
-    unwrap<LocationBienServiceResponse>(http.patch(`/locations-biens-services/${id}/statut`, { statut })),
+  updateStatut: (id: number, statut: StatutLocationBienService, raccourcir?: boolean) =>
+    unwrap<LocationBienServiceResponse>(http.patch(`/locations-biens-services/${id}/statut`, { statut, raccourcir })),
 
   getRemboursements: (id: number) =>
     unwrap<RemboursementResponse[]>(http.get(`/locations-biens-services/${id}/remboursements`)),

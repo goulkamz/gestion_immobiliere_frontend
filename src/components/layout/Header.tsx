@@ -5,6 +5,7 @@ import { useSessionStore, selectIsAuthenticated, selectRole } from "@/store/sess
 import { useLogoutMutation } from "@/hooks/queries/useAuth";
 import { Button } from "@/components/ui";
 import type { Role } from "@/api/types";
+import { NotificationBell } from "./NotificationBell";
 
 const ROLE_SPACE_LINK: Record<Role, { to: string; label: string }> = {
   ROLE_CLIENT: { to: "/espace-client", label: "Mon espace" },
@@ -98,6 +99,7 @@ export function Header() {
         <div className="hidden items-center gap-2 xl:flex">
           {isAuthenticated ? (
             <>
+              <NotificationBell />
               <Link
                 to="/profil"
                 className="flex items-center gap-2 whitespace-nowrap rounded-full py-1 pl-1 pr-3 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-100"
@@ -122,6 +124,12 @@ export function Header() {
             </>
           )}
         </div>
+
+        {isAuthenticated && (
+          <div className="ml-auto mr-1 xl:hidden">
+            <NotificationBell />
+          </div>
+        )}
 
         <button
           type="button"

@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { AlertTriangle, Banknote, Building2, Calendar, FileSignature, Home, User } from "lucide-react";
-import { ActionGroup, Button, DataTable, EmptyState, Input, Modal, PageHeader, Pagination, RemoteCombobox, SearchInput, Select, StatutBadge } from "@/components/ui";
+import { AlertTriangle, Banknote, Building2, Calendar, CheckCircle2, Clock, FileSignature, Home, List, User } from "lucide-react";
+import { ActionGroup, Button, DataTable, EmptyState, Input, Modal, PageHeader, Pagination, RemoteCombobox, SearchInput, Select, StatCard, StatutBadge } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import { useRechercheServeur } from "@/hooks/useRechercheServeur";
-import { useEcheancesQuery } from "@/hooks/queries/useEcheances";
+import { useEcheancesCompteurs, useEcheancesQuery } from "@/hooks/queries/useEcheances";
 import { useCoursAvecMandatOptions } from "@/hooks/useOptionsSelection";
 import { useCreatePaiementMutation } from "@/hooks/queries/usePaiements";
 import { encaisserPaiementSchema, type EncaisserPaiementFormInput, type EncaisserPaiementFormValues } from "../schemas";
@@ -44,6 +44,13 @@ export function AgentEcheancesPage() {
     referenceCour: courFilterMandat || undefined,
     recherche: mandatRecherche.recherche || undefined,
   });
+  const compteursLocation = useEcheancesCompteurs({ type: "LOCATION", recherche: locationRecherche.recherche || undefined });
+  const compteursMandat = useEcheancesCompteurs({
+    type: "MANDAT",
+    referenceCour: courFilterMandat || undefined,
+    recherche: mandatRecherche.recherche || undefined,
+  });
+  const compteurs = onglet === "LOCATION" ? compteursLocation : compteursMandat;
   const encaisserMutation = useCreatePaiementMutation();
 
   const encaisserForm = useForm<EncaisserPaiementFormInput, unknown, EncaisserPaiementFormValues>({
@@ -187,6 +194,13 @@ export function AgentEcheancesPage() {
           <FileSignature size={15} aria-hidden="true" />
           Commissions (mandats)
         </button>
+      </div>
+
+      <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+        <StatCard label="Total" value={compteurs.loading ? "-" : compteurs.total} icon={<List size={20} aria-hidden="true" />} tone="primary" />
+        <StatCard label="Payées" value={compteurs.loading ? "-" : compteurs.paye} icon={<CheckCircle2 size={20} aria-hidden="true" />} tone="success" />
+        <StatCard label="En retard" value={compteurs.loading ? "-" : compteurs.retard} icon={<AlertTriangle size={20} aria-hidden="true" />} tone="danger" />
+        <StatCard label="En attente" value={compteurs.loading ? "-" : compteurs.attente} icon={<Clock size={20} aria-hidden="true" />} tone="warning" />
       </div>
 
       {onglet === "LOCATION" && (

@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +24,7 @@ import {
   PhotoManager,
   PhotoPicker,
   SearchInput,
+  Textarea,
   RemoteCombobox,
   Select,
   StatutBadge,
@@ -63,6 +66,7 @@ export function AgentMaisonsPage() {
   const [deleting, setDeleting] = useState<MaisonResponse | null>(null);
 
   const maisonsQuery = useMaisonsGestionQuery({ size: 100 });
+  const compteurs = useCompteursStatut(useMaisonsGestionQuery, {}, ["DISPONIBLE", "RESERVEE", "LOUEE", "EN_MAINTENANCE"] as const);
   const createMutation = useCreateMaisonMutation();
   const [photos, setPhotos] = useState<File[]>([]);
   const { attach: attachPhotos, isPending: photosPending } = useAttachPhotos();
@@ -118,6 +122,7 @@ export function AgentMaisonsPage() {
       caution: maison.caution ?? undefined,
       avance: maison.avance ?? undefined,
       nombreMoisCaution: maison.nombreMoisCaution ?? undefined,
+      description: maison.description ?? "",
     });
   }
 
@@ -223,12 +228,17 @@ export function AgentMaisonsPage() {
             icon: <Edit2 size={15} aria-hidden="true" />,
             onClick: () => openEdit(m),
           },
-          {
-            label: "Changer le statut",
-            text: "Statut",
-            icon: <Settings2 size={15} aria-hidden="true" />,
-            onClick: () => openStatut(m),
-          },
+          // Maison réservée ou louée : statut piloté par la réservation / le contrat
+          ...(MAISON_STATUT_TRANSITIONS[m.statut].length > 0
+            ? [
+                {
+                  label: "Changer le statut",
+                  text: "Statut",
+                  icon: <Settings2 size={15} aria-hidden="true" />,
+                  onClick: () => openStatut(m),
+                },
+              ]
+            : []),
           {
             label: "Supprimer",
             text: "Supprimer",
@@ -265,6 +275,8 @@ export function AgentMaisonsPage() {
           </Button>
         }
       />
+
+      <CompteursStatut compteurs={compteurs} statuts={["DISPONIBLE", "RESERVEE", "LOUEE", "EN_MAINTENANCE"] as const} />
 
       {maisonsQuery.isError ? (
         <EmptyState
@@ -338,13 +350,19 @@ export function AgentMaisonsPage() {
               {...createForm.register("nombrePiece")}
             />
             <Input
+              label="Mois de caution requis"
+              type="number"
+              min={0}
+              {...createForm.register("nombreMoisCaution")}
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Input
               label="Loyer (F CFA)"
               type="number"
               min={0}
               {...createForm.register("loyer")}
             />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
             <Input
               label="Caution (F CFA)"
               type="number"
@@ -358,11 +376,11 @@ export function AgentMaisonsPage() {
               {...createForm.register("avance")}
             />
           </div>
-          <Input
-            label="Mois de caution requis"
-            type="number"
-            min={0}
-            {...createForm.register("nombreMoisCaution")}
+          <Textarea
+            label="Description"
+            placeholder="État des lieux, équipements, atouts…"
+            rows={4}
+            {...createForm.register("description")}
           />
           <PhotoPicker files={photos} onChange={setPhotos} />
           <Button
@@ -409,13 +427,19 @@ export function AgentMaisonsPage() {
               {...editForm.register("nombrePiece")}
             />
             <Input
+              label="Mois de caution requis"
+              type="number"
+              min={0}
+              {...editForm.register("nombreMoisCaution")}
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Input
               label="Loyer (F CFA)"
               type="number"
               min={0}
               {...editForm.register("loyer")}
             />
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
             <Input
               label="Caution (F CFA)"
               type="number"
@@ -429,11 +453,11 @@ export function AgentMaisonsPage() {
               {...editForm.register("avance")}
             />
           </div>
-          <Input
-            label="Mois de caution requis"
-            type="number"
-            min={0}
-            {...editForm.register("nombreMoisCaution")}
+          <Textarea
+            label="Description"
+            placeholder="État des lieux, équipements, atouts…"
+            rows={4}
+            {...editForm.register("description")}
           />
           {editing && (
             <PhotoManager entiteType="MAISON" entiteId={editing.idMaison} />

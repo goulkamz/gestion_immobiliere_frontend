@@ -1,21 +1,50 @@
-import { useMemo, useState } from "react";
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { useRechercheServeur } from "@/hooks/useRechercheServeur";
+import { statutLabel } from "@/utils/statut";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import type { AxiosResponse } from "axios";
-import { useQueries } from "@tanstack/react-query";
-import { AlertTriangle, Building2, Download, Eye, FileCheck2, FileText, Files, Home, LogIn, LogOut, User } from "lucide-react";
-import { ActionGroup, DataTable, DocumentPreviewModal, EmptyState, PageHeader, Modal, Select, SearchInput, StatutBadge, MaisonDetailModal } from "@/components/ui";
+import {
+  AlertTriangle,
+  Building2,
+  Download,
+  Eye,
+  FileCheck2,
+  FileText,
+  Files,
+  Home,
+  LogIn,
+  LogOut,
+  User,
+} from "lucide-react";
+import {
+  ActionGroup,
+  CompteursStatut,
+  DataTable,
+  DocumentPreviewModal,
+  EmptyState,
+  PageHeader,
+  Modal,
+  Pagination,
+  Select,
+  SearchInput,
+  StatutBadge,
+  MaisonDetailModal,
+} from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import { useContratsLocationQuery } from "@/hooks/queries/useContrats";
 import { useCoursQuery } from "@/hooks/queries/useCours";
 import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { useBailleurUiStore } from "@/store/bailleurUiStore";
-import { maisonsQueryKeys } from "@/hooks/queries/useMaisons";
-import { maisonsApi } from "@/api/maisons";
 import { documentsApi } from "@/api/documents";
 import { formatDate, formatMontant } from "@/utils/format";
-import type { ContratLocationResponse } from "@/api/types";
+import type { ContratLocationResponse, StatutLocation } from "@/api/types";
 
-const SORTIE_DISPONIBLE: ContratLocationResponse["statut"][] = ["TERMINE", "RESILIE"];
+const STATUTS = ["EN_ATTENTE", "ACTIF", "TERMINE", "RESILIE"] as const;
+const SORTIE_DISPONIBLE: ContratLocationResponse["statut"][] = [
+  "TERMINE",
+  "RESILIE",
+];
 
 interface DocumentDescriptor {
   key: string;
@@ -27,58 +56,72 @@ interface DocumentDescriptor {
 
 export function BailleurContratsPage() {
   const [detailMaison, setDetailMaison] = useState<number | null>(null);
-  const [search, setSearch] = useState("");
+  const { search, setSearch, recherche, page, setPage } = useRechercheServeur();
   const [courFilter, setCourFilter] = useState("");
-  const [openContrat, setOpenContrat] = useState<ContratLocationResponse | null>(null);
+  const [statutFilter, setStatutFilter] = useState<StatutLocation | "">("");
+  const [openContrat, setOpenContrat] =
+    useState<ContratLocationResponse | null>(null);
   const sidebarCollapsed = useBailleurUiStore((s) => s.sidebarCollapsed);
-  const contratsQuery = useContratsLocationQuery({ size: 50 });
-  const coursQuery = useCoursQuery({ size: 100 });
-  const { openPreview, download, downloadPreview, closePreview, preview, isPending } = useDocumentDownload();
-
-  const cours = useMemo(() => coursQuery.data?.content ?? [], [coursQuery.data]);
-  const maisonsQueries = useQueries({
-    queries: cours.map((cour) => ({
-      queryKey: maisonsQueryKeys.list({ idCour: cour.idCour, size: 100 }),
-      queryFn: () => maisonsApi.list({ idCour: cour.idCour, size: 100 }),
-      enabled: cours.length > 0,
-    })),
+  // Périmètre (mes maisons), recherche, cour, statut et pagination sont appliqués côté serveur
+  const filtres = {
+    recherche: recherche || undefined,
+    referenceCour: courFilter || undefined,
+  };
+  const contratsQuery = useContratsLocationQuery({
+    ...filtres,
+    page,
+    size: 20,
+    sort: "dateEntree,desc",
+    statut: statutFilter || undefined,
   });
+  const compteurs = useCompteursStatut(
+    useContratsLocationQuery,
+    filtres,
+    STATUTS,
+  );
+  const coursQuery = useCoursQuery({ size: 100 });
+  const {
+    openPreview,
+    download,
+    downloadPreview,
+    closePreview,
+    preview,
+    isPending,
+  } = useDocumentDownload();
 
-  // Le contrat n'expose que idMaison : on retrouve la cour via la maison, pour le filtre multi-cours.
-  const maisonCourMap = useMemo(() => {
-    const map = new Map<number, string>();
-    for (const q of maisonsQueries) for (const m of q.data?.content ?? []) map.set(m.idMaison, m.referenceCour);
-    return map;
-  }, [maisonsQueries]);
-
-  const filtered = useMemo(() => {
-    let list = contratsQuery.data?.content ?? [];
-    if (courFilter) list = list.filter((c) => maisonCourMap.get(c.idMaison) === courFilter);
-    const term = search.trim().toLowerCase();
-    if (term) list = list.filter((c) => c.nomCommunMaison.toLowerCase().includes(term) || c.nomLocataire.toLowerCase().includes(term));
-    return list;
-  }, [contratsQuery.data, courFilter, search, maisonCourMap]);
+  const cours = coursQuery.data?.content ?? [];
+  const contrats = contratsQuery.data?.content ?? [];
 
   function documentsFor(c: ContratLocationResponse): DocumentDescriptor[] {
     return [
       {
         key: `attestation-${c.idContratLocation}`,
         label: "Attestation de loyer",
-        icon: <FileCheck2 size={16} className="text-primary-600" aria-hidden="true" />,
+        icon: (
+          <FileCheck2
+            size={16}
+            className="text-primary-600"
+            aria-hidden="true"
+          />
+        ),
         fetcher: () => documentsApi.attestationLoyer(c.idContratLocation),
         filename: `attestation-loyer-${c.idContratLocation}.pdf`,
       },
       {
         key: `contrat-${c.idContratLocation}`,
         label: "Contrat de location",
-        icon: <FileText size={16} className="text-primary-600" aria-hidden="true" />,
+        icon: (
+          <FileText size={16} className="text-primary-600" aria-hidden="true" />
+        ),
         fetcher: () => documentsApi.contratLocation(c.idContratLocation),
         filename: `contrat-location-${c.idContratLocation}.pdf`,
       },
       {
         key: `edl-entree-${c.idContratLocation}`,
         label: "État des lieux (entrée)",
-        icon: <LogIn size={16} className="text-primary-600" aria-hidden="true" />,
+        icon: (
+          <LogIn size={16} className="text-primary-600" aria-hidden="true" />
+        ),
         fetcher: () => documentsApi.etatDesLieux(c.idContratLocation, "entree"),
         filename: `etat-des-lieux-entree-${c.idContratLocation}.pdf`,
       },
@@ -87,8 +130,15 @@ export function BailleurContratsPage() {
             {
               key: `edl-sortie-${c.idContratLocation}`,
               label: "État des lieux (sortie)",
-              icon: <LogOut size={16} className="text-primary-600" aria-hidden="true" />,
-              fetcher: () => documentsApi.etatDesLieux(c.idContratLocation, "sortie"),
+              icon: (
+                <LogOut
+                  size={16}
+                  className="text-primary-600"
+                  aria-hidden="true"
+                />
+              ),
+              fetcher: () =>
+                documentsApi.etatDesLieux(c.idContratLocation, "sortie"),
               filename: `etat-des-lieux-sortie-${c.idContratLocation}.pdf`,
             },
           ]
@@ -102,7 +152,11 @@ export function BailleurContratsPage() {
       header: "Maison",
       render: (c) => (
         <span className="flex items-center gap-2">
-          <Home size={15} className="shrink-0 text-primary-600" aria-hidden="true" />
+          <Home
+            size={15}
+            className="shrink-0 text-primary-600"
+            aria-hidden="true"
+          />
           {c.nomCommunMaison}
         </span>
       ),
@@ -112,7 +166,11 @@ export function BailleurContratsPage() {
       header: "Locataire",
       render: (c) => (
         <span className="flex items-center gap-2">
-          <User size={15} className="shrink-0 text-primary-600" aria-hidden="true" />
+          <User
+            size={15}
+            className="shrink-0 text-primary-600"
+            aria-hidden="true"
+          />
           {c.nomLocataire}
         </span>
       ),
@@ -124,17 +182,38 @@ export function BailleurContratsPage() {
             header: "Cour",
             render: (c: ContratLocationResponse) => (
               <span className="flex items-center gap-2">
-                <Building2 size={15} className="shrink-0 text-primary-600" aria-hidden="true" />
-                {maisonCourMap.get(c.idMaison) ?? "-"}
+                <Building2
+                  size={15}
+                  className="shrink-0 text-primary-600"
+                  aria-hidden="true"
+                />
+                {c.referenceCour ?? "-"}
               </span>
             ),
           },
         ]
       : []),
-    { key: "dateEntree", header: "Entrée", render: (c) => formatDate(c.dateEntree) },
-    { key: "dateSortie", header: "Sortie", render: (c) => formatDate(c.dateSortie) },
-    { key: "loyer", header: "Loyer", align: "right", render: (c) => formatMontant(c.montantLoyer) },
-    { key: "statut", header: "Statut", render: (c) => <StatutBadge statut={c.statut} /> },
+    {
+      key: "dateEntree",
+      header: "Entrée",
+      render: (c) => formatDate(c.dateEntree),
+    },
+    {
+      key: "dateSortie",
+      header: "Sortie",
+      render: (c) => formatDate(c.dateSortie),
+    },
+    {
+      key: "loyer",
+      header: "Loyer",
+      align: "right",
+      render: (c) => formatMontant(c.montantLoyer),
+    },
+    {
+      key: "statut",
+      header: "Statut",
+      render: (c) => <StatutBadge statut={c.statut} />,
+    },
     {
       key: "documents",
       header: "Actions",
@@ -142,9 +221,26 @@ export function BailleurContratsPage() {
       render: (c) => {
         if (!sidebarCollapsed) {
           const items: ActionGroupItem[] = [
-            { label: "Documents du contrat", text: "Documents", icon: <Files size={15} aria-hidden="true" />, onClick: () => setOpenContrat(c) },
+            {
+              label: "Documents du contrat",
+              text: "Documents",
+              icon: <Files size={15} aria-hidden="true" />,
+              onClick: () => setOpenContrat(c),
+            },
           ];
-          return <ActionGroup items={[{ label: "Voir le détail", text: "Détails", icon: <Eye size={15} aria-hidden="true" />, onClick: () => setDetailMaison(c.idMaison) }, ...items]} />;
+          return (
+            <ActionGroup
+              items={[
+                {
+                  label: "Voir le détail",
+                  text: "Détails",
+                  icon: <Eye size={15} aria-hidden="true" />,
+                  onClick: () => setDetailMaison(c.idMaison),
+                },
+                ...items,
+              ]}
+            />
+          );
         }
         return (
           <div className="inline-flex items-center gap-1">
@@ -163,14 +259,19 @@ export function BailleurContratsPage() {
                 title={doc.label}
                 className="inline-flex items-center gap-0.5 rounded-lg border border-primary-100 bg-primary-50/60 p-0.5"
               >
-                <span className="flex h-6 w-6 items-center justify-center" aria-hidden="true">
+                <span
+                  className="flex h-6 w-6 items-center justify-center"
+                  aria-hidden="true"
+                >
                   {doc.icon}
                 </span>
                 <button
                   type="button"
                   aria-label={`Aperçu - ${doc.label}`}
                   disabled={isPending(doc.key)}
-                  onClick={() => openPreview(doc.key, doc.fetcher, doc.label, doc.filename)}
+                  onClick={() =>
+                    openPreview(doc.key, doc.fetcher, doc.label, doc.filename)
+                  }
                   className="flex h-6 w-6 items-center justify-center rounded-md text-primary-700 transition-all hover:bg-white hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   <Eye size={14} aria-hidden="true" />
@@ -185,8 +286,17 @@ export function BailleurContratsPage() {
 
   return (
     <div>
-      <MaisonDetailModal idMaison={detailMaison} onClose={() => setDetailMaison(null)} />
-      <PageHeader tone="indigo" title="Contrats de location" description="Les contrats de location de vos locataires." />
+      <MaisonDetailModal
+        idMaison={detailMaison}
+        onClose={() => setDetailMaison(null)}
+      />
+      <PageHeader
+        tone="indigo"
+        title="Contrats de location"
+        description="Les contrats de location de vos locataires."
+      />
+
+      <CompteursStatut compteurs={compteurs} statuts={STATUTS} />
       {contratsQuery.isError ? (
         <EmptyState
           icon={<AlertTriangle size={32} />}
@@ -201,12 +311,33 @@ export function BailleurContratsPage() {
                 <Select
                   aria-label="Filtrer par cour"
                   value={courFilter}
-                  onChange={(e) => setCourFilter(e.target.value)}
+                  onChange={(e) => {
+                    setCourFilter(e.target.value);
+                    setPage(0);
+                  }}
                   placeholder="Toutes les cours"
-                  options={cours.map((c) => ({ value: c.referenceCour, label: c.referenceCour }))}
+                  options={cours.map((c) => ({
+                    value: c.referenceCour,
+                    label: c.referenceCour,
+                  }))}
                 />
               </div>
             )}
+            <div className="sm:w-44">
+              <Select
+                aria-label="Filtrer par statut"
+                value={statutFilter}
+                onChange={(e) => {
+                  setStatutFilter(e.target.value as StatutLocation | "");
+                  setPage(0);
+                }}
+                placeholder="Tous les statuts"
+                options={STATUTS.map((st) => ({
+                  value: st,
+                  label: statutLabel(st),
+                }))}
+              />
+            </div>
             <div className="sm:w-72">
               <SearchInput
                 value={search}
@@ -217,24 +348,43 @@ export function BailleurContratsPage() {
             </div>
           </div>
           <DataTable
-            data={filtered}
+            data={contrats}
             columns={columns}
             keyExtractor={(c) => c.idContratLocation}
             loading={contratsQuery.isLoading}
-            emptyMessage={search || courFilter ? "Aucun contrat ne correspond à votre recherche" : "Aucun contrat de location pour le moment"}
+            emptyMessage={
+              search || courFilter || statutFilter
+                ? "Aucun contrat ne correspond à votre recherche"
+                : "Aucun contrat de location pour le moment"
+            }
           />
+          {contratsQuery.data && (
+            <Pagination
+              currentPage={contratsQuery.data.page.number}
+              totalPages={contratsQuery.data.page.totalPages}
+              totalElements={contratsQuery.data.page.totalElements}
+              onPageChange={setPage}
+            />
+          )}
         </>
       )}
 
       <Modal
         isOpen={openContrat !== null}
         onClose={() => setOpenContrat(null)}
-        title={openContrat ? `Documents - ${openContrat.nomCommunMaison}` : "Documents"}
+        title={
+          openContrat
+            ? `Documents - ${openContrat.nomCommunMaison}`
+            : "Documents"
+        }
       >
         {openContrat && (
           <ul className="divide-y divide-slate-100">
             {documentsFor(openContrat).map((doc) => (
-              <li key={doc.key} className="flex items-center justify-between gap-3 py-3">
+              <li
+                key={doc.key}
+                className="flex items-center justify-between gap-3 py-3"
+              >
                 <span className="flex items-center gap-2.5 text-sm font-medium text-slate-700">
                   {doc.icon}
                   {doc.label}
@@ -245,7 +395,9 @@ export function BailleurContratsPage() {
                     title="Aperçu"
                     aria-label={`Aperçu - ${doc.label}`}
                     disabled={isPending(doc.key)}
-                    onClick={() => openPreview(doc.key, doc.fetcher, doc.label, doc.filename)}
+                    onClick={() =>
+                      openPreview(doc.key, doc.fetcher, doc.label, doc.filename)
+                    }
                     className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-700 transition-colors hover:bg-primary-50 disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <Eye size={16} aria-hidden="true" />

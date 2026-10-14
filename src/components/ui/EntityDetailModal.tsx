@@ -148,6 +148,7 @@ export function MaisonDetailModal({
       }
       entiteType="MAISON"
       entiteId={idMaison ?? 0}
+      description={maison?.description}
       facts={maison ? maisonFacts(maison) : []}
     />
   );
@@ -172,6 +173,7 @@ export function MaisonDetailModalFromData({
       }
       entiteType="MAISON"
       entiteId={maison?.idMaison ?? 0}
+      description={maison?.description}
       facts={maison ? maisonFacts(maison) : []}
     />
   );
@@ -267,6 +269,7 @@ export function CourDetailModal({
       title={cour ? `Cour ${cour.referenceCour}` : "Détail de la cour"}
       entiteType="COUR"
       entiteId={cour?.idCour ?? 0}
+      description={cour?.description}
       facts={
         cour
           ? [

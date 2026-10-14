@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { AlertTriangle, Eye, Mail, Phone } from "lucide-react";
@@ -18,6 +20,7 @@ export function AgentDemandesPage() {
   const [viewing, setViewing] = useState<DemandeResponse | null>(null);
 
   const demandesQuery = useDemandesQuery({ page, size: 20, sort: "dateDemande,desc", statut: statutFilter || undefined, recherche: recherche || undefined });
+  const compteurs = useCompteursStatut(useDemandesQuery, { recherche: recherche || undefined }, ["EN_ATTENTE", "EN_COURS", "SATISFAITE", "ANNULEE"] as const);
   const statutMutation = useUpdateStatutDemandeMutation();
 
   // Filtre statut, recherche et pagination sont appliqués côté serveur
@@ -57,6 +60,8 @@ export function AgentDemandesPage() {
   return (
     <div>
       <PageHeader tone="indigo" title="Demandes" description="Les besoins exprimés par les clients via le formulaire de demande." />
+
+      <CompteursStatut compteurs={compteurs} statuts={["EN_ATTENTE", "EN_COURS", "SATISFAITE", "ANNULEE"] as const} />
 
       {demandesQuery.isError ? (
         <EmptyState

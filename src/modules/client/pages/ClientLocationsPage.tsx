@@ -1,21 +1,28 @@
-import { useMemo, useState } from "react";
+import { useBiensServicesDisponiblesOptions } from "@/hooks/useOptionsSelection";
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { useRechercheServeur } from "@/hooks/useRechercheServeur";
+import { statutLabel } from "@/utils/statut";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { AlertTriangle, Eye, Package, Plus, XCircle } from "lucide-react";
 import {
   ActionGroup,
+  BienServiceDetailModal,
   Button,
+  CompteursStatut,
   DataTable,
   EmptyState,
+  EntityPhotoPreview,
   Input,
   Modal,
   PageHeader,
+  Pagination,
+  RemoteCombobox,
   SearchInput,
   Select,
   StatutBadge,
-  BienServiceDetailModal,
-  EntityPhotoPreview,
 } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import {
@@ -23,7 +30,6 @@ import {
   useCreateLocationMutation,
   useLocationsQuery,
 } from "@/hooks/queries/useLocations";
-import { useBiensServicesQuery } from "@/hooks/queries/usePublicCatalog";
 import {
   locationBienServiceSchema,
   type LocationBienServiceFormInput,
@@ -31,19 +37,35 @@ import {
 } from "../schemas";
 import { formatDate, formatMontant } from "@/utils/format";
 import { ApiError } from "@/api/http";
-import type { LocationBienServiceResponse } from "@/api/types";
+import type {
+  LocationBienServiceResponse,
+  StatutLocationBienService,
+} from "@/api/types";
 
+const STATUTS = ["EN_ATTENTE", "ACTIF", "TERMINE", "ANNULE"] as const;
 const ANNULABLE: LocationBienServiceResponse["statut"][] = ["EN_ATTENTE"];
 
 export function ClientLocationsPage() {
   const [detailBien, setDetailBien] = useState<number | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const locationsQuery = useLocationsQuery({ size: 50 });
-  const biensQuery = useBiensServicesQuery({ size: 100 });
-  const biensDisponibles = (biensQuery.data?.content ?? []).filter(
-    (b) => b.disponibilite === "DISPONIBLE",
+  const { search, setSearch, recherche, page, setPage } = useRechercheServeur();
+  const [statutFilter, setStatutFilter] = useState<
+    StatutLocationBienService | ""
+  >("");
+  // Périmètre (mes données), recherche, statut et pagination sont appliqués côté serveur
+  const locationsQuery = useLocationsQuery({
+    page,
+    size: 20,
+    sort: "dateDebut,desc",
+    statut: statutFilter || undefined,
+    recherche: recherche || undefined,
+  });
+  const compteurs = useCompteursStatut(
+    useLocationsQuery,
+    { recherche: recherche || undefined },
+    STATUTS,
   );
+  const locations = locationsQuery.data?.content ?? [];
   const createMutation = useCreateLocationMutation();
   const annulerMutation = useAnnulerLocationMutation();
 
@@ -91,15 +113,6 @@ export function ClientLocationsPage() {
       );
     }
   }
-
-  const filtered = useMemo(() => {
-    const list = locationsQuery.data?.content ?? [];
-    const term = search.trim().toLowerCase();
-    if (!term) return list;
-    return list.filter((l) =>
-      l.libelleBienService.toLowerCase().includes(term),
-    );
-  }, [locationsQuery.data, search]);
 
   const columns: DataTableColumn<LocationBienServiceResponse>[] = [
     {
@@ -183,6 +196,8 @@ export function ClientLocationsPage() {
         }
       />
 
+      <CompteursStatut compteurs={compteurs} statuts={STATUTS} />
+
       {locationsQuery.isError ? (
         <EmptyState
           icon={<AlertTriangle size={32} />}
@@ -191,25 +206,52 @@ export function ClientLocationsPage() {
         />
       ) : (
         <>
-          <div className="mb-4">
-            <SearchInput
-              value={search}
-              onChange={setSearch}
-              placeholder="Rechercher un bien ou service…"
-              ariaLabel="Rechercher parmi mes locations"
-            />
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+            <div className="sm:w-44">
+              <Select
+                aria-label="Filtrer par statut"
+                value={statutFilter}
+                onChange={(e) => {
+                  setStatutFilter(
+                    e.target.value as StatutLocationBienService | "",
+                  );
+                  setPage(0);
+                }}
+                placeholder="Tous les statuts"
+                options={STATUTS.map((st) => ({
+                  value: st,
+                  label: statutLabel(st),
+                }))}
+              />
+            </div>
+            <div className="sm:w-72">
+              <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Rechercher un bien ou service…"
+                ariaLabel="Rechercher parmi mes locations"
+              />
+            </div>
           </div>
           <DataTable
-            data={filtered}
+            data={locations}
             columns={columns}
             keyExtractor={(l) => l.idLocationBienService}
             loading={locationsQuery.isLoading}
             emptyMessage={
-              search
+              search || statutFilter
                 ? "Aucune location ne correspond à votre recherche"
                 : "Aucune location pour le moment"
             }
           />
+          {locationsQuery.data && (
+            <Pagination
+              currentPage={locationsQuery.data.page.number}
+              totalPages={locationsQuery.data.page.totalPages}
+              totalElements={locationsQuery.data.page.totalElements}
+              onPageChange={setPage}
+            />
+          )}
         </>
       )}
 
@@ -224,15 +266,12 @@ export function ClientLocationsPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          <Select
+          <RemoteCombobox
             label="Bien ou service"
             required
-            placeholder="Sélectionner"
-            defaultValue=""
-            options={biensDisponibles.map((b) => ({
-              value: b.idBienService,
-              label: b.libelle,
-            }))}
+            placeholder="Rechercher un bien ou un service"
+            useOptions={useBiensServicesDisponiblesOptions}
+            value={bienChoisi}
             error={errors.idBienService?.message}
             {...register("idBienService")}
           />

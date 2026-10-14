@@ -9,32 +9,31 @@ export function formatMontant(value: number | null | undefined): string {
   return currencyFormatter.format(value);
 }
 
-const dateFormatter = new Intl.DateTimeFormat("fr-FR", {
-  day: "2-digit",
-  month: "long",
-  year: "numeric",
-});
+const MOIS_COURTS = [
+  "jan", "fév", "mar", "avr", "mai", "juin",
+  "juil", "août", "sep", "oct", "nov", "déc",
+];
+
+/** Date courte compacte, ex. "07 oct 2026" (espaces insécables : ne passe jamais à la ligne). */
+function dateCourte(date: Date): string {
+  const jour = String(date.getDate()).padStart(2, "0");
+  return `${jour} ${MOIS_COURTS[date.getMonth()]} ${date.getFullYear()}`;
+}
 
 export function formatDate(value: string | null | undefined): string {
   if (!value) return "-";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "-";
-  return dateFormatter.format(date);
+  return dateCourte(date);
 }
-
-const dateTimeFormatter = new Intl.DateTimeFormat("fr-FR", {
-  day: "2-digit",
-  month: "short",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-});
 
 export function formatDateTime(value: string | null | undefined): string {
   if (!value) return "-";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "-";
-  return dateTimeFormatter.format(date);
+  const heure = String(date.getHours()).padStart(2, "0");
+  const minute = String(date.getMinutes()).padStart(2, "0");
+  return `${dateCourte(date)} ${heure}:${minute}`;
 }
 
 const monthFormatter = new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric" });

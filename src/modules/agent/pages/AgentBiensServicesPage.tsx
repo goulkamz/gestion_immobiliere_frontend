@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,12 +55,13 @@ import { useAttachPhotos } from "@/hooks/queries/useMedias";
 import { ApiError } from "@/api/http";
 import type { BienServiceResponse, StatutBienService } from "@/api/types";
 
-const TOUS_STATUTS: StatutBienService[] = [
-  "DISPONIBLE",
-  "RESERVEE",
-  "LOUEE",
-  "EN_MAINTENANCE",
-];
+// Transitions manuelles autorisées (miroir du backend) : RESERVEE et LOUEE ne se changent pas à la main.
+const STATUT_TRANSITIONS: Record<StatutBienService, StatutBienService[]> = {
+  DISPONIBLE: ["EN_MAINTENANCE"],
+  EN_MAINTENANCE: ["DISPONIBLE"],
+  RESERVEE: [],
+  LOUEE: [],
+};
 
 export function AgentBiensServicesPage() {
   const [detail, setDetail] = useState<BienServiceResponse | null>(null);
@@ -73,6 +76,7 @@ export function AgentBiensServicesPage() {
   const [deleting, setDeleting] = useState<BienServiceResponse | null>(null);
 
   const biensQuery = useBiensServicesQuery({ page, size: 20, sort: "idBienService,desc", recherche: recherche || undefined });
+  const compteurs = useCompteursStatut(useBiensServicesQuery, { recherche: recherche || undefined }, ["DISPONIBLE", "RESERVEE", "LOUEE", "EN_MAINTENANCE"] as const, "disponibilite");
   const createMutation = useCreateBienServiceMutation();
   const [photos, setPhotos] = useState<File[]>([]);
   const { attach: attachPhotos, isPending: photosPending } = useAttachPhotos();
@@ -233,12 +237,16 @@ export function AgentBiensServicesPage() {
             icon: <Edit2 size={15} aria-hidden="true" />,
             onClick: () => openEdit(b),
           },
-          {
-            label: "Changer la disponibilité",
-            text: "Statut",
-            icon: <Settings2 size={15} aria-hidden="true" />,
-            onClick: () => openStatut(b),
-          },
+          ...(STATUT_TRANSITIONS[b.disponibilite].length > 0
+            ? [
+                {
+                  label: "Changer la disponibilité",
+                  text: "Statut",
+                  icon: <Settings2 size={15} aria-hidden="true" />,
+                  onClick: () => openStatut(b),
+                },
+              ]
+            : []),
           {
             label: "Supprimer",
             text: "Supprimer",
@@ -275,6 +283,8 @@ export function AgentBiensServicesPage() {
           </Button>
         }
       />
+
+      <CompteursStatut compteurs={compteurs} statuts={["DISPONIBLE", "RESERVEE", "LOUEE", "EN_MAINTENANCE"] as const} />
 
       {biensQuery.isError ? (
         <EmptyState
@@ -485,9 +495,9 @@ export function AgentBiensServicesPage() {
               onChange={(e) =>
                 setNouveauStatut(e.target.value as StatutBienService)
               }
-              options={TOUS_STATUTS.filter(
-                (s) => s !== changingStatut.disponibilite,
-              ).map((s) => ({ value: s, label: statutLabel(s) }))}
+              options={STATUT_TRANSITIONS[changingStatut.disponibilite].map(
+                (s) => ({ value: s, label: statutLabel(s) }),
+              )}
             />
             <Button
               fullWidth

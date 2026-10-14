@@ -62,7 +62,7 @@ export function DataTable<T>({ data, columns, keyExtractor, loading, emptyMessag
               <th
                 key={column.key}
                 scope="col"
-                className={`px-3.5 py-2 ${column.hiddenOnMobile ? "hidden md:table-cell" : ""} ${
+                className={`px-2.5 py-1.5${column.hiddenOnMobile ? "hidden md:table-cell" : ""} ${
                   column.align === "right" ? "text-right" : column.align === "center" ? "text-center" : ""
                 }`}
               >
@@ -100,7 +100,7 @@ export function DataTable<T>({ data, columns, keyExtractor, loading, emptyMessag
               {columns.map((column) => (
                 <td
                   key={column.key}
-                  className={`px-3.5 py-1 text-slate-700 ${column.hiddenOnMobile ? "hidden md:table-cell" : ""} ${
+                  className={`px-2.5 py-1 text-slate-700 ${column.hiddenOnMobile ? "hidden md:table-cell" : ""} ${
                     column.align === "right" ? "text-right" : column.align === "center" ? "text-center" : ""
                   }`}
                 >

@@ -2,11 +2,27 @@ import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tansta
 import { usersAdminApi, type UserListParams } from "@/api/users-admin";
 import type { CreateUserByAdminRequest, Role } from "@/api/types";
 
-export function useUsersByRoleQuery(role: Role, params?: UserListParams) {
+export function useUsersByRoleQuery(role: Role | undefined, params?: UserListParams) {
   return useQuery({
     queryKey: ["admin-users", role, params],
     queryFn: () => usersAdminApi.getByRole(role, params),
     placeholderData: keepPreviousData,
+  });
+}
+
+export function useUpdateUserStatusMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, flagActif }: { id: number; flagActif: boolean }) => usersAdminApi.updateStatus(id, flagActif),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin-users"] }),
+  });
+}
+
+export function useRestaurerUserMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => usersAdminApi.restaurer(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin-users"] }),
   });
 }
 

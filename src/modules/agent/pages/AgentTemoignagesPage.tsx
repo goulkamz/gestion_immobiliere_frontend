@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,6 +29,7 @@ export function AgentTemoignagesPage() {
   const [createOpen, setCreateOpen] = useState(false);
 
   const temoignagesQuery = useAdminTemoignagesQuery({ page, size: 20, statut: statutFilter || undefined });
+  const compteurs = useCompteursStatut(useAdminTemoignagesQuery, {}, ["EN_ATTENTE", "PUBLIE", "RETIRE"] as const);
   const statutMutation = useUpdateStatutTemoignageMutation();
   const createMutation = useCreateAdminTemoignageMutation();
 
@@ -128,6 +131,8 @@ export function AgentTemoignagesPage() {
           </Button>
         }
       />
+
+      <CompteursStatut compteurs={compteurs} statuts={["EN_ATTENTE", "PUBLIE", "RETIRE"] as const} />
 
       {temoignagesQuery.isError ? (
         <EmptyState

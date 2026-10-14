@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -91,6 +93,7 @@ export function AgentReservationsPage() {
     statut: statutFilter || undefined,
     recherche: rechercheDebounced || undefined,
   });
+  const compteurs = useCompteursStatut(useReservationsQuery, { recherche: rechercheDebounced || undefined }, STATUTS);
   const confirmerMutation = useConfirmerReservationMutation();
   const annulerMutation = useAnnulerReservationMutation();
   const convertirMutation = useConvertirReservationMutation();
@@ -171,7 +174,10 @@ export function AgentReservationsPage() {
 
   function openConvertir(reservation: ReservationResponse) {
     setConvertissant(reservation);
-    convertirForm.reset({ typeContrat: "HABITATION" });
+    convertirForm.reset({
+      typeContrat: "HABITATION",
+      montantLoyer: reservation.loyerMaison ?? undefined,
+    });
   }
 
   async function onConvertir(values: ConvertirReservationFormValues) {
@@ -349,6 +355,8 @@ export function AgentReservationsPage() {
         }
       />
 
+      <CompteursStatut compteurs={compteurs} statuts={STATUTS} />
+
       {reservationsQuery.isError ? (
         <EmptyState
           icon={<AlertTriangle size={32} />}
@@ -516,7 +524,6 @@ export function AgentReservationsPage() {
               options={[
                 { value: "HABITATION", label: "Habitation" },
                 { value: "COMMERCIAL", label: "Commercial" },
-                { value: "MEUBLE", label: "Meublé" },
               ]}
               {...convertirForm.register("typeContrat")}
             />

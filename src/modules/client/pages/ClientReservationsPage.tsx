@@ -1,4 +1,8 @@
-import { useMemo, useState } from "react";
+import { useMaisonsDisponiblesOptions } from "@/hooks/useOptionsSelection";
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { useRechercheServeur } from "@/hooks/useRechercheServeur";
+import { statutLabel } from "@/utils/statut";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
@@ -6,15 +10,18 @@ import { AlertTriangle, Eye, Home, Info, Plus, XCircle } from "lucide-react";
 import {
   ActionGroup,
   Button,
+  CompteursStatut,
   DataTable,
   EmptyState,
+  EntityPhotoPreview,
+  MaisonDetailModal,
   Modal,
   PageHeader,
+  Pagination,
+  RemoteCombobox,
   SearchInput,
   Select,
   StatutBadge,
-  MaisonDetailModal,
-  EntityPhotoPreview,
 } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import {
@@ -22,10 +29,7 @@ import {
   useCreateReservationMutation,
   useReservationsQuery,
 } from "@/hooks/queries/useReservations";
-import {
-  useMaisonsQuery,
-  useParametresPubliquesQuery,
-} from "@/hooks/queries/usePublicCatalog";
+import { useParametresPubliquesQuery } from "@/hooks/queries/usePublicCatalog";
 import {
   reservationSchema,
   type ReservationFormInput,
@@ -35,16 +39,30 @@ import { formatDateTime } from "@/utils/format";
 import { getParametreEntier } from "@/utils/parametres";
 import { dateDebutMaintenant } from "@/utils/dateDebut";
 import { ApiError } from "@/api/http";
-import type { ReservationResponse } from "@/api/types";
+import type { ReservationResponse, StatutReservation } from "@/api/types";
 
+const STATUTS = ["EN_ATTENTE", "CONFIRMEE", "CONVERTIE", "ANNULEE"] as const;
 const ANNULABLE: ReservationResponse["statut"][] = ["EN_ATTENTE", "CONFIRMEE"];
 
 export function ClientReservationsPage() {
   const [detailMaison, setDetailMaison] = useState<number | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const reservationsQuery = useReservationsQuery({ size: 50 });
-  const maisonsQuery = useMaisonsQuery({ statut: "DISPONIBLE", size: 100 });
+  const { search, setSearch, recherche, page, setPage } = useRechercheServeur();
+  const [statutFilter, setStatutFilter] = useState<StatutReservation | "">("");
+  // Périmètre (mes données), recherche, statut et pagination sont appliqués côté serveur
+  const reservationsQuery = useReservationsQuery({
+    page,
+    size: 20,
+    sort: "dateDebut,desc",
+    statut: statutFilter || undefined,
+    recherche: recherche || undefined,
+  });
+  const compteurs = useCompteursStatut(
+    useReservationsQuery,
+    { recherche: recherche || undefined },
+    STATUTS,
+  );
+  const reservations = reservationsQuery.data?.content ?? [];
   const parametresQuery = useParametresPubliquesQuery();
   const delaiExpirationHeures = getParametreEntier(
     parametresQuery.data,
@@ -99,15 +117,6 @@ export function ClientReservationsPage() {
       );
     }
   }
-
-  const filtered = useMemo(() => {
-    const list = reservationsQuery.data?.content ?? [];
-    const term = search.trim().toLowerCase();
-    if (!term) return list;
-    return list.filter((r) =>
-      (r.nomCommunMaison ?? "").toLowerCase().includes(term),
-    );
-  }, [reservationsQuery.data, search]);
 
   const columns: DataTableColumn<ReservationResponse>[] = [
     {
@@ -194,6 +203,8 @@ export function ClientReservationsPage() {
         }
       />
 
+      <CompteursStatut compteurs={compteurs} statuts={STATUTS} />
+
       <div className="mb-4 flex items-start gap-3 rounded-xl border border-warning-500/30 bg-warning-50 px-4 py-3 text-sm text-warning-700">
         <AlertTriangle
           size={18}
@@ -218,25 +229,50 @@ export function ClientReservationsPage() {
         />
       ) : (
         <>
-          <div className="mb-4">
-            <SearchInput
-              value={search}
-              onChange={setSearch}
-              placeholder="Rechercher une maison…"
-              ariaLabel="Rechercher parmi mes réservations"
-            />
+          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
+            <div className="sm:w-44">
+              <Select
+                aria-label="Filtrer par statut"
+                value={statutFilter}
+                onChange={(e) => {
+                  setStatutFilter(e.target.value as StatutReservation | "");
+                  setPage(0);
+                }}
+                placeholder="Tous les statuts"
+                options={STATUTS.map((st) => ({
+                  value: st,
+                  label: statutLabel(st),
+                }))}
+              />
+            </div>
+            <div className="sm:w-72">
+              <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Rechercher une maison…"
+                ariaLabel="Rechercher parmi mes réservations"
+              />
+            </div>
           </div>
           <DataTable
-            data={filtered}
+            data={reservations}
             columns={columns}
             keyExtractor={(r) => r.idReservation}
             loading={reservationsQuery.isLoading}
             emptyMessage={
-              search
+              search || statutFilter
                 ? "Aucune réservation ne correspond à votre recherche"
                 : "Aucune réservation pour le moment"
             }
           />
+          {reservationsQuery.data && (
+            <Pagination
+              currentPage={reservationsQuery.data.page.number}
+              totalPages={reservationsQuery.data.page.totalPages}
+              totalElements={reservationsQuery.data.page.totalElements}
+              onPageChange={setPage}
+            />
+          )}
         </>
       )}
 
@@ -251,15 +287,12 @@ export function ClientReservationsPage() {
           onSubmit={handleSubmit(onSubmit)}
           noValidate
         >
-          <Select
+          <RemoteCombobox
             label="Maison"
             required
-            placeholder="Sélectionner une maison"
-            defaultValue=""
-            options={(maisonsQuery.data?.content ?? []).map((m) => ({
-              value: m.idMaison,
-              label: m.nomCommunMaison ?? `Maison #${m.idMaison}`,
-            }))}
+            placeholder="Rechercher une maison"
+            useOptions={useMaisonsDisponiblesOptions}
+            value={maisonChoisie}
             error={errors.idMaison?.message}
             {...register("idMaison")}
           />

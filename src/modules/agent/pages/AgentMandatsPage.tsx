@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -66,6 +68,7 @@ export function AgentMandatsPage() {
     statut: statutFilter || undefined,
     recherche: rechercheDebounced || undefined,
   });
+  const compteurs = useCompteursStatut(useContratsMandatQuery, { recherche: rechercheDebounced || undefined }, ["EN_ATTENTE", "ACTIF", "RESILIE", "EXPIRE"] as const);
   const createMutation = useCreateContratMandatMutation();
   const modifierMutation = useModifierContratMandatMutation();
   const activerMutation = useActiverContratMandatMutation();
@@ -282,6 +285,8 @@ export function AgentMandatsPage() {
           </Button>
         }
       />
+
+      <CompteursStatut compteurs={compteurs} statuts={["EN_ATTENTE", "ACTIF", "RESILIE", "EXPIRE"] as const} />
 
       {mandatsQuery.isError ? (
         <EmptyState

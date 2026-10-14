@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
@@ -9,7 +11,9 @@ import {
   CheckCircle2,
   Eye,
   Flag,
+  Mail,
   Package,
+  Phone,
   Plus,
   User,
   XCircle,
@@ -78,6 +82,52 @@ const STATUTS: StatutLocationBienService[] = [
 // Les dates sont stockées en LocalDateTime ; les champs date n'attendent que yyyy-MM-dd
 const versChampDate = (iso: string) => iso.slice(0, 10);
 
+// Doit rester aligné avec JOURS_PREAVIS_ECHEANCE côté serveur
+const JOURS_PREAVIS_ECHEANCE = 2;
+
+/** Jours restants avant la fin (négatif si échue), calculés sur les dates sans heure. */
+function joursAvantFin(dateFin: string): number {
+  const fin = new Date(versChampDate(dateFin)).getTime();
+  const aujourdhui = new Date(new Date().toISOString().slice(0, 10)).getTime();
+  return Math.round((fin - aujourdhui) / 86400000);
+}
+
+function EcheanceBadge({ location }: { location: LocationBienServiceResponse }) {
+  if (location.statut !== "ACTIF") return null;
+  const jours = joursAvantFin(location.dateFin);
+  if (jours > JOURS_PREAVIS_ECHEANCE) return null;
+  let libelle: string;
+  let couleur: string;
+  if (jours < 0) {
+    libelle = `Échue depuis ${-jours} jour(s)`;
+    couleur = "bg-red-500";
+  } else if (jours === 0) {
+    libelle = "Se termine aujourd'hui";
+    couleur = "bg-orange-500";
+  } else {
+    libelle = `Se termine dans ${jours} jour(s)`;
+    couleur = "bg-amber-400";
+  }
+  // Pastille compacte : l'info s'affiche au survol (souris) ou au toucher/focus (mobile)
+  return (
+    <span className="group relative inline-flex">
+      <button
+        type="button"
+        aria-label={libelle}
+        className="flex h-4 w-4 items-center justify-center rounded-full"
+      >
+        <span className={`h-2.5 w-2.5 rounded-full ${couleur}`} />
+      </button>
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full right-0 z-20 mb-1 hidden whitespace-nowrap rounded-md bg-slate-800 px-2 py-1 text-xs text-white shadow-lg group-hover:block group-focus-within:block"
+      >
+        {libelle}
+      </span>
+    </span>
+  );
+}
+
 function libelleSolde(solde: number) {
   if (solde > 0) return "Reste à payer";
   if (solde < 0) return "Trop-perçu à rembourser";
@@ -91,6 +141,7 @@ export function AgentLocationsBiensServicesPage() {
   const [statutFilter, setStatutFilter] = useState<
     StatutLocationBienService | ""
   >("");
+  const [aEcheance, setAEcheance] = useState(false);
   const [annulant, setAnnulant] = useState<LocationBienServiceResponse | null>(
     null,
   );
@@ -114,8 +165,10 @@ export function AgentLocationsBiensServicesPage() {
     size: 20,
     sort: "dateDebut,desc",
     statut: statutFilter || undefined,
+    aEcheance: aEcheance || undefined,
     recherche: recherche || undefined,
   });
+  const compteurs = useCompteursStatut(useLocationsQuery, { aEcheance: aEcheance || undefined, recherche: recherche || undefined }, STATUTS);
   const locations = locationsQuery.data?.content ?? [];
   const remboursementsQuery = useLocationRemboursementsQuery(
     detail?.idLocationBienService ?? 0,
@@ -156,6 +209,26 @@ export function AgentLocationsBiensServicesPage() {
     !!modifiant &&
     !!nouvelleFinSaisie &&
     nouvelleFinSaisie > versChampDate(modifiant.dateFin);
+
+  // Complément à encaisser pour une prolongation : nouveau total - (déjà versé - déjà remboursé).
+  // Un éventuel trop-perçu est ainsi réutilisé avant de demander un nouveau paiement.
+  const complementDu = (() => {
+    if (!modifiant || !estProlongation || !modifiant.prixJournalier) return 0;
+    const jours = Math.round(
+      (new Date(nouvelleFinSaisie).getTime() -
+        new Date(versChampDate(modifiant.dateDebut)).getTime()) /
+        86400000,
+    );
+    const nouveauTotal = modifiant.prixJournalier * jours;
+    const dejaVerse = modifiant.totalEncaisse - modifiant.totalRembourse;
+    return Math.max(0, Math.round((nouveauTotal - dejaVerse) * 100) / 100);
+  })();
+  const { setValue: setDureeValue } = dureeForm;
+  useEffect(() => {
+    if (estProlongation) {
+      setDureeValue("montantComplement", complementDu > 0 ? complementDu : "");
+    }
+  }, [estProlongation, complementDu, setDureeValue]);
 
   const rembourserForm = useForm<
     RembourserLocationFormInput,
@@ -305,16 +378,41 @@ export function AgentLocationsBiensServicesPage() {
     }
   }
 
-  async function handleCloturer() {
+  // Jours restants avant la fin prévue (0 si la date de fin est atteinte ou dépassée)
+  const joursRestants = cloturant
+    ? Math.max(
+        0,
+        Math.round(
+          (new Date(versChampDate(cloturant.dateFin)).getTime() -
+            new Date(new Date().toISOString().slice(0, 10)).getTime()) /
+            86400000,
+        ),
+      )
+    : 0;
+  const estimationRemboursement =
+    cloturant && cloturant.duree > 0
+      ? (cloturant.montantTotal / cloturant.duree) * joursRestants
+      : 0;
+
+  async function handleCloturer(raccourcir: boolean) {
     if (!cloturant) return;
     try {
-      await statutMutation.mutateAsync({
+      const reponse = await statutMutation.mutateAsync({
         id: cloturant.idLocationBienService,
         statut: "TERMINE",
+        raccourcir,
       });
-      toast.success("Location clôturée.");
       setCloturant(null);
-      setDetail(null);
+      if (reponse.statut === "TERMINE") {
+        toast.success("Location clôturée.");
+        setDetail(null);
+      } else {
+        // Clôture anticipée : durée ramenée à aujourd'hui, trop-perçu à rembourser avant de terminer
+        toast.info(
+          `Durée ramenée à aujourd'hui. Remboursez le trop-perçu de ${formatMontant(Math.abs(reponse.solde))} puis terminez la location.`,
+        );
+        setDetail((d) => (d ? reponse : d));
+      }
     } catch (err) {
       toast.error(
         err instanceof ApiError ? err.message : "Clôture impossible.",
@@ -351,8 +449,48 @@ export function AgentLocationsBiensServicesPage() {
         </span>
       ),
     },
+    {
+      key: "contact",
+      header: "Contact",
+      render: (l) => {
+        if (!l.emailClient && !l.telephoneClient) return "-";
+        return (
+          <div className="flex flex-col gap-0.5 text-xs text-slate-600">
+            {l.emailClient && (
+              <span className="flex items-center gap-1.5">
+                <Mail
+                  size={13}
+                  className="shrink-0 text-primary-600"
+                  aria-hidden="true"
+                />
+                {l.emailClient}
+              </span>
+            )}
+            {l.telephoneClient && (
+              <span className="flex items-center gap-1.5">
+                <Phone
+                  size={13}
+                  className="shrink-0 text-primary-600"
+                  aria-hidden="true"
+                />
+                {l.telephoneClient}
+              </span>
+            )}
+          </div>
+        );
+      },
+    },
     { key: "dateDebut", header: "Du", render: (l) => formatDate(l.dateDebut) },
-    { key: "dateFin", header: "Au", render: (l) => formatDate(l.dateFin) },
+    {
+      key: "dateFin",
+      header: "Au",
+      render: (l) => (
+        <span className="flex items-center gap-1.5">
+          {formatDate(l.dateFin)}
+          <EcheanceBadge location={l} />
+        </span>
+      ),
+    },
     {
       key: "montant",
       header: "Montant",
@@ -444,6 +582,8 @@ export function AgentLocationsBiensServicesPage() {
         }
       />
 
+      <CompteursStatut compteurs={compteurs} statuts={STATUTS} />
+
       {locationsQuery.isError ? (
         <EmptyState
           icon={<AlertTriangle size={32} />}
@@ -470,6 +610,18 @@ export function AgentLocationsBiensServicesPage() {
                 }))}
               />
             </div>
+            <label className="flex items-center gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={aEcheance}
+                onChange={(e) => {
+                  setAEcheance(e.target.checked);
+                  setPage(0);
+                }}
+                className="h-4 w-4 rounded border-slate-300"
+              />
+              À échéance
+            </label>
             <div className="sm:w-72">
               <SearchInput
                 value={search}
@@ -485,7 +637,7 @@ export function AgentLocationsBiensServicesPage() {
             keyExtractor={(l) => l.idLocationBienService}
             loading={locationsQuery.isLoading}
             emptyMessage={
-              search || statutFilter
+              search || statutFilter || aEcheance
                 ? "Aucune location ne correspond à votre recherche"
                 : "Aucune location pour le moment"
             }
@@ -583,6 +735,12 @@ export function AgentLocationsBiensServicesPage() {
                   {detail.libelleBienService}
                 </p>
                 <p>{detail.nomClient}</p>
+                {detail.emailClient && (
+                  <p className="text-slate-500">{detail.emailClient}</p>
+                )}
+                {detail.telephoneClient && (
+                  <p className="text-slate-500">{detail.telephoneClient}</p>
+                )}
                 {detail.destination && (
                   <p className="text-slate-500">
                     Destination : {detail.destination}
@@ -787,6 +945,11 @@ export function AgentLocationsBiensServicesPage() {
                   type="number"
                   min={0}
                   step="any"
+                  helperText={
+                    complementDu > 0
+                      ? `Reste dû calculé automatiquement : ${formatMontant(complementDu)}.`
+                      : "Rien à encaisser : les sommes déjà versées couvrent la prolongation."
+                  }
                   error={dureeForm.formState.errors.montantComplement?.message}
                   {...dureeForm.register("montantComplement")}
                 />
@@ -877,6 +1040,17 @@ export function AgentLocationsBiensServicesPage() {
               pour <strong>{cloturant.nomClient}</strong> passera au statut
               terminé.
             </p>
+            {joursRestants > 0 && (
+              <p className="mt-2 rounded-lg bg-amber-50 p-3 text-sm text-amber-800">
+                La date de fin prévue ({formatDate(cloturant.dateFin)}) n&apos;est
+                pas atteinte : il reste {joursRestants} jour(s). Voulez-vous
+                ramener la fin de la location à aujourd&apos;hui ? Un
+                remboursement d&apos;environ{" "}
+                {formatMontant(estimationRemboursement)} sera alors à effectuer
+                avant la clôture. Sinon, la location reste active et vous
+                pouvez ajuster la durée avec le bouton Durée.
+              </p>
+            )}
             {cloturant.solde > 0 && (
               <p className="mt-2 text-sm text-amber-700">
                 Attention : il reste {formatMontant(cloturant.solde)} à payer
@@ -885,27 +1059,51 @@ export function AgentLocationsBiensServicesPage() {
             )}
             {cloturant.solde < 0 && (
               <p className="mt-2 text-sm text-amber-700">
-                Attention : un trop-perçu de{" "}
-                {formatMontant(Math.abs(cloturant.solde))} n&apos;a pas encore
-                été remboursé. Le remboursement ne sera plus possible après la
-                clôture.
+                Un trop-perçu de {formatMontant(Math.abs(cloturant.solde))} est
+                à rembourser avant de pouvoir terminer la location.
               </p>
             )}
-            <div className="mt-4 flex gap-2">
-              <Button
-                variant="secondary"
-                className="flex-1"
-                onClick={() => setCloturant(null)}
-              >
-                Retour
-              </Button>
-              <Button
-                className="flex-1"
-                loading={statutMutation.isPending}
-                onClick={handleCloturer}
-              >
-                Clôturer
-              </Button>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {joursRestants > 0 ? (
+                <>
+                  <Button
+                    variant="secondary"
+                    className="flex-1"
+                    onClick={() => {
+                      setCloturant(null);
+                      toast.info(
+                        "La location reste active. Utilisez le bouton Durée pour ajuster la fin, puis remboursez avant de clôturer.",
+                      );
+                    }}
+                  >
+                    Non, je gère la durée moi-même
+                  </Button>
+                  <Button
+                    className="flex-1"
+                    loading={statutMutation.isPending}
+                    onClick={() => handleCloturer(true)}
+                  >
+                    Oui, ramener à aujourd&apos;hui
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="secondary"
+                    className="flex-1"
+                    onClick={() => setCloturant(null)}
+                  >
+                    Retour
+                  </Button>
+                  <Button
+                    className="flex-1"
+                    loading={statutMutation.isPending}
+                    onClick={() => handleCloturer(false)}
+                  >
+                    Clôturer
+                  </Button>
+                </>
+              )}
             </div>
           </>
         )}

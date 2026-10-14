@@ -1,3 +1,5 @@
+import { useCompteursStatut } from "@/hooks/useCompteursStatut";
+import { CompteursStatut } from "@/components/ui";
 import { useState } from "react";
 import { AlertTriangle, Eye, Mail, Phone } from "lucide-react";
 import { ActionGroup, Button, DataTable, EmptyState, Modal, PageHeader, Pagination, SearchInput, Select, StatutBadge } from "@/components/ui";
@@ -18,6 +20,7 @@ export function AgentContactsPage() {
   const [viewing, setViewing] = useState<ContactResponse | null>(null);
 
   const contactsQuery = useContactsQuery({ page, size: 20, sort: "dateEnvoi,desc", statut: statutFilter || undefined, recherche: recherche || undefined });
+  const compteurs = useCompteursStatut(useContactsQuery, { recherche: recherche || undefined }, ["NON_LU", "LU", "TRAITE"] as const);
   const statutMutation = useUpdateStatutContactMutation();
 
   // Filtre statut, recherche et pagination sont appliqués côté serveur
@@ -84,6 +87,8 @@ export function AgentContactsPage() {
   return (
     <div>
       <PageHeader tone="indigo" title="Contacts" description="Les messages envoyés depuis le formulaire de contact du site." />
+
+      <CompteursStatut compteurs={compteurs} statuts={["NON_LU", "LU", "TRAITE"] as const} />
 
       {contactsQuery.isError ? (
         <EmptyState

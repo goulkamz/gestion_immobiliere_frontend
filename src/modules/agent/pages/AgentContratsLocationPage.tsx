@@ -8,9 +8,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { AlertTriangle, CreditCard, Download, Edit2, Eye, FileCheck2, FileText, FileWarning, Files, Home, LogIn, LogOut, User, XCircle } from "lucide-react";
+import { AvenantFields } from "@/components/ui/AvenantFields";
 import { ActionGroup, Button, DataTable, DocumentPreviewModal, EmptyState, Input, Modal, PageHeader, Pagination, SearchInput, StatutBadge, Textarea, MaisonDetailModal } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import {
+  useAvenantsLocationQuery,
   useContratsLocationQuery,
   useDecompteSortieQuery,
   useModifierContratLocationMutation,
@@ -20,6 +22,7 @@ import {
 } from "@/hooks/queries/useContrats";
 import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { documentsApi } from "@/api/documents";
+import { documentsAvenants } from "@/utils/avenants";
 import {
   cloturerLocationSchema,
   modifierLocationSchema,
@@ -82,6 +85,7 @@ export function AgentContratsLocationPage() {
   const terminerMutation = useTerminerLocationMutation();
   const resilierMutation = useResilierLocationMutation();
   const reglerMutation = useReglerDecompteSortieMutation();
+  const avenantsDocsQuery = useAvenantsLocationQuery(openDocs?.idContratLocation ?? 0, { enabled: openDocs !== null });
   const decompteQuery = useDecompteSortieQuery(decompteContrat?.idContratLocation ?? 0, { enabled: decompteContrat !== null });
   const { openPreview, download, closePreview, downloadPreview, preview, isPending } = useDocumentDownload();
 
@@ -128,17 +132,46 @@ export function AgentContratsLocationPage() {
 
   function openEdit(contrat: ContratLocationResponse) {
     setEditing(contrat);
-    editForm.reset({ montantLoyer: contrat.montantLoyer, dateSortie: contrat.dateSortie ? contrat.dateSortie.slice(0, 10) : "" });
+    editForm.reset({
+      montantLoyer: contrat.montantLoyer,
+      dateSortie: contrat.dateSortie ? contrat.dateSortie.slice(0, 10) : "",
+      motif: "",
+      accordClient: false,
+      dateEffet: "",
+    });
   }
 
   async function onEdit(values: ModifierLocationFormValues) {
     if (!editing) return;
     try {
-      await modifierMutation.mutateAsync({
+      const reponse = await modifierMutation.mutateAsync({
         id: editing.idContratLocation,
-        body: { montantLoyer: values.montantLoyer, dateSortie: values.dateSortie ? `${values.dateSortie}T00:00:00` : undefined },
+        body: {
+          montantLoyer: values.montantLoyer,
+          dateSortie: values.dateSortie ? `${values.dateSortie}T00:00:00` : undefined,
+          motif: values.motif,
+          accordClient: values.accordClient,
+          dateEffet: values.dateEffet || undefined,
+        },
       });
-      toast.success("Contrat mis à jour.");
+      const idAvenant = reponse.idAvenant;
+      toast.success(
+        <span>
+          Contrat mis à jour, avenant n°{reponse.numeroAvenant} créé.{" "}
+          {idAvenant !== undefined && (
+            <button
+              type="button"
+              className="font-semibold underline"
+              onClick={() =>
+                download(`avenant-${idAvenant}`, () => documentsApi.avenant(idAvenant), `avenant-${reponse.numeroAvenant}-location-${reponse.idContratLocation}.pdf`)
+              }
+            >
+              Télécharger l&apos;avenant
+            </button>
+          )}
+        </span>,
+        { autoClose: 10000 },
+      );
       setEditing(null);
     } catch (err) {
       toast.error(err instanceof ApiError ? err.message : "Mise à jour impossible.");
@@ -179,6 +212,7 @@ export function AgentContratsLocationPage() {
             },
           ]
         : []),
+      ...documentsAvenants(avenantsDocsQuery.data),
     ];
   }
 
@@ -346,6 +380,16 @@ export function AgentContratsLocationPage() {
               type="date"
               helperText="Prolongez ou réduisez le bail sans le clôturer. Laissez vide pour une durée indéterminée."
               {...editForm.register("dateSortie")}
+            />
+            <AvenantFields
+              motif={editForm.register("motif")}
+              accord={editForm.register("accordClient")}
+              dateEffet={editForm.register("dateEffet")}
+              errors={{
+                motif: editForm.formState.errors.motif?.message,
+                accord: editForm.formState.errors.accordClient?.message,
+                dateEffet: editForm.formState.errors.dateEffet?.message,
+              }}
             />
             <Button type="submit" fullWidth loading={modifierMutation.isPending}>
               Enregistrer

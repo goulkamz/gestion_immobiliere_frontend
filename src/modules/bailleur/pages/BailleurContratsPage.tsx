@@ -10,6 +10,7 @@ import {
   Download,
   Eye,
   FileCheck2,
+  FilePen,
   FileText,
   Files,
   Home,
@@ -32,11 +33,12 @@ import {
   MaisonDetailModal,
 } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
-import { useContratsLocationQuery } from "@/hooks/queries/useContrats";
+import { useAvenantsLocationQuery, useContratsLocationQuery } from "@/hooks/queries/useContrats";
 import { useCoursQuery } from "@/hooks/queries/useCours";
 import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { useBailleurUiStore } from "@/store/bailleurUiStore";
 import { documentsApi } from "@/api/documents";
+import { documentsAvenants } from "@/utils/avenants";
 import { formatDate, formatMontant } from "@/utils/format";
 import type { ContratLocationResponse, StatutLocation } from "@/api/types";
 
@@ -88,6 +90,8 @@ export function BailleurContratsPage() {
     preview,
     isPending,
   } = useDocumentDownload();
+  // Avenants du contrat dont la modale Documents est ouverte
+  const avenantsQuery = useAvenantsLocationQuery(openContrat?.idContratLocation ?? 0, { enabled: openContrat !== null });
 
   const cours = coursQuery.data?.content ?? [];
   const contrats = contratsQuery.data?.content ?? [];
@@ -278,6 +282,15 @@ export function BailleurContratsPage() {
                 </button>
               </div>
             ))}
+            <button
+              type="button"
+              title="Documents et avenants"
+              aria-label="Documents et avenants du contrat"
+              onClick={() => setOpenContrat(c)}
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-700 transition-colors hover:bg-primary-50"
+            >
+              <FilePen size={16} aria-hidden="true" />
+            </button>
           </div>
         );
       },
@@ -380,7 +393,7 @@ export function BailleurContratsPage() {
       >
         {openContrat && (
           <ul className="divide-y divide-slate-100">
-            {documentsFor(openContrat).map((doc) => (
+            {[...documentsFor(openContrat), ...documentsAvenants(avenantsQuery.data)].map((doc) => (
               <li
                 key={doc.key}
                 className="flex items-center justify-between gap-3 py-3"

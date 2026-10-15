@@ -4,12 +4,16 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { AlertTriangle, Building2, CheckCircle2, Download, Edit2, Eye, FileSignature, Plus, User, XCircle } from "lucide-react";
+import { AlertTriangle, Building2, CheckCircle2, Download, Edit2, Eye, FilePen, FileSignature, Plus, User, XCircle } from "lucide-react";
+import { AvenantFields } from "@/components/ui/AvenantFields";
+import { AvenantsModal } from "@/components/ui/AvenantsModal";
+import { documentsAvenants } from "@/utils/avenants";
 import { ActionGroup, Button, DataTable, DocumentPreviewModal, EmptyState, Input, Modal, PageHeader, Pagination, SearchInput, RemoteCombobox, Select, StatutBadge, Textarea, CourDetailModalById } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import { useCoursSansMandatActifOptions } from "@/hooks/useOptionsSelection";
 import {
   useActiverContratMandatMutation,
+  useAvenantsMandatQuery,
   useContratsMandatQuery,
   useCreateContratMandatMutation,
   useModesFacturationQuery,
@@ -49,6 +53,7 @@ export function AgentMandatsPage() {
   const [rechercheDebounced, setRechercheDebounced] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [editing, setEditing] = useState<ContratMandatResponse | null>(null);
+  const [avenantsMandat, setAvenantsMandat] = useState<ContratMandatResponse | null>(null);
   const [activating, setActivating] = useState<ContratMandatResponse | null>(null);
   const [resiliating, setResiliating] = useState<ContratMandatResponse | null>(null);
 
@@ -74,6 +79,7 @@ export function AgentMandatsPage() {
   const activerMutation = useActiverContratMandatMutation();
   const resilierMutation = useResilierContratMandatMutation();
   const { openPreview, download, closePreview, downloadPreview, preview, isPending } = useDocumentDownload();
+  const avenantsQuery = useAvenantsMandatQuery(avenantsMandat?.idMandat ?? 0, { enabled: avenantsMandat !== null });
 
   const createForm = useForm<MandatCreateFormInput, unknown, MandatCreateFormValues>({ resolver: zodResolver(mandatCreateSchema) });
   const editForm = useForm<MandatEditFormInput, unknown, MandatEditFormValues>({ resolver: zodResolver(mandatEditSchema) });
@@ -139,22 +145,56 @@ export function AgentMandatsPage() {
       dateFin: mandat.dateFin ? mandat.dateFin.slice(0, 10) : "",
       commission: mandat.commission ?? undefined,
       modeFacturation: mandat.modeFacturation ?? undefined,
+      motif: "",
+      accordClient: false,
     });
   }
 
   async function onEdit(values: MandatEditFormValues) {
     if (!editing) return;
+    // Mandat actif : la modification crée un avenant, il faut un motif et l'accord du client
+    const actif = editing.statut === "ACTIF";
+    if (actif) {
+      let invalide = false;
+      if (!values.motif?.trim()) {
+        editForm.setError("motif", { message: "Le motif est obligatoire" });
+        invalide = true;
+      }
+      if (!values.accordClient) {
+        editForm.setError("accordClient", { message: "Confirmez que le client a accepté la modification" });
+        invalide = true;
+      }
+      if (invalide) return;
+    }
     try {
-      await modifierMutation.mutateAsync({
+      const reponse = await modifierMutation.mutateAsync({
         id: editing.idMandat,
         body: {
           typeMandat: values.typeMandat,
           dateFin: values.dateFin ? `${values.dateFin}T00:00:00` : undefined,
           commission: values.commission,
           modeFacturation: values.modeFacturation,
+          ...(actif ? { motif: values.motif, accordClient: true } : {}),
         },
       });
-      toast.success("Mandat mis à jour.");
+      const idAvenant = reponse.idAvenant;
+      if (idAvenant !== undefined) {
+        toast.success(
+          <span>
+            Mandat mis à jour, avenant n°{reponse.numeroAvenant} créé.{" "}
+            <button
+              type="button"
+              className="font-semibold underline"
+              onClick={() => download(`avenant-${idAvenant}`, () => documentsApi.avenant(idAvenant), `avenant-${reponse.numeroAvenant}-mandat-${reponse.idMandat}.pdf`)}
+            >
+              Télécharger l&apos;avenant
+            </button>
+          </span>,
+          { autoClose: 10000 },
+        );
+      } else {
+        toast.success("Mandat mis à jour.");
+      }
       setEditing(null);
     } catch (err) {
       toast.error(err instanceof ApiError ? err.message : "Mise à jour impossible.");
@@ -256,6 +296,9 @@ export function AgentMandatsPage() {
         }
         if (m.statut === "EN_ATTENTE") {
           items.push({ label: "Activer", text: "Activer", icon: <CheckCircle2 size={15} aria-hidden="true" />, onClick: () => setActivating(m) });
+        }
+        if (m.statut !== "EN_ATTENTE") {
+          items.push({ label: "Avenants du mandat", text: "Avenants", icon: <FilePen size={15} aria-hidden="true" />, onClick: () => setAvenantsMandat(m) });
         }
         if (m.statut === "ACTIF") {
           items.push({ label: "Résilier", text: "Résilier", icon: <XCircle size={15} aria-hidden="true" />, tone: "danger", onClick: () => openResilier(m) });
@@ -401,12 +444,30 @@ export function AgentMandatsPage() {
               error={editForm.formState.errors.modeFacturation?.message}
               {...editForm.register("modeFacturation")}
             />
+            {editing.statut === "ACTIF" && (
+              <AvenantFields
+                motif={editForm.register("motif")}
+                accord={editForm.register("accordClient")}
+                errors={{ motif: editForm.formState.errors.motif?.message, accord: editForm.formState.errors.accordClient?.message }}
+              />
+            )}
             <Button type="submit" fullWidth loading={modifierMutation.isPending}>
               Enregistrer
             </Button>
           </form>
         )}
       </Modal>
+
+      <AvenantsModal
+        isOpen={avenantsMandat !== null}
+        onClose={() => setAvenantsMandat(null)}
+        title={avenantsMandat ? `Avenants - ${avenantsMandat.referenceCour}` : "Avenants"}
+        loading={avenantsQuery.isLoading}
+        documents={documentsAvenants(avenantsQuery.data)}
+        isPending={isPending}
+        onPreview={(doc) => openPreview(doc.key, doc.fetcher, doc.label, doc.filename)}
+        onDownload={(doc) => download(doc.key, doc.fetcher, doc.filename)}
+      />
 
       <Modal isOpen={activating !== null} onClose={() => setActivating(null)} title="Activer ce mandat ?" titleTone="indigo">
         {activating && (

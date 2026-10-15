@@ -452,6 +452,9 @@ export interface ContratLocationResponse {
   dateSortie: string | null;
   montantLoyer: number;
   statut: StatutLocation;
+  /** Renseignés uniquement par la réponse d'une modification qui a créé un avenant. */
+  idAvenant?: number;
+  numeroAvenant?: number;
 }
 
 export interface EcheanceResponse {
@@ -562,6 +565,9 @@ export interface ContratMandatResponse {
   modeFacturation: ModeFacturation | null;
   statut: StatutMandat;
   motifResiliation: string | null;
+  /** Renseignés uniquement par la réponse d'une modification qui a créé un avenant. */
+  idAvenant?: number;
+  numeroAvenant?: number;
 }
 
 export interface BailleurPatrimoineDTO {
@@ -732,12 +738,37 @@ export interface UpdateContratMandatRequest {
   commission?: number;
   modeFacturation?: ModeFacturation;
   typeMandat?: TypeMandat;
+  /** Mandat ACTIF : motif et accord du client obligatoires (un avenant est créé). Mandat EN_ATTENTE : ignorés. */
+  motif?: string;
+  accordClient?: boolean;
+  /** yyyy-MM-dd ; pour un mandat, uniquement aujourd'hui (la modification s'applique dès l'enregistrement). */
+  dateEffet?: string;
 }
 
-/** Prolonge/réduit un bail ACTIF (dateSortie) et/ou corrige le loyer, sans clôturer le contrat (409 si non ACTIF). */
+/**
+ * Prolonge/réduit un bail ACTIF (dateSortie) et/ou corrige le loyer, sans clôturer le contrat (409 si non ACTIF).
+ * Crée un avenant : motif et accord du client obligatoires, date d'effet (yyyy-MM-dd) aujourd'hui par défaut, jamais dans le passé.
+ */
 export interface UpdateContratLocationRequest {
   dateSortie?: string;
   montantLoyer?: number;
+  motif: string;
+  accordClient: boolean;
+  dateEffet?: string;
+}
+
+export type ChampAvenant = "montantLoyer" | "dateSortie" | "dateFin" | "commission" | "modeFacturation" | "typeMandat";
+
+/** Avenant à un contrat de location ou à un mandat (`GET /contrats-location|mandat/{id}/avenants`). */
+export interface AvenantResponse {
+  idAvenant: number;
+  typeContrat: "LOCATION" | "MANDAT";
+  idContrat: number;
+  numeroOrdre: number;
+  dateEffet: string;
+  motif: string;
+  dateCreation: string;
+  lignes: { champ: ChampAvenant; ancienneValeur: string | null; nouvelleValeur: string | null }[];
 }
 
 export interface DecompteSortieResponse {

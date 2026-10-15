@@ -15,6 +15,15 @@ export function useContratsLocationQuery(params?: ContratLocationListParams) {
   });
 }
 
+/** Avenants d'un contrat de location (clé sous ["contrats-location"] : invalidée avec les contrats). */
+export function useAvenantsLocationQuery(idContrat: number, options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: ["contrats-location", idContrat, "avenants"] as const,
+    queryFn: () => contratsApi.getAvenants(idContrat),
+    enabled: options?.enabled ?? true,
+  });
+}
+
 export function useDecompteSortieQuery(idContrat: number, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: contratsQueryKeys.decompte(idContrat),

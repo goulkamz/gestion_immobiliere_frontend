@@ -1,6 +1,7 @@
 import { http } from "./http";
 import type {
   ApiSuccessResponse,
+  AvenantResponse,
   ContratMandatResponse,
   CreateContratMandatRequest,
   ModesFacturationParType,
@@ -34,6 +35,8 @@ export const contratsMandatApi = {
   create: (body: CreateContratMandatRequest) => unwrap<ContratMandatResponse>(http.post("/contrats-mandat", body)),
 
   activer: (id: number) => unwrap<ContratMandatResponse>(http.patch(`/contrats-mandat/${id}/activer`)),
+
+  getAvenants: (id: number) => unwrap<AvenantResponse[]>(http.get(`/contrats-mandat/${id}/avenants`)),
 
   modifier: (id: number, body: UpdateContratMandatRequest) => unwrap<ContratMandatResponse>(http.patch(`/contrats-mandat/${id}/modifier`, body)),
 

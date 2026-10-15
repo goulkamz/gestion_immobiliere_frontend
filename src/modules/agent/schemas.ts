@@ -73,6 +73,9 @@ export const mandatEditSchema = z.object({
   dateFin: z.string().optional(),
   commission: z.coerce.number().min(0).optional().or(z.literal("").transform(() => undefined)),
   modeFacturation: z.enum(["MENSUEL", "CUMUL", "COMMISSION"], { message: "Choisissez un mode de facturation" }),
+  // Mandat ACTIF : un avenant est créé, motif et accord du client sont alors exigés (vérifié dans la page)
+  motif: z.string().optional(),
+  accordClient: z.boolean().optional(),
 });
 export type MandatEditFormValues = z.infer<typeof mandatEditSchema>;
 export type MandatEditFormInput = z.input<typeof mandatEditSchema>;
@@ -94,6 +97,10 @@ export type ConvertirReservationFormInput = z.input<typeof convertirReservationS
 export const modifierLocationSchema = z.object({
   montantLoyer: z.coerce.number().positive("Le loyer doit être positif").optional().or(z.literal("").transform(() => undefined)),
   dateSortie: z.string().optional(),
+  // Avenant : toute modification d'un contrat actif exige un motif, l'accord du client et une date d'effet valide
+  motif: z.string().trim().min(1, "Le motif est obligatoire"),
+  accordClient: z.boolean().refine((v) => v, "Confirmez que le client a accepté la modification"),
+  dateEffet: z.string().optional(),
 });
 export type ModifierLocationFormValues = z.infer<typeof modifierLocationSchema>;
 export type ModifierLocationFormInput = z.input<typeof modifierLocationSchema>;

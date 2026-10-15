@@ -22,6 +22,15 @@ export function useModesFacturationQuery() {
   });
 }
 
+/** Avenants d'un mandat (clé sous ["contrats-mandat"] : invalidée avec les mandats). */
+export function useAvenantsMandatQuery(idMandat: number, options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: ["contrats-mandat", idMandat, "avenants"] as const,
+    queryFn: () => contratsMandatApi.getAvenants(idMandat),
+    enabled: options?.enabled ?? true,
+  });
+}
+
 export function useContratMandatQuery(id: number | undefined) {
   return useQuery({
     queryKey: ["contrats-mandat", "detail", id] as const,

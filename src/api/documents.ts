@@ -27,4 +27,7 @@ export const documentsApi = {
 
   etatDesLieux: (idContrat: number, phase: "entree" | "sortie"): Promise<AxiosResponse<Blob>> =>
     http.get(`/documents/etats-des-lieux/${idContrat}/${phase}`, { responseType: "blob" }),
+
+  avenant: (idAvenant: number): Promise<AxiosResponse<Blob>> =>
+    http.get(`/documents/avenants/${idAvenant}`, { responseType: "blob" }),
 };

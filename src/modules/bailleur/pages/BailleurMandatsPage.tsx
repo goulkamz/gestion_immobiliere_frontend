@@ -4,6 +4,7 @@ import {
   Building2,
   Download,
   Eye,
+  FilePen,
   FileSignature,
 } from "lucide-react";
 import {
@@ -20,12 +21,14 @@ import {
   CourDetailModalById,
 } from "@/components/ui";
 import type { DataTableColumn } from "@/components/ui";
-import { useContratsMandatQuery } from "@/hooks/queries/useContratsMandat";
+import { AvenantsModal } from "@/components/ui/AvenantsModal";
+import { useAvenantsMandatQuery, useContratsMandatQuery } from "@/hooks/queries/useContratsMandat";
 import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { useRechercheServeur } from "@/hooks/useRechercheServeur";
 import { statutLabel } from "@/utils/statut";
 import { documentsApi } from "@/api/documents";
+import { documentsAvenants } from "@/utils/avenants";
 import { formatDate } from "@/utils/format";
 import { MODE_FACTURATION_LABELS } from "@/utils/mandat";
 import type { ContratMandatResponse, StatutMandat } from "@/api/types";
@@ -40,6 +43,7 @@ const TYPE_LABELS: Record<ContratMandatResponse["typeMandat"], string> = {
 
 export function BailleurMandatsPage() {
   const [detailCour, setDetailCour] = useState<number | null>(null);
+  const [avenantsMandat, setAvenantsMandat] = useState<ContratMandatResponse | null>(null);
   const { search, setSearch, recherche, page, setPage } = useRechercheServeur();
   const [statutFilter, setStatutFilter] = useState<StatutMandat | "">("");
   // Périmètre (mes cours), recherche, statut et pagination sont appliqués côté serveur
@@ -62,6 +66,7 @@ export function BailleurMandatsPage() {
     isPending,
     preview,
   } = useDocumentDownload();
+  const avenantsQuery = useAvenantsMandatQuery(avenantsMandat?.idMandat ?? 0, { enabled: avenantsMandat !== null });
   const mandats = mandatsQuery.data?.content ?? [];
 
   const columns: DataTableColumn<ContratMandatResponse>[] = [
@@ -152,6 +157,15 @@ export function BailleurMandatsPage() {
           >
             <Download size={16} aria-hidden="true" />
           </button>
+          <button
+            type="button"
+            title="Avenants du mandat"
+            aria-label={`Avenants du mandat - ${m.referenceCour}`}
+            onClick={() => setAvenantsMandat(m)}
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-primary-700 transition-colors hover:bg-primary-50"
+          >
+            <FilePen size={16} aria-hidden="true" />
+          </button>
         </div>
       ),
     },
@@ -232,6 +246,17 @@ export function BailleurMandatsPage() {
           patrimoine.
         </p>
       )}
+
+      <AvenantsModal
+        isOpen={avenantsMandat !== null}
+        onClose={() => setAvenantsMandat(null)}
+        title={avenantsMandat ? `Avenants - ${avenantsMandat.referenceCour}` : "Avenants"}
+        loading={avenantsQuery.isLoading}
+        documents={documentsAvenants(avenantsQuery.data)}
+        isPending={isPending}
+        onPreview={(doc) => openPreview(doc.key, doc.fetcher, doc.label, doc.filename)}
+        onDownload={(doc) => download(doc.key, doc.fetcher, doc.filename)}
+      />
 
       <DocumentPreviewModal
         isOpen={preview !== null}

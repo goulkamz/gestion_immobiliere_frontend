@@ -2,6 +2,7 @@ import { http } from "./http";
 import type {
   StatutLocation,
   ApiSuccessResponse,
+  AvenantResponse,
   ContratLocationResponse,
   DecompteSortieResponse,
   PageParams,
@@ -30,6 +31,8 @@ export interface ContratLocationListParams extends PageParams {
 export const contratsApi = {
   getContratsLocation: (params?: ContratLocationListParams) =>
     unwrap<PagedResponse<ContratLocationResponse>>(http.get("/contrats-location", { params })),
+
+  getAvenants: (id: number) => unwrap<AvenantResponse[]>(http.get(`/contrats-location/${id}/avenants`)),
 
   modifier: (id: number, body: UpdateContratLocationRequest) =>
     unwrap<ContratLocationResponse>(http.patch(`/contrats-location/${id}/modifier`, body)),

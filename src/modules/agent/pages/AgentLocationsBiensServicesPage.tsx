@@ -1,3 +1,4 @@
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useEffect, useState } from "react";
@@ -66,6 +67,7 @@ import {
 } from "../schemas";
 import { formatDate, formatDateTime, formatMontant } from "@/utils/format";
 import { statutLabel } from "@/utils/statut";
+import { locationsApi } from "@/api/locations";
 import { ApiError } from "@/api/http";
 import type {
   LocationBienServiceResponse,
@@ -170,6 +172,13 @@ export function AgentLocationsBiensServicesPage() {
   });
   const compteurs = useCompteursStatut(useLocationsQuery, { aEcheance: aEcheance || undefined, recherche: recherche || undefined }, STATUTS);
   const locations = locationsQuery.data?.content ?? [];
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: locations,
+    getId: (l) => l.idLocationBienService,
+    fetchOne: locationsApi.getLocation,
+    queryKey: ["locations"],
+  });
   const remboursementsQuery = useLocationRemboursementsQuery(
     detail?.idLocationBienService ?? 0,
   );
@@ -632,7 +641,9 @@ export function AgentLocationsBiensServicesPage() {
             </div>
           </div>
           <DataTable
-            data={locations}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(l) => l.idLocationBienService}
             loading={locationsQuery.isLoading}

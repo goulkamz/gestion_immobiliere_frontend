@@ -1,3 +1,4 @@
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useBiensServicesDisponiblesOptions } from "@/hooks/useOptionsSelection";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { useRechercheServeur } from "@/hooks/useRechercheServeur";
@@ -36,6 +37,7 @@ import {
   type LocationBienServiceFormValues,
 } from "../schemas";
 import { formatDate, formatMontant } from "@/utils/format";
+import { locationsApi } from "@/api/locations";
 import { ApiError } from "@/api/http";
 import type {
   LocationBienServiceResponse,
@@ -66,6 +68,13 @@ export function ClientLocationsPage() {
     STATUTS,
   );
   const locations = locationsQuery.data?.content ?? [];
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: locations,
+    getId: (l) => l.idLocationBienService,
+    fetchOne: locationsApi.getLocation,
+    queryKey: ["locations"],
+  });
   const createMutation = useCreateLocationMutation();
   const annulerMutation = useAnnulerLocationMutation();
 
@@ -234,7 +243,9 @@ export function ClientLocationsPage() {
             </div>
           </div>
           <DataTable
-            data={locations}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(l) => l.idLocationBienService}
             loading={locationsQuery.isLoading}

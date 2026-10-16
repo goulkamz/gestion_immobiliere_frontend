@@ -108,6 +108,22 @@
   }
 }
 
+/* Ligne repérée par une notification : clignote 3 fois puis reste surlignée */
+@keyframes cible-flash {
+  0%, 100% {
+    background-color: rgb(254 243 199 / 0.75);
+  }
+  50% {
+    background-color: rgb(252 211 77 / 0.65);
+  }
+}
+
+.ligne-ciblee {
+  background-color: rgb(254 243 199 / 0.75);
+  box-shadow: inset 4px 0 0 0 rgb(245 158 11);
+  animation: cible-flash 1.2s ease-in-out 3;
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;

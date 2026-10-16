@@ -1,3 +1,4 @@
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useState } from "react";
@@ -9,6 +10,7 @@ import { useContactsQuery, useUpdateStatutContactMutation } from "@/hooks/querie
 import { statutLabel } from "@/utils/statut";
 import { formatDateTime } from "@/utils/format";
 import { toast } from "react-toastify";
+import { contactsApi } from "@/api/contacts";
 import { ApiError } from "@/api/http";
 import type { ContactResponse, StatutContact } from "@/api/types";
 
@@ -25,6 +27,13 @@ export function AgentContactsPage() {
 
   // Filtre statut, recherche et pagination sont appliqués côté serveur
   const contacts = contactsQuery.data?.content ?? [];
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: contacts,
+    getId: (c) => c.idContact,
+    fetchOne: contactsApi.getContact,
+    queryKey: ["contacts"],
+  });
 
   async function openView(contact: ContactResponse) {
     setViewing(contact);
@@ -116,7 +125,9 @@ export function AgentContactsPage() {
             </div>
           </div>
           <DataTable
-            data={contacts}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(c) => c.idContact}
             loading={contactsQuery.isLoading}

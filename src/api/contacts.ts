@@ -14,5 +14,6 @@ export interface ContactListParams extends PageParams {
 
 export const contactsApi = {
   getContacts: (params?: ContactListParams) => unwrap<PagedResponse<ContactResponse>>(http.get("/contacts", { params })),
+  getContact: (id: number) => unwrap<ContactResponse>(http.get(`/contacts/${id}`)),
   updateStatut: (id: number, body: UpdateStatutContactRequest) => unwrap<ContactResponse>(http.patch(`/contacts/${id}/statut`, body)),
 };

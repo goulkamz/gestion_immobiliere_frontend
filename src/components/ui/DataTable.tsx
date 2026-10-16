@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { LoadingSpinner } from "./LoadingSpinner";
@@ -21,9 +21,28 @@ interface DataTableProps<T> {
   loading?: boolean;
   emptyMessage?: string;
   onRowClick?: (row: T) => void;
+  /** Clé de la ligne à repérer (ex. ciblée par une notification) : surlignée, amenée à l'écran et marquée d'une pastille. */
+  highlightKey?: string | number | null;
+  highlightLabel?: string;
+  /** Appelée au clic sur la pastille pour retirer le repère. */
+  onDismissHighlight?: () => void;
 }
 
-export function DataTable<T>({ data, columns, keyExtractor, loading, emptyMessage, onRowClick }: DataTableProps<T>) {
+export function DataTable<T>({
+  data,
+  columns,
+  keyExtractor,
+  loading,
+  emptyMessage,
+  onRowClick,
+  highlightKey = null,
+  highlightLabel = "À voir",
+  onDismissHighlight,
+}: DataTableProps<T>) {
+  // Amène la ligne repérée à l'écran une seule fois, quand elle apparaît
+  const scrollVersLigne = useCallback((el: HTMLTableRowElement | null) => {
+    el?.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, []);
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
@@ -62,7 +81,7 @@ export function DataTable<T>({ data, columns, keyExtractor, loading, emptyMessag
               <th
                 key={column.key}
                 scope="col"
-                className={`px-2.5 py-1.5${column.hiddenOnMobile ? "hidden md:table-cell" : ""} ${
+                className={`px-2.5 py-1.5 ${column.hiddenOnMobile ? "hidden md:table-cell" : ""} ${
                   column.align === "right" ? "text-right" : column.align === "center" ? "text-center" : ""
                 }`}
               >
@@ -91,24 +110,46 @@ export function DataTable<T>({ data, columns, keyExtractor, loading, emptyMessag
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
-          {sortedData.map((row) => (
-            <tr
-              key={keyExtractor(row)}
-              onClick={onRowClick ? () => onRowClick(row) : undefined}
-              className={`transition-colors hover:bg-primary-50/40 ${onRowClick ? "cursor-pointer" : ""}`}
-            >
-              {columns.map((column) => (
-                <td
-                  key={column.key}
-                  className={`px-2.5 py-1 text-slate-700 ${column.hiddenOnMobile ? "hidden md:table-cell" : ""} ${
-                    column.align === "right" ? "text-right" : column.align === "center" ? "text-center" : ""
-                  }`}
-                >
-                  {column.render(row)}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {sortedData.map((row) => {
+            const repere = highlightKey !== null && keyExtractor(row) === highlightKey;
+            return (
+              <tr
+                key={keyExtractor(row)}
+                ref={repere ? scrollVersLigne : undefined}
+                onClick={onRowClick ? () => onRowClick(row) : undefined}
+                className={`transition-colors hover:bg-primary-50/40 ${onRowClick ? "cursor-pointer" : ""} ${repere ? "ligne-ciblee" : ""}`}
+              >
+                {columns.map((column, index) => (
+                  <td
+                    key={column.key}
+                    className={`px-2.5 py-1 text-slate-700 ${column.hiddenOnMobile ? "hidden md:table-cell" : ""} ${
+                      column.align === "right" ? "text-right" : column.align === "center" ? "text-center" : ""
+                    }`}
+                  >
+                    {repere && index === 0 ? (
+                      <span className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDismissHighlight?.();
+                          }}
+                          title="Cliquez pour retirer le repère"
+                          aria-label={`${highlightLabel} : retirer le repère de cette ligne`}
+                          className="shrink-0 rounded-full bg-amber-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-amber-600"
+                        >
+                          {highlightLabel}
+                        </button>
+                        {column.render(row)}
+                      </span>
+                    ) : (
+                      column.render(row)
+                    )}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

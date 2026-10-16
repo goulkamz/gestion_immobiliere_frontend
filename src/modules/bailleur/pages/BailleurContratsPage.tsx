@@ -1,3 +1,4 @@
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { useRechercheServeur } from "@/hooks/useRechercheServeur";
 import { statutLabel } from "@/utils/statut";
@@ -37,6 +38,7 @@ import { useAvenantsLocationQuery, useContratsLocationQuery } from "@/hooks/quer
 import { useCoursQuery } from "@/hooks/queries/useCours";
 import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { useBailleurUiStore } from "@/store/bailleurUiStore";
+import { contratsApi } from "@/api/contrats";
 import { documentsApi } from "@/api/documents";
 import { documentsAvenants } from "@/utils/avenants";
 import { formatDate, formatMontant } from "@/utils/format";
@@ -95,6 +97,13 @@ export function BailleurContratsPage() {
 
   const cours = coursQuery.data?.content ?? [];
   const contrats = contratsQuery.data?.content ?? [];
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: contrats,
+    getId: (c) => c.idContratLocation,
+    fetchOne: contratsApi.getContratLocation,
+    queryKey: ["contrats-location"],
+  });
 
   function documentsFor(c: ContratLocationResponse): DocumentDescriptor[] {
     return [
@@ -361,7 +370,9 @@ export function BailleurContratsPage() {
             </div>
           </div>
           <DataTable
-            data={contrats}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(c) => c.idContratLocation}
             loading={contratsQuery.isLoading}

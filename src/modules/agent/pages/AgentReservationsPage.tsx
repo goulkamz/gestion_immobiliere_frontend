@@ -1,3 +1,4 @@
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useEffect, useState } from "react";
@@ -56,6 +57,7 @@ import {
 } from "../schemas";
 import { formatDateTime } from "@/utils/format";
 import { statutLabel } from "@/utils/statut";
+import { reservationsApi } from "@/api/reservations";
 import { ApiError } from "@/api/http";
 import type { ReservationResponse, StatutReservation } from "@/api/types";
 
@@ -120,6 +122,13 @@ export function AgentReservationsPage() {
 
   // Filtre statut, recherche et pagination sont appliqués côté serveur
   const reservations = reservationsQuery.data?.content ?? [];
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: reservations,
+    getId: (r) => r.idReservation,
+    fetchOne: reservationsApi.getReservation,
+    queryKey: ["reservations"],
+  });
 
   async function handleConfirmer(reservation: ReservationResponse) {
     try {
@@ -391,7 +400,9 @@ export function AgentReservationsPage() {
             </div>
           </div>
           <DataTable
-            data={reservations}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(r) => r.idReservation}
             loading={reservationsQuery.isLoading}

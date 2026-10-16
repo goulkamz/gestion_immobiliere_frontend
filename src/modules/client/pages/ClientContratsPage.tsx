@@ -1,3 +1,4 @@
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { useRechercheServeur } from "@/hooks/useRechercheServeur";
 import { statutLabel } from "@/utils/statut";
@@ -34,6 +35,7 @@ import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import { useAvenantsLocationQuery, useContratsLocationQuery } from "@/hooks/queries/useContrats";
 import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { useClientUiStore } from "@/store/clientUiStore";
+import { contratsApi } from "@/api/contrats";
 import { documentsApi } from "@/api/documents";
 import { documentsAvenants } from "@/utils/avenants";
 import { formatDate, formatMontant } from "@/utils/format";
@@ -75,6 +77,13 @@ export function ClientContratsPage() {
     STATUTS,
   );
   const contrats = contratsQuery.data?.content ?? [];
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: contrats,
+    getId: (c) => c.idContratLocation,
+    fetchOne: contratsApi.getContratLocation,
+    queryKey: ["contrats-location"],
+  });
   const {
     openPreview,
     download,
@@ -304,7 +313,9 @@ export function ClientContratsPage() {
             </div>
           </div>
           <DataTable
-            data={contrats}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(c) => c.idContratLocation}
             loading={contratsQuery.isLoading}

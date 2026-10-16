@@ -32,6 +32,8 @@ export const contratsApi = {
   getContratsLocation: (params?: ContratLocationListParams) =>
     unwrap<PagedResponse<ContratLocationResponse>>(http.get("/contrats-location", { params })),
 
+  getContratLocation: (id: number) => unwrap<ContratLocationResponse>(http.get(`/contrats-location/${id}`)),
+
   getAvenants: (id: number) => unwrap<AvenantResponse[]>(http.get(`/contrats-location/${id}/avenants`)),
 
   modifier: (id: number, body: UpdateContratLocationRequest) =>

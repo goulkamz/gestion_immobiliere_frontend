@@ -1,3 +1,4 @@
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useState } from "react";
 import {
   AlertTriangle,
@@ -27,6 +28,7 @@ import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { useRechercheServeur } from "@/hooks/useRechercheServeur";
 import { statutLabel } from "@/utils/statut";
+import { contratsMandatApi } from "@/api/contrats-mandat";
 import { documentsApi } from "@/api/documents";
 import { documentsAvenants } from "@/utils/avenants";
 import { formatDate } from "@/utils/format";
@@ -68,6 +70,13 @@ export function BailleurMandatsPage() {
   } = useDocumentDownload();
   const avenantsQuery = useAvenantsMandatQuery(avenantsMandat?.idMandat ?? 0, { enabled: avenantsMandat !== null });
   const mandats = mandatsQuery.data?.content ?? [];
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: mandats,
+    getId: (m) => m.idMandat,
+    fetchOne: contratsMandatApi.getContratMandat,
+    queryKey: ["contrats-mandat"],
+  });
 
   const columns: DataTableColumn<ContratMandatResponse>[] = [
     {
@@ -218,7 +227,9 @@ export function BailleurMandatsPage() {
             </div>
           </div>
           <DataTable
-            data={mandats}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(m) => m.idMandat}
             loading={mandatsQuery.isLoading}

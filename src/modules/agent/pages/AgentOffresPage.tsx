@@ -1,3 +1,4 @@
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useState, type ReactNode } from "react";
@@ -15,6 +16,7 @@ import { creerCompteProprietaireSchema, type CreerCompteProprietaireFormInput, t
 import { statutLabel } from "@/utils/statut";
 import { formatDateTime } from "@/utils/format";
 import { passwordStrengthMessage } from "@/utils/validation";
+import { offresApi } from "@/api/offres";
 import { ApiError } from "@/api/http";
 import { MediaGallery } from "@/components/ui/MediaGallery";
 import { useAgenceMediasQuery } from "@/hooks/queries/useMedias";
@@ -74,6 +76,13 @@ export function AgentOffresPage() {
 
   // Filtre statut, recherche et pagination sont appliqués côté serveur
   const offres = offresQuery.data?.content ?? [];
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: offres,
+    getId: (o) => o.idOffre,
+    fetchOne: offresApi.getOffre,
+    queryKey: ["offres"],
+  });
 
   async function handleChangeStatutRow(o: OffreResponse, statut: StatutOffre) {
     try {
@@ -153,7 +162,9 @@ export function AgentOffresPage() {
             </div>
           </div>
           <DataTable
-            data={offres}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(o) => o.idOffre}
             loading={offresQuery.isLoading}

@@ -12,14 +12,16 @@ export const notificationQueryKeys = {
 
 const useIdUser = () => useSessionStore((s) => s.profile?.idUser);
 
-/** Compteur de la cloche : relu toutes les minutes tant que l'utilisateur est connecté. */
+/** Compteur de la cloche : relu toutes les 20 secondes, et au retour sur l'onglet, tant que l'utilisateur est connecté. */
 export function useNotificationCountQuery(enabled: boolean) {
   const idUser = useIdUser();
   return useQuery({
     queryKey: notificationQueryKeys.count(idUser),
     queryFn: notificationsApi.countNonLues,
     enabled,
-    refetchInterval: 60_000,
+    refetchInterval: 20_000,
+    staleTime: 0,
+    refetchOnWindowFocus: true,
     select: (data) => data.count,
   });
 }
@@ -30,6 +32,8 @@ export function useNotificationsQuery(params: NotificationListParams | undefined
     queryKey: notificationQueryKeys.list(idUser, params),
     queryFn: () => notificationsApi.getAll(params),
     enabled,
+    // Toujours relue à l'ouverture du panneau : une liste gardée en cache (30 s par défaut) masquerait les alertes récentes
+    staleTime: 0,
   });
 }
 

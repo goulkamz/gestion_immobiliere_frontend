@@ -1,3 +1,4 @@
+import { useCible } from "@/hooks/useLigneCiblee";
 import { useMemo, useState } from "react";
 import { AlertTriangle, Calendar, Download, Eye, Home, Package } from "lucide-react";
 import { DataTable, DocumentPreviewModal, EmptyState, PageHeader, SearchInput, StatutBadge } from "@/components/ui";
@@ -16,7 +17,9 @@ interface PaiementLocationRow extends PaiementLocationBienServiceResponse {
 }
 
 export function ClientRecusPage() {
-  const [tab, setTab] = useState<Onglet>("loyer");
+  const { cibleId, effacer: effacerCible } = useCible();
+  // Un reçu ciblé par une notification est un paiement de location de bien/service : on ouvre directement cet onglet
+  const [tab, setTab] = useState<Onglet>(cibleId !== null ? "location" : "loyer");
   const [search, setSearch] = useState("");
   const echeancesQuery = useClientEcheancesStatsQuery();
   const locationsQuery = useLocationsQuery({ size: 100 });
@@ -34,7 +37,7 @@ export function ClientRecusPage() {
   const term = search.trim().toLowerCase();
   const filteredEcheances = term ? echeancesPayees.filter((e) => (e.moisLibelle ?? "").toLowerCase().includes(term)) : echeancesPayees;
   const filteredPaiements = term
-    ? paiementsLocations.filter((p) => p.libelleBienService.toLowerCase().includes(term))
+    ? paiementsLocations.filter((p) => p.idPaiement === cibleId || p.libelleBienService.toLowerCase().includes(term))
     : paiementsLocations;
 
   const echeancesColumns: DataTableColumn<ClientEcheanceDTO>[] = [
@@ -198,6 +201,8 @@ export function ClientRecusPage() {
           ) : (
             <DataTable
               data={filteredPaiements}
+              highlightKey={cibleId}
+              onDismissHighlight={effacerCible}
               columns={paiementsColumns}
               keyExtractor={(p) => p.idPaiement}
               loading={locationsQuery.isLoading}

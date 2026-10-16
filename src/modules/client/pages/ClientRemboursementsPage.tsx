@@ -1,3 +1,4 @@
+import { useCible } from "@/hooks/useLigneCiblee";
 import { AlertTriangle, Calendar, Undo2 } from "lucide-react";
 import { DataTable, EmptyState, PageHeader } from "@/components/ui";
 import type { DataTableColumn } from "@/components/ui";
@@ -7,6 +8,7 @@ import type { ClientRemboursementDTO } from "@/api/types";
 
 export function ClientRemboursementsPage() {
   const remboursementsQuery = useClientRemboursementsStatsQuery();
+  const { cibleId, effacer: effacerCible } = useCible();
 
   const columns: DataTableColumn<ClientRemboursementDTO>[] = [
     {
@@ -45,6 +47,8 @@ export function ClientRemboursementsPage() {
       ) : (
         <DataTable
           data={remboursementsQuery.data ?? []}
+          highlightKey={cibleId}
+          onDismissHighlight={effacerCible}
           columns={columns}
           keyExtractor={(r) => r.idRemboursement}
           loading={remboursementsQuery.isLoading}

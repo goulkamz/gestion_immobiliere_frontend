@@ -1,3 +1,4 @@
+import { useCible } from "@/hooks/useLigneCiblee";
 import { compterParStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useMemo, useState } from "react";
@@ -18,6 +19,7 @@ import type { ClientEcheanceDTO } from "@/api/types";
 
 export function ClientEcheancesPage() {
   const [search, setSearch] = useState("");
+  const { cibleId, effacer: effacerCible } = useCible();
   const echeancesQuery = useClientEcheancesStatsQuery();
   const parametresQuery = useParametresPubliquesQuery();
   const toleranceJours = getParametreEntier(
@@ -30,10 +32,10 @@ export function ClientEcheancesPage() {
     const list = echeancesQuery.data ?? [];
     const term = search.trim().toLowerCase();
     if (!term) return list;
-    return list.filter((e) =>
-      (e.moisLibelle ?? "").toLowerCase().includes(term),
+    return list.filter(
+      (e) => e.idEcheance === cibleId || (e.moisLibelle ?? "").toLowerCase().includes(term),
     );
-  }, [echeancesQuery.data, search]);
+  }, [echeancesQuery.data, search, cibleId]);
 
   const hasEnRetard = (echeancesQuery.data ?? []).some(
     (e) => e.statut === "EN_RETARD",
@@ -126,6 +128,8 @@ export function ClientEcheancesPage() {
           </div>
           <DataTable
             data={filtered}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(e) => e.idEcheance}
             loading={echeancesQuery.isLoading}

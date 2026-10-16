@@ -1,4 +1,7 @@
+import { useCible } from "@/hooks/useLigneCiblee";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { echeancesApi } from "@/api/echeances";
 import { AlertTriangle, Building2, Calendar } from "lucide-react";
 import {
   CompteursStatut,
@@ -63,9 +66,21 @@ export function BailleurRevenusPage() {
   const compteurs = useCompteursStatut(useEcheancesQuery, filtres, STATUTS);
   const coursQuery = useCoursQuery({ size: 100 });
 
+  const { cibleId, effacer: effacerCible } = useCible();
   const cours = coursQuery.data?.content ?? [];
-  const mensuels = versRows(mensuelsQuery.data?.content);
-  const cumules = versRows(cumulsQuery.data?.content);
+  const mensuelsPage = versRows(mensuelsQuery.data?.content);
+  const cumulesPage = versRows(cumulsQuery.data?.content);
+  // Ligne ciblée par une notification absente des pages affichées : récupérée et épinglée dans le tableau de son mode
+  const dansLesPages = cibleId !== null && [...mensuelsPage, ...cumulesPage].some((e) => e.idEcheance === cibleId);
+  const cibleQuery = useQuery({
+    queryKey: ["echeances", "cible", cibleId],
+    queryFn: () => echeancesApi.getEcheance(cibleId as number),
+    enabled: cibleId !== null && !dansLesPages && !mensuelsQuery.isLoading && !cumulsQuery.isLoading,
+    retry: false,
+  });
+  const epinglee = cibleQuery.data ? versRows([cibleQuery.data])[0] : null;
+  const mensuels = epinglee && epinglee.modeFacturation !== "CUMUL" ? [epinglee, ...mensuelsPage] : mensuelsPage;
+  const cumules = epinglee && epinglee.modeFacturation === "CUMUL" ? [epinglee, ...cumulesPage] : cumulesPage;
   const echeancesQuery = mensuelsQuery;
 
   function changerCour(valeur: string) {
@@ -203,6 +218,8 @@ export function BailleurRevenusPage() {
             </p>
             <DataTable
               data={mensuels}
+              highlightKey={cibleId}
+              onDismissHighlight={effacerCible}
               columns={columns}
               keyExtractor={(e) => e.idEcheance}
               loading={mensuelsQuery.isLoading}
@@ -232,6 +249,8 @@ export function BailleurRevenusPage() {
               </p>
               <DataTable
                 data={cumules}
+                highlightKey={cibleId}
+                onDismissHighlight={effacerCible}
                 columns={columns}
                 keyExtractor={(e) => e.idEcheance}
                 loading={cumulsQuery.isLoading}

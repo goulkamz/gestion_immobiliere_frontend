@@ -23,9 +23,14 @@ export function NotificationBell() {
   const navigate = useNavigate();
 
   const { data: count = 0 } = useNotificationCountQuery(true);
-  const { data: page, isLoading } = useNotificationsQuery({ size: 10 }, open);
+  const { data: page, isLoading, refetch } = useNotificationsQuery({ size: 10 }, open);
   const marquerLue = useMarquerNotificationLueMutation();
   const marquerToutesLues = useMarquerToutesNotificationsLuesMutation();
+
+  // Panneau ouvert : une nouvelle alerte (le compteur change) rafraîchit la liste sans fermer ni rouvrir
+  useEffect(() => {
+    if (open) void refetch();
+  }, [count]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!open) return;

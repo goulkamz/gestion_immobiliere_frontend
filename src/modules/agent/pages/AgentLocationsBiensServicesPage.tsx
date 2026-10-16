@@ -1,3 +1,4 @@
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
@@ -162,7 +163,9 @@ export function AgentLocationsBiensServicesPage() {
   );
 
   // Filtre statut, recherche et pagination sont appliqués côté serveur
+  const villeFiltre = useVilleFiltre();
   const locationsQuery = useLocationsQuery({
+    ...villeFiltre,
     page,
     size: 20,
     sort: "dateDebut,desc",
@@ -170,7 +173,7 @@ export function AgentLocationsBiensServicesPage() {
     aEcheance: aEcheance || undefined,
     recherche: recherche || undefined,
   });
-  const compteurs = useCompteursStatut(useLocationsQuery, { aEcheance: aEcheance || undefined, recherche: recherche || undefined }, STATUTS);
+  const compteurs = useCompteursStatut(useLocationsQuery, { ...villeFiltre, aEcheance: aEcheance || undefined, recherche: recherche || undefined }, STATUTS);
   const locations = locationsQuery.data?.content ?? [];
   // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
   const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({

@@ -1,3 +1,5 @@
+import { libelleVille } from "@/utils/ville";
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
@@ -48,8 +50,9 @@ export function AgentOffresPage() {
   const [viewing, setViewing] = useState<OffreResponse | null>(null);
   const [creatingAccountFor, setCreatingAccountFor] = useState<OffreResponse | null>(null);
 
-  const offresQuery = useOffresQuery({ page, size: 20, sort: "dateOffre,desc", statut: statutFilter || undefined, recherche: recherche || undefined });
-  const compteurs = useCompteursStatut(useOffresQuery, { recherche: recherche || undefined }, ["EN_ATTENTE", "TRAITEE", "REFUSEE"] as const);
+  const villeFiltre = useVilleFiltre();
+  const offresQuery = useOffresQuery({ ...villeFiltre, page, size: 20, sort: "dateOffre,desc", statut: statutFilter || undefined, recherche: recherche || undefined });
+  const compteurs = useCompteursStatut(useOffresQuery, { ...villeFiltre, recherche: recherche || undefined }, ["EN_ATTENTE", "TRAITEE", "REFUSEE"] as const);
   const statutMutation = useUpdateStatutOffreMutation();
   const createAccountMutation = useCreateUserAdminMutation();
 
@@ -98,6 +101,7 @@ export function AgentOffresPage() {
     { key: "nom", header: "Nom", render: (o) => o.nomComplet },
     { key: "titre", header: "Titre", render: (o) => o.titre ?? "-" },
     { key: "type", header: "Type", render: (o) => o.typeOffre ?? "-" },
+    { key: "ville", header: "Ville", render: (o) => libelleVille(o) },
     { key: "adresse", header: "Adresse", render: (o) => o.adresse ?? "-" },
     { key: "date", header: "Reçue le", render: (o) => formatDateTime(o.dateOffre) },
     { key: "statut", header: "Statut", render: (o) => <StatutBadge statut={o.statut} /> },

@@ -1,3 +1,4 @@
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +28,9 @@ export function AgentEcheancesPage() {
   const [encaissing, setEncaissing] = useState<EcheanceResponse | null>(null);
 
   // Recherche, filtres et pagination sont appliqués côté serveur ; les libellés (maison, locataire, cour, propriétaire) viennent de la réponse
+  const villeFiltre = useVilleFiltre();
   const echeancesLocationQuery = useEcheancesQuery({
+    ...villeFiltre,
     type: "LOCATION",
     page: locationRecherche.page,
     size: 20,
@@ -36,6 +39,7 @@ export function AgentEcheancesPage() {
     recherche: locationRecherche.recherche || undefined,
   });
   const echeancesMandatQuery = useEcheancesQuery({
+    ...villeFiltre,
     type: "MANDAT",
     page: mandatRecherche.page,
     size: 20,
@@ -44,8 +48,9 @@ export function AgentEcheancesPage() {
     referenceCour: courFilterMandat || undefined,
     recherche: mandatRecherche.recherche || undefined,
   });
-  const compteursLocation = useEcheancesCompteurs({ type: "LOCATION", recherche: locationRecherche.recherche || undefined });
+  const compteursLocation = useEcheancesCompteurs({ ...villeFiltre, type: "LOCATION", recherche: locationRecherche.recherche || undefined });
   const compteursMandat = useEcheancesCompteurs({
+    ...villeFiltre,
     type: "MANDAT",
     referenceCour: courFilterMandat || undefined,
     recherche: mandatRecherche.recherche || undefined,

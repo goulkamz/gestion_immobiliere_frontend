@@ -1,3 +1,4 @@
+import { useCible } from "@/hooks/useLigneCiblee";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,7 +19,9 @@ const ROLE_LABEL: Record<RoleOnglet, string> = { ROLE_BAILLEUR: "Bailleur", ROLE
 
 export function AgentUtilisateursPage() {
   const isAdmin = useSessionStore(selectRole) === "ROLE_ADMIN";
-  const [onglet, setOnglet] = useState<RoleOnglet | "SUPPRIMES">("ROLE_BAILLEUR");
+  const { cibleId, effacer: effacerCible } = useCible();
+  // Un compte ciblé par une notification est un nouveau compte client : on ouvre directement cet onglet
+  const [onglet, setOnglet] = useState<RoleOnglet | "SUPPRIMES">(cibleId !== null ? "ROLE_CLIENT" : "ROLE_BAILLEUR");
   const [search, setSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
 
@@ -37,7 +40,7 @@ export function AgentUtilisateursPage() {
     const list = usersQuery.data?.content ?? [];
     const term = search.trim().toLowerCase();
     if (!term) return list;
-    return list.filter((u) => [u.nom, u.prenom, u.email, u.telephone].filter(Boolean).join(" ").toLowerCase().includes(term));
+    return list.filter((u) => u.idUser === cibleId || [u.nom, u.prenom, u.email, u.telephone].filter(Boolean).join(" ").toLowerCase().includes(term));
   }, [usersQuery.data, search]);
 
   const tousLesComptes = usersQuery.data?.content ?? [];
@@ -180,6 +183,8 @@ export function AgentUtilisateursPage() {
           </div>
           <DataTable
             data={filtered}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(u) => u.idUser}
             loading={usersQuery.isLoading}

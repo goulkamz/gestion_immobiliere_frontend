@@ -1,3 +1,4 @@
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useMemo, useState } from "react";
@@ -65,8 +66,9 @@ export function AgentMaisonsPage() {
   const [nouveauStatut, setNouveauStatut] = useState<StatutMaison | "">("");
   const [deleting, setDeleting] = useState<MaisonResponse | null>(null);
 
-  const maisonsQuery = useMaisonsGestionQuery({ size: 100 });
-  const compteurs = useCompteursStatut(useMaisonsGestionQuery, {}, ["DISPONIBLE", "RESERVEE", "LOUEE", "EN_MAINTENANCE"] as const);
+  const villeFiltre = useVilleFiltre();
+  const maisonsQuery = useMaisonsGestionQuery({ size: 100, ...villeFiltre });
+  const compteurs = useCompteursStatut(useMaisonsGestionQuery, { ...villeFiltre }, ["DISPONIBLE", "RESERVEE", "LOUEE", "EN_MAINTENANCE"] as const);
   const createMutation = useCreateMaisonMutation();
   const [photos, setPhotos] = useState<File[]>([]);
   const { attach: attachPhotos, isPending: photosPending } = useAttachPhotos();

@@ -11,6 +11,7 @@ import type {
   PagedResponse,
   RemboursementResponse,
   StatutLocationBienService,
+  VilleFiltreParams,
 } from "./types";
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
@@ -18,7 +19,7 @@ async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Pro
   return data.data as T;
 }
 
-export interface LocationListParams extends PageParams {
+export interface LocationListParams extends PageParams, VilleFiltreParams {
   /** Recherche serveur (bien, client, destination). */
   recherche?: string;
   statut?: StatutLocationBienService;

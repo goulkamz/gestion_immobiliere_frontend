@@ -1,3 +1,4 @@
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useEffect, useMemo, useState } from "react";
@@ -67,13 +68,15 @@ export function AgentMandatsPage() {
   }, [search]);
 
   const idUser = useSessionStore((s) => s.profile?.idUser);
+  const villeFiltre = useVilleFiltre();
   const mandatsQuery = useContratsMandatQuery({
+    ...villeFiltre,
     page,
     size: 20,
     statut: statutFilter || undefined,
     recherche: rechercheDebounced || undefined,
   });
-  const compteurs = useCompteursStatut(useContratsMandatQuery, { recherche: rechercheDebounced || undefined }, ["EN_ATTENTE", "ACTIF", "RESILIE", "EXPIRE"] as const);
+  const compteurs = useCompteursStatut(useContratsMandatQuery, { ...villeFiltre, recherche: rechercheDebounced || undefined }, ["EN_ATTENTE", "ACTIF", "RESILIE", "EXPIRE"] as const);
   const createMutation = useCreateContratMandatMutation();
   const modifierMutation = useModifierContratMandatMutation();
   const activerMutation = useActiverContratMandatMutation();

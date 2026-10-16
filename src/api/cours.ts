@@ -1,12 +1,12 @@
 import { http } from "./http";
-import type { ApiSuccessResponse, CourResponse, CreateCourRequest, PageParams, PagedResponse, UpdateCourRequest } from "./types";
+import type { ApiSuccessResponse, CourResponse, CreateCourRequest, PageParams, PagedResponse, UpdateCourRequest, VilleFiltreParams } from "./types";
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
   const { data } = await promise;
   return data.data as T;
 }
 
-export interface CourListParams extends PageParams {
+export interface CourListParams extends PageParams, VilleFiltreParams {
   idSecteur?: number;
   recherche?: string;
   /** Ne renvoie que les cours sans mandat ACTIF. */

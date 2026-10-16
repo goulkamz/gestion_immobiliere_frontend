@@ -1,3 +1,5 @@
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
+import { temoignagesAdminApi } from "@/api/temoignages-admin";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useMemo, useState } from "react";
@@ -37,7 +39,14 @@ export function AgentTemoignagesPage() {
     resolver: zodResolver(temoignageAdminCreateSchema),
   });
 
-  const temoignages = useMemo(() => temoignagesQuery.data?.content ?? [], [temoignagesQuery.data]);
+  const temoignagesPage = useMemo(() => temoignagesQuery.data?.content ?? [], [temoignagesQuery.data]);
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: temoignages, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: temoignagesPage,
+    getId: (t) => t.idTemoignage,
+    fetchOne: temoignagesAdminApi.getOne,
+    queryKey: ["temoignages-admin"],
+  });
 
   async function handleChangeStatut(t: TemoignageAdminResponse, statut: TemoignageStatut) {
     try {
@@ -158,6 +167,8 @@ export function AgentTemoignagesPage() {
           </div>
           <DataTable
             data={temoignages}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(t) => t.idTemoignage}
             loading={temoignagesQuery.isLoading}

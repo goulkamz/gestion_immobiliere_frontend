@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { exigerVilleAutre, villeChamps } from "@/utils/ville";
 
 export const contactSchema = z.object({
   nomComplet: z.string().min(1, "Le nom est requis"),
@@ -14,10 +15,10 @@ export const demandeSchema = z.object({
   email: z.string().min(1, "L'email est requis").email("Email invalide"),
   telephone: z.string().min(1, "Le téléphone est requis"),
   typeBien: z.string().min(1, "Le type de bien recherché est requis"),
-  localisationSouhaite: z.string().optional(),
+  ...villeChamps,
   budgetMax: z.coerce.number().positive().optional(),
   description: z.string().optional(),
-});
+}).superRefine(exigerVilleAutre);
 export type DemandeFormValues = z.infer<typeof demandeSchema>;
 /** Forme des champs avant coercition (ex: budgetMax saisi comme chaîne) — à utiliser pour typer `useForm`. */
 export type DemandeFormInput = z.input<typeof demandeSchema>;
@@ -30,7 +31,8 @@ export const offreSchema = z.object({
   titre: z.string().min(1, "Le titre est requis"),
   description: z.string().optional(),
   adresse: z.string().optional(),
-});
+  ...villeChamps,
+}).superRefine(exigerVilleAutre);
 export type OffreFormValues = z.infer<typeof offreSchema>;
 
 const noAngleBrackets = (v: string) => !/[<>]/.test(v);

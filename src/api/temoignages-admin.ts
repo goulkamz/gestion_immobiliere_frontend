@@ -21,6 +21,7 @@ export interface TemoignageAdminListParams extends PageParams {
 export const temoignagesAdminApi = {
   getAll: (params?: TemoignageAdminListParams) =>
     unwrap<PagedResponse<TemoignageAdminResponse>>(http.get("/admin/temoignages", { params })),
+  getOne: (id: number) => unwrap<TemoignageAdminResponse>(http.get(`/admin/temoignages/${id}`)),
   updateStatut: (id: number, body: UpdateStatutTemoignageRequest) =>
     unwrap<TemoignageAdminResponse>(http.patch(`/admin/temoignages/${id}/statut`, body)),
   create: (body: CreateTemoignageAdminRequest) =>

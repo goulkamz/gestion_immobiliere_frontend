@@ -1,3 +1,5 @@
+import { useCible } from "@/hooks/useLigneCiblee";
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -64,10 +66,13 @@ export function AgentReversementsPage() {
   const [confirmingVirement, setConfirmingVirement] = useState<EcheanceResponse | null>(null);
   const [page, setPage] = useState(0);
 
-  const mandatsQuery = useContratsMandatQuery({ size: 100 });
+  const villeFiltre = useVilleFiltre();
+  const { cibleId, effacer: effacerCible } = useCible();
+  const mandatsQuery = useContratsMandatQuery({ size: 100, ...villeFiltre });
   const enRetardQuery = useEcheancesEnRetardMandatQuery();
   // Mois, mandat et pagination sont appliqués côté serveur ; la référence de cour vient de la réponse
   const echeancesMandatQuery = useEcheancesQuery({
+    ...villeFiltre,
     type: "MANDAT",
     page,
     size: 20,
@@ -78,6 +83,7 @@ export function AgentReversementsPage() {
   });
 
   const compteurs = useEcheancesCompteurs({
+    ...villeFiltre,
     type: "MANDAT",
     periode: periodeFiltre || undefined,
     modeFacturation: modeFiltre || undefined,
@@ -320,6 +326,8 @@ export function AgentReversementsPage() {
           ) : (
             <DataTable
               data={enRetardQuery.data ?? []}
+              highlightKey={cibleId}
+              onDismissHighlight={effacerCible}
               columns={retardColumns}
               keyExtractor={(e) => e.idEcheance}
               loading={enRetardQuery.isLoading}
@@ -406,6 +414,8 @@ export function AgentReversementsPage() {
           <>
             <DataTable
               data={calcules}
+              highlightKey={cibleId}
+              onDismissHighlight={effacerCible}
               columns={calculesColumns}
               keyExtractor={(e) => e.idEcheance}
               loading={echeancesMandatQuery.isLoading}

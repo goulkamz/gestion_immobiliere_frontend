@@ -1,3 +1,4 @@
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useState } from "react";
@@ -75,8 +76,9 @@ export function AgentBiensServicesPage() {
   );
   const [deleting, setDeleting] = useState<BienServiceResponse | null>(null);
 
-  const biensQuery = useBiensServicesQuery({ page, size: 20, sort: "idBienService,desc", recherche: recherche || undefined });
-  const compteurs = useCompteursStatut(useBiensServicesQuery, { recherche: recherche || undefined }, ["DISPONIBLE", "RESERVEE", "LOUEE", "EN_MAINTENANCE"] as const, "disponibilite");
+  const villeFiltre = useVilleFiltre();
+  const biensQuery = useBiensServicesQuery({ ...villeFiltre, page, size: 20, sort: "idBienService,desc", recherche: recherche || undefined });
+  const compteurs = useCompteursStatut(useBiensServicesQuery, { ...villeFiltre, recherche: recherche || undefined }, ["DISPONIBLE", "RESERVEE", "LOUEE", "EN_MAINTENANCE"] as const, "disponibilite");
   const createMutation = useCreateBienServiceMutation();
   const [photos, setPhotos] = useState<File[]>([]);
   const { attach: attachPhotos, isPending: photosPending } = useAttachPhotos();

@@ -49,6 +49,12 @@ export interface PagedResponse<T> {
   };
 }
 
+/** Filtre ville des listes (confort de l'espace agent) : une ville, ou « sans ville répertoriée ». */
+export interface VilleFiltreParams {
+  idVille?: number;
+  sansVille?: boolean;
+}
+
 export interface PageParams {
   page?: number;
   size?: number;
@@ -188,6 +194,9 @@ export interface AnnonceResponse {
   statut: StatutAnnonce;
   prix: number | null;
   localisation: string | null;
+  idVille: number | null;
+  nomVille: string | null;
+  villeAutre: string | null;
 }
 
 export interface CreateContactRequest {
@@ -217,6 +226,8 @@ export interface CreateDemandeRequest {
   localisationSouhaite?: string;
   budgetMax?: number;
   description?: string;
+  idVille?: number;
+  villeAutre?: string;
 }
 
 export interface DemandeResponse {
@@ -230,6 +241,9 @@ export interface DemandeResponse {
   description: string | null;
   dateDemande: string;
   statut: StatutDemande;
+  idVille: number | null;
+  nomVille: string | null;
+  villeAutre: string | null;
 }
 
 export interface CreateOffreRequest {
@@ -240,6 +254,8 @@ export interface CreateOffreRequest {
   titre?: string;
   description?: string;
   adresse?: string;
+  idVille?: number;
+  villeAutre?: string;
 }
 
 export interface OffreResponse {
@@ -253,6 +269,9 @@ export interface OffreResponse {
   adresse: string | null;
   dateOffre: string;
   statut: StatutOffre;
+  idVille: number | null;
+  nomVille: string | null;
+  villeAutre: string | null;
 }
 
 /** Réponse à la création publique : `jetonDepotPhotos` n'apparaît qu'ici (valable 1 h) et autorise l'envoi des photos. */
@@ -475,6 +494,8 @@ export interface EcheanceResponse {
   referenceCour?: string | null;
   nomProprietaire?: string | null;
   commissionMandat?: number | null;
+  /** Mode de facturation du mandat (MANDAT). */
+  modeFacturation?: ModeFacturation | null;
 }
 
 export interface EcheanceMandatResponse {
@@ -799,6 +820,8 @@ export interface CreateAnnonceRequest {
   dateExpiration: string;
   prix?: number;
   localisation?: string;
+  idVille?: number;
+  villeAutre?: string;
 }
 
 export interface UpdateAnnonceRequest {
@@ -808,6 +831,8 @@ export interface UpdateAnnonceRequest {
   dateExpiration?: string;
   prix?: number;
   localisation?: string;
+  idVille?: number;
+  villeAutre?: string;
 }
 
 export interface UpdateStatutAnnonceRequest {

@@ -1,3 +1,4 @@
+import { exigerVilleAutre, villeChamps } from "@/utils/ville";
 import { z } from "zod";
 import { PASSWORD_PATTERN, isValidPhone } from "@/utils/validation";
 
@@ -148,7 +149,8 @@ export const annonceSchema = z.object({
   dateExpiration: z.string().min(1, "La date d'expiration est requise"),
   prix: z.coerce.number().positive().optional().or(z.literal("").transform(() => undefined)),
   localisation: z.string().optional(),
-});
+  ...villeChamps,
+}).superRefine(exigerVilleAutre);
 export type AnnonceFormValues = z.infer<typeof annonceSchema>;
 export type AnnonceFormInput = z.input<typeof annonceSchema>;
 

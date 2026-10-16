@@ -19,6 +19,7 @@ import type {
   StatutAnnonce,
   StatutMaison,
   VilleResponse,
+  VilleFiltreParams,
 } from "./types";
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
@@ -26,7 +27,7 @@ async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Pro
   return data.data as T;
 }
 
-export interface MaisonListParams extends PageParams {
+export interface MaisonListParams extends PageParams, VilleFiltreParams {
   idCour?: number;
   statut?: StatutMaison;
   /** Recherche serveur (nom, type, référence de la cour). */
@@ -39,7 +40,7 @@ export interface SecteurListParams extends PageParams {
   recherche?: string;
 }
 
-export interface BienServiceListParams extends PageParams {
+export interface BienServiceListParams extends PageParams, VilleFiltreParams {
   idSecteur?: number;
   idCategorie?: number;
   /** Recherche serveur (libellé, catégorie, secteur). */
@@ -48,7 +49,7 @@ export interface BienServiceListParams extends PageParams {
   disponibilite?: "DISPONIBLE" | "RESERVEE" | "LOUEE" | "EN_MAINTENANCE";
 }
 
-export interface AnnonceListParams extends PageParams {
+export interface AnnonceListParams extends PageParams, VilleFiltreParams {
   statut?: StatutAnnonce;
   /** Recherche serveur (titre, type, localisation). */
   recherche?: string;

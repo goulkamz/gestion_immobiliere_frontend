@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { Button, Input, PhotoPicker, Textarea } from "@/components/ui";
+import { Button, Input, PhotoPicker, Textarea, VilleFields } from "@/components/ui";
+import { INDICATION_SECTEUR, separerVille } from "@/utils/ville";
 import { offreSchema, type OffreFormValues } from "../schemas";
 import { usePostOffreMutation } from "@/hooks/queries/usePublicCatalog";
 import { publicApi } from "@/api/public";
@@ -16,12 +17,14 @@ export function OffreForm() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm<OffreFormValues>({ resolver: zodResolver(offreSchema) });
 
   async function onSubmit(values: OffreFormValues) {
     try {
-      const offre = await mutation.mutateAsync(values);
+      const { reste, choix } = separerVille(values);
+      const offre = await mutation.mutateAsync({ ...reste, ...choix });
       if (photos.length > 0) {
         setEnvoiPhotos(true);
         try {
@@ -58,8 +61,11 @@ export function OffreForm() {
         />
       </div>
       <Input label="Titre" required error={errors.titre?.message} {...register("titre")} />
-      <Input label="Adresse" {...register("adresse")} />
-      <Textarea label="Description" {...register("description")} />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <VilleFields ville={register("ville")} villeAutre={register("villeAutre")} valeur={watch("ville")} erreurVille={errors.ville?.message} erreurAutre={errors.villeAutre?.message} />
+        <Input label="Adresse" {...register("adresse")} />
+      </div>
+      <Textarea label="Description" rows={3} placeholder={INDICATION_SECTEUR} {...register("description")} />
       <PhotoPicker files={photos} onChange={setPhotos} />
       <Button type="submit" loading={mutation.isPending || envoiPhotos}>
         Proposer ce bien

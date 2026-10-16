@@ -3,6 +3,7 @@ export type { ButtonVariant, ButtonSize } from "./Button";
 export { Input } from "./Input";
 export { Textarea } from "./Textarea";
 export { Select } from "./Select";
+export { VilleFields } from "./VilleFields";
 export type { SelectOption } from "./Select";
 export { Badge } from "./Badge";
 export type { BadgeVariant } from "./Badge";

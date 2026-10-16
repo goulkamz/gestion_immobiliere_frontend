@@ -10,6 +10,7 @@ import type {
   ResilierMandatRequest,
   StatutMandat,
   UpdateContratMandatRequest,
+  VilleFiltreParams,
 } from "./types";
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
@@ -17,7 +18,7 @@ async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Pro
   return data.data as T;
 }
 
-export interface ContratMandatListParams extends PageParams {
+export interface ContratMandatListParams extends PageParams, VilleFiltreParams {
   idCour?: number;
   statut?: StatutMandat;
   recherche?: string;

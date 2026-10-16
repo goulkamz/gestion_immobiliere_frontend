@@ -1,3 +1,5 @@
+import { INDICATION_SECTEUR, libelleVille, separerVille, villeInitiale } from "@/utils/ville";
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useState } from "react";
@@ -27,6 +29,7 @@ import {
   Select,
   StatutBadge,
   Textarea,
+  VilleFields,
   AnnonceDetailModal,
 } from "@/components/ui";
 import { useRechercheServeur } from "@/hooks/useRechercheServeur";
@@ -61,14 +64,16 @@ export function AgentAnnoncesPage() {
   );
   const [nouveauStatut, setNouveauStatut] = useState<StatutAnnonce | "">("");
 
+  const villeFiltre = useVilleFiltre();
   const annoncesQuery = useAnnoncesQuery({
+    ...villeFiltre,
     page,
     size: 20,
     sort: "datePublication,desc",
     statut: statutFilter || undefined,
     recherche: recherche || undefined,
   });
-  const compteurs = useCompteursStatut(useAnnoncesQuery, { recherche: recherche || undefined }, ["ACTIVE", "SUSPENDUE", "EXPIREE"] as const);
+  const compteurs = useCompteursStatut(useAnnoncesQuery, { ...villeFiltre, recherche: recherche || undefined }, ["ACTIVE", "SUSPENDUE", "EXPIREE"] as const);
   const createMutation = useCreateAnnonceMutation();
   const [photos, setPhotos] = useState<File[]>([]);
   const { attach: attachPhotos, isPending: photosPending } = useAttachPhotos();
@@ -88,8 +93,10 @@ export function AgentAnnoncesPage() {
 
   async function onCreate(values: AnnonceFormValues) {
     try {
+      const { reste, choix } = separerVille(values);
       const annonce = await createMutation.mutateAsync({
-        ...values,
+        ...reste,
+        ...choix,
         dateExpiration: `${values.dateExpiration}T00:00:00`,
       });
       // Le backend publie toujours l'annonce en ACTIVE à la création (pas de champ statut en entrée) :
@@ -125,16 +132,19 @@ export function AgentAnnoncesPage() {
       dateExpiration: annonce.dateExpiration.slice(0, 10),
       prix: annonce.prix ?? undefined,
       localisation: annonce.localisation ?? "",
+      ...villeInitiale(annonce),
     });
   }
 
   async function onEdit(values: AnnonceFormValues) {
     if (!editing) return;
     try {
+      const { reste, choix } = separerVille(values);
       await updateMutation.mutateAsync({
         id: editing.idAnnonce,
         body: {
-          ...values,
+          ...reste,
+          ...choix,
           dateExpiration: `${values.dateExpiration}T00:00:00`,
         },
       });
@@ -191,6 +201,11 @@ export function AgentAnnoncesPage() {
       header: "Prix",
       align: "right",
       render: (a) => formatMontant(a.prix),
+    },
+    {
+      key: "ville",
+      header: "Ville",
+      render: (a) => libelleVille(a),
     },
     {
       key: "localisation",
@@ -338,7 +353,15 @@ export function AgentAnnoncesPage() {
           />
           <Textarea
             label="Description"
+            placeholder={INDICATION_SECTEUR}
             {...createForm.register("description")}
+          />
+          <VilleFields
+            ville={createForm.register("ville")}
+            villeAutre={createForm.register("villeAutre")}
+            valeur={createForm.watch("ville")}
+            erreurVille={createForm.formState.errors.ville?.message}
+            erreurAutre={createForm.formState.errors.villeAutre?.message}
           />
           <div className="grid gap-4 sm:grid-cols-2">
             <Input
@@ -409,7 +432,14 @@ export function AgentAnnoncesPage() {
             error={editForm.formState.errors.titre?.message}
             {...editForm.register("titre")}
           />
-          <Textarea label="Description" {...editForm.register("description")} />
+          <Textarea label="Description" placeholder={INDICATION_SECTEUR} {...editForm.register("description")} />
+          <VilleFields
+            ville={editForm.register("ville")}
+            villeAutre={editForm.register("villeAutre")}
+            valeur={editForm.watch("ville")}
+            erreurVille={editForm.formState.errors.ville?.message}
+            erreurAutre={editForm.formState.errors.villeAutre?.message}
+          />
           <div className="grid gap-4 sm:grid-cols-2">
             <Input
               label="Type"

@@ -1,3 +1,5 @@
+import { libelleVille } from "@/utils/ville";
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useState } from "react";
@@ -10,6 +12,8 @@ import { useDemandesQuery, useUpdateStatutDemandeMutation } from "@/hooks/querie
 import { statutLabel } from "@/utils/statut";
 import { formatDateTime, formatMontant } from "@/utils/format";
 import { ApiError } from "@/api/http";
+import { demandesApi } from "@/api/demandes";
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import type { DemandeResponse, StatutDemande } from "@/api/types";
 
 const STATUTS: StatutDemande[] = ["EN_ATTENTE", "EN_COURS", "SATISFAITE", "ANNULEE"];
@@ -19,12 +23,20 @@ export function AgentDemandesPage() {
   const [statutFilter, setStatutFilter] = useState<StatutDemande | "">("");
   const [viewing, setViewing] = useState<DemandeResponse | null>(null);
 
-  const demandesQuery = useDemandesQuery({ page, size: 20, sort: "dateDemande,desc", statut: statutFilter || undefined, recherche: recherche || undefined });
-  const compteurs = useCompteursStatut(useDemandesQuery, { recherche: recherche || undefined }, ["EN_ATTENTE", "EN_COURS", "SATISFAITE", "ANNULEE"] as const);
+  const villeFiltre = useVilleFiltre();
+  const demandesQuery = useDemandesQuery({ ...villeFiltre, page, size: 20, sort: "dateDemande,desc", statut: statutFilter || undefined, recherche: recherche || undefined });
+  const compteurs = useCompteursStatut(useDemandesQuery, { ...villeFiltre, recherche: recherche || undefined }, ["EN_ATTENTE", "EN_COURS", "SATISFAITE", "ANNULEE"] as const);
   const statutMutation = useUpdateStatutDemandeMutation();
 
   // Filtre statut, recherche et pagination sont appliqués côté serveur
   const demandes = demandesQuery.data?.content ?? [];
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: demandes,
+    getId: (d) => d.idDemande,
+    fetchOne: demandesApi.getDemande,
+    queryKey: ["demandes"],
+  });
 
   async function handleChangeStatut(statut: StatutDemande) {
     if (!viewing) return;
@@ -40,6 +52,7 @@ export function AgentDemandesPage() {
   const columns: DataTableColumn<DemandeResponse>[] = [
     { key: "nom", header: "Nom", render: (d) => d.nomComplet },
     { key: "typeBien", header: "Type recherché", render: (d) => d.typeBien ?? "-" },
+    { key: "ville", header: "Ville", render: (d) => libelleVille(d) },
     { key: "localisation", header: "Localisation souhaitée", render: (d) => d.localisationSouhaite ?? "-" },
     { key: "budget", header: "Budget max", align: "right", render: (d) => formatMontant(d.budgetMax) },
     { key: "date", header: "Reçue le", render: (d) => formatDateTime(d.dateDemande) },
@@ -89,7 +102,9 @@ export function AgentDemandesPage() {
             </div>
           </div>
           <DataTable
-            data={demandes}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(d) => d.idDemande}
             loading={demandesQuery.isLoading}
@@ -127,6 +142,8 @@ export function AgentDemandesPage() {
             <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
               <dt className="text-slate-500">Type de bien</dt>
               <dd className="text-right text-slate-900">{viewing.typeBien ?? "-"}</dd>
+              <dt className="text-slate-500">Ville</dt>
+              <dd className="text-right text-slate-900">{libelleVille(viewing)}</dd>
               <dt className="text-slate-500">Localisation souhaitée</dt>
               <dd className="text-right text-slate-900">{viewing.localisationSouhaite ?? "-"}</dd>
               <dt className="text-slate-500">Budget maximum</dt>

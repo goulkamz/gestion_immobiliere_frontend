@@ -11,6 +11,7 @@ import type {
   ResilierLocationRequest,
   TerminerLocationRequest,
   UpdateContratLocationRequest,
+  VilleFiltreParams,
 } from "./types";
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
@@ -18,7 +19,7 @@ async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Pro
   return data.data as T;
 }
 
-export interface ContratLocationListParams extends PageParams {
+export interface ContratLocationListParams extends PageParams, VilleFiltreParams {
   idMaison?: number;
   /** Recherche serveur (agent/admin) sur le nom de la maison ou du locataire. */
   recherche?: string;

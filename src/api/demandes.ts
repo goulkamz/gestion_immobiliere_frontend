@@ -1,12 +1,12 @@
 import { http } from "./http";
-import type { ApiSuccessResponse, DemandeResponse, PageParams, PagedResponse, StatutDemande, UpdateStatutDemandeRequest } from "./types";
+import type { ApiSuccessResponse, DemandeResponse, PageParams, PagedResponse, StatutDemande, UpdateStatutDemandeRequest, VilleFiltreParams } from "./types";
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
   const { data } = await promise;
   return data.data as T;
 }
 
-export interface DemandeListParams extends PageParams {
+export interface DemandeListParams extends PageParams, VilleFiltreParams {
   /** Recherche serveur (nom, email, type de bien, lieu, description). */
   recherche?: string;
   statut?: StatutDemande;

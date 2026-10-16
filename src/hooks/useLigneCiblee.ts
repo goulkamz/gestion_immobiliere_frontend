@@ -11,6 +11,19 @@ interface Options<T> {
   queryKey: readonly unknown[];
 }
 
+/** Identifiant de la ligne ciblée par une notification (`?cible=<id>`), pour les pages dont la liste est chargée en entier. */
+export function useCible() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const brut = searchParams.get("cible");
+  const cibleId = brut !== null && /^\d+$/.test(brut) ? Number(brut) : null;
+  function effacer() {
+    const suivants = new URLSearchParams(searchParams);
+    suivants.delete("cible");
+    setSearchParams(suivants, { replace: true });
+  }
+  return { cibleId, effacer };
+}
+
 /**
  * Ligne ciblée par une notification (`?cible=<id>` dans l'adresse).
  * - si la ligne est dans la page affichée, elle est simplement repérée ;

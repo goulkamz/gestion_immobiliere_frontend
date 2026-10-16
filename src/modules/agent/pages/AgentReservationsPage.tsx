@@ -1,3 +1,4 @@
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
@@ -88,14 +89,16 @@ export function AgentReservationsPage() {
     return () => clearTimeout(timer);
   }, [search]);
 
+  const villeFiltre = useVilleFiltre();
   const reservationsQuery = useReservationsQuery({
+    ...villeFiltre,
     page,
     size: 20,
     sort: "dateDebut,desc",
     statut: statutFilter || undefined,
     recherche: rechercheDebounced || undefined,
   });
-  const compteurs = useCompteursStatut(useReservationsQuery, { recherche: rechercheDebounced || undefined }, STATUTS);
+  const compteurs = useCompteursStatut(useReservationsQuery, { ...villeFiltre, recherche: rechercheDebounced || undefined }, STATUTS);
   const confirmerMutation = useConfirmerReservationMutation();
   const annulerMutation = useAnnulerReservationMutation();
   const convertirMutation = useConvertirReservationMutation();

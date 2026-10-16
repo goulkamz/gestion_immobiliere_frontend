@@ -1,3 +1,4 @@
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useEffect, useState } from "react";
@@ -74,13 +75,15 @@ export function AgentContratsLocationPage() {
     return () => clearTimeout(timer);
   }, [search]);
 
+  const villeFiltre = useVilleFiltre();
   const contratsQuery = useContratsLocationQuery({
+    ...villeFiltre,
     page,
     size: 20,
     sort: "dateEntree,desc",
     recherche: rechercheDebounced || undefined,
   });
-  const compteurs = useCompteursStatut(useContratsLocationQuery, { recherche: rechercheDebounced || undefined }, ["EN_ATTENTE", "ACTIF", "TERMINE", "RESILIE"] as const);
+  const compteurs = useCompteursStatut(useContratsLocationQuery, { ...villeFiltre, recherche: rechercheDebounced || undefined }, ["EN_ATTENTE", "ACTIF", "TERMINE", "RESILIE"] as const);
   const modifierMutation = useModifierContratLocationMutation();
   const terminerMutation = useTerminerLocationMutation();
   const resilierMutation = useResilierLocationMutation();

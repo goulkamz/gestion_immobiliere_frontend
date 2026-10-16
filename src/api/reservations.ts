@@ -8,6 +8,7 @@ import type {
   PagedResponse,
   ReservationResponse,
   StatutReservation,
+  VilleFiltreParams,
 } from "./types";
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
@@ -15,7 +16,7 @@ async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Pro
   return data.data as T;
 }
 
-export interface ReservationListParams extends PageParams {
+export interface ReservationListParams extends PageParams, VilleFiltreParams {
   idMaison?: number;
   statut?: StatutReservation;
   /** Recherche serveur (agent/admin) sur le nom de la maison ou du client. */

@@ -1,3 +1,4 @@
+import { useVilleFiltre } from "@/hooks/useVilleFiltre";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -77,7 +78,8 @@ export function AgentCoursPage() {
   const [createOpen, setCreateOpen] = useState(false);
   const [editing, setEditing] = useState<CourResponse | null>(null);
   const [deleting, setDeleting] = useState<CourResponse | null>(null);
-  const coursQuery = useCoursQuery({ size: 100 });
+  const villeFiltre = useVilleFiltre();
+  const coursQuery = useCoursQuery({ size: 100, ...villeFiltre });
   const createMutation = useCreateCourMutation();
   const [photos, setPhotos] = useState<File[]>([]);
   const { attach: attachPhotos, isPending: photosPending } = useAttachPhotos();

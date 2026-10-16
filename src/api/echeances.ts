@@ -9,6 +9,7 @@ import type {
   PagedResponse,
   StatutEcheance,
   TypeEcheance,
+  VilleFiltreParams,
 } from "./types";
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
@@ -16,7 +17,7 @@ async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Pro
   return data.data as T;
 }
 
-export interface EcheanceListParams extends PageParams {
+export interface EcheanceListParams extends PageParams, VilleFiltreParams {
   type?: TypeEcheance;
   entiteId?: number;
   statut?: StatutEcheance;
@@ -51,6 +52,7 @@ export interface CalculCumulResponse {
 export const echeancesApi = {
   getEcheances: (params?: EcheanceListParams) =>
     unwrap<PagedResponse<EcheanceResponse>>(http.get("/echeances", { params })),
+  getEcheance: (id: number) => unwrap<EcheanceResponse>(http.get(`/echeances/${id}`)),
   getEcheancesEnRetardLocation: () => unwrap<EcheanceResponse[]>(http.get("/echeances/en-retard-location")),
   getEcheancesEnRetardMandat: () => unwrap<EcheanceMandatResponse[]>(http.get("/echeances/en-retard-mandat")),
   calculerReversement: (idMandat: number, periode: string) =>

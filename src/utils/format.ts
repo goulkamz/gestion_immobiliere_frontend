@@ -24,7 +24,7 @@ const MOIS_COURTS = [
 /** Date courte compacte, ex. "07 oct 2026" (espaces insécables : ne passe jamais à la ligne). */
 function dateCourte(date: Date): string {
   const jour = String(date.getDate()).padStart(2, "0");
-  return `${jour} ${MOIS_COURTS[date.getMonth()]} ${date.getFullYear()}`;
+  return `${jour}\u00A0${MOIS_COURTS[date.getMonth()]}\u00A0${date.getFullYear()}`;
 }
 
 export function formatDate(value: string | null | undefined): string {

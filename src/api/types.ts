@@ -896,3 +896,138 @@ export interface NotificationResponse {
   lue: boolean;
   dateCreation: string;
 }
+
+
+// ─── Statistiques admin ─────────────────────────────────────────────────
+/** Flux entrant : loyers dus par les locataires (échéances de type LOCATION). "Échu" = date d'échéance atteinte. */
+export interface LoyersStatsDTO {
+  echuTotal: number;
+  encaisseSurEchu: number;
+  resteAEncaisser: number;
+  nombreImpayesEchus: number;
+  /** En pourcentage (0 à 100). */
+  tauxRecouvrement: number;
+  aVenir: number;
+  /** Impayés échus par ancienneté de l'échéance. */
+  anciennete: { jours0a30: number; jours31a60: number; jours61a90: number; plusDe90: number };
+}
+
+export interface CategorieFinanceDTO {
+  categorie: string;
+  encaisse: number;
+  rembourse: number;
+  net: number;
+  nbLocations: number;
+}
+
+/** `GET /api/stats/admin/finances?debut=&fin=` : flux d'une période (sans bornes = depuis le début). */
+export interface FinancesPeriodeDTO {
+  debut: string | null;
+  fin: string | null;
+  loyersEncaisses: number;
+  reversementsEffectues: number;
+  commissionsAcquises: number;
+  /** Revenus propres de l'agence (pas de bailleur sur les biens et services). */
+  biensServices: {
+    encaisse: number;
+    rembourse: number;
+    net: number;
+    nbLocations: number;
+    parCategorie: CategorieFinanceDTO[];
+  };
+  /** Loyers encaissés + biens et services nets. */
+  volumeEncaisse: number;
+  /** Commissions acquises + biens et services nets. */
+  revenuAgence: number;
+}
+
+/** Flux sortant : reversements aux bailleurs (échéances de type MANDAT) et commissions de l'agence. */
+export interface ReversementsStatsDTO {
+  effectue: number;
+  aReverser: number;
+  nombreAReverser: number;
+  aVenir: number;
+  commissionsAcquises: number;
+  commissionsPrevues: number;
+}
+
+/** `GET /api/stats/admin` (AdminStatsDTO). Les maps sont des décomptes par statut ou par rôle. */
+export interface AdminStatsDTO {
+  totalUtilisateurs: number;
+  utilisateursParRole: Record<string, number>;
+  inscriptionsCeMois: number;
+  connexionsRecentes7j: number;
+  totalCours: number;
+  maisonsParStatut: Record<string, number>;
+  tauxOccupationMaisons: number;
+  biensServiceParDisponibilite: Record<string, Record<string, number>>;
+  mandatsParStatut: Record<string, number>;
+  contratsLocationParStatut: Record<string, number>;
+  mandatsExpirantSous30Jours: number;
+  loyers: LoyersStatsDTO;
+  reversements: ReversementsStatsDTO;
+  locationsBienServiceParStatut: Record<string, number>;
+  totalEncaisseBienService: number;
+  totalRembourseBienService: number;
+  annoncesParStatut: Record<string, number>;
+  demandesParStatut: Record<string, number>;
+  offresNonTraitees: number;
+  contactsNonLus: number;
+}
+
+export interface VilleStatsDTO {
+  nomVille: string;
+  nbMaisons: number;
+  nbLocatairesActifs: number;
+  /** Valeur de la ville sur la période demandée. */
+  loyersEncaisses: number;
+  biensServicesNet: number;
+  commissionsAcquises: number;
+  volumeEncaisse: number;
+  revenuAgence: number;
+  /** Stock à ce jour, indépendant de la période. */
+  impayesEchus: number;
+}
+
+export interface BailleurTopDTO {
+  idBailleur: number;
+  nomComplet: string;
+  nbMaisons: number;
+  loyersEncaisses: number;
+}
+
+export interface LocataireCreanceDTO {
+  idLocataire: number;
+  nomComplet: string;
+  nbEcheancesEnRetard: number;
+  montantDu: number;
+}
+
+/** Reversements échus et non payés, regroupés par bailleur. */
+export interface BailleurCreancierDTO {
+  idBailleur: number;
+  nomComplet: string;
+  nbMois: number;
+  montantDu: number;
+  plusAncienneEcheance: string;
+}
+
+export interface GainAgenceDTO {
+  periodeMois: string;
+  commissionsAcquises: number;
+  commissionsPrevues: number;
+  reverseEffectue: number;
+  reversePrevu: number;
+}
+
+/** Une ligne par mois (`mois` = premier jour du mois). */
+export interface EvolutionMensuelleDTO {
+  mois: string;
+  loyersAttendus: number;
+  loyersEncaisses: number;
+  reversementsEffectues: number;
+  commissionsAcquises: number;
+  biensServicesNet: number;
+  inscriptions: number;
+  nouveauxContrats: number;
+}

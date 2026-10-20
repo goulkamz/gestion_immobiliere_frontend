@@ -6,6 +6,9 @@ import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 
 // Pages déjà construites dans l'espace agent, réutilisées telles quelles (elles gèrent le rôle admin)
+const AdminDashboardPage = lazy(() =>
+  import("@/modules/admin/pages/AdminDashboardPage").then((m) => ({ default: m.AdminDashboardPage })),
+);
 const AgentUtilisateursPage = lazy(() =>
   import("@/modules/agent/pages/AgentUtilisateursPage").then((m) => ({ default: m.AgentUtilisateursPage })),
 );
@@ -36,7 +39,7 @@ export const adminRoutes = (
       </ProtectedRoute>
     }
   >
-    <Route index element={<Bientot title="Tableau de bord" />} />
+    <Route index element={<AdminDashboardPage />} />
     <Route path="utilisateurs" element={<AgentUtilisateursPage />} />
     <Route path="temoignages" element={<AgentTemoignagesPage />} />
     <Route path="localisation" element={<Bientot title="Localisation" />} />

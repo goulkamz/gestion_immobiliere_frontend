@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
+import "@fontsource-variable/plus-jakarta-sans";
 import "./index.css";
 import "@/store/themeStore"; // applique le thème avant le premier rendu
 import { App } from "@/app/App";

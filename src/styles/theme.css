@@ -9,8 +9,8 @@
  * un changement de thème complet sans toucher au code.
  */
 @theme {
-  --font-heading: "Poppins", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   --color-primary-50: var(--c-primary-50);
   --color-primary-100: var(--c-primary-100);
@@ -55,12 +55,18 @@
 @layer base {
   html {
     font-family: var(--font-sans);
+    /* L'espace de Plus Jakarta Sans est étroite (0,17 em) : on l'élargit un peu, ce qui aère aussi « F CFA » et les dates */
+    word-spacing: 0.05em;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
   }
   body {
     @apply bg-white text-slate-800;
+  }
+  /* Chiffres de largeur régulière : les montants s'alignent en colonne */
+  table {
+    font-variant-numeric: tabular-nums;
   }
   /* Barres de défilement fines et discrètes, teintées selon le thème */
   * {

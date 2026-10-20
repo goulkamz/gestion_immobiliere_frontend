@@ -4,9 +4,16 @@ const currencyFormatter = new Intl.NumberFormat("fr-FR", {
   maximumFractionDigits: 0,
 });
 
+/**
+ * Intl sépare les milliers par une espace fine insécable (U+202F), absente de la police Plus Jakarta Sans :
+ * le navigateur la dessinerait avec une autre police, très étroite. On met l'espace fine ordinaire (U+2009),
+ * que la police possède, entourée de joints de mots (U+2060) pour qu'un montant ne soit jamais coupé en fin de ligne.
+ */
+const ESPACE_FINE_INSECABLE = "\u2060\u2009\u2060";
+
 export function formatMontant(value: number | null | undefined): string {
   if (value === null || value === undefined) return "-";
-  return currencyFormatter.format(value);
+  return currencyFormatter.format(value).replace(/\u202F/g, ESPACE_FINE_INSECABLE);
 }
 
 const MOIS_COURTS = [

@@ -25,7 +25,7 @@ export function Footer() {
             </span>
             GestImmo
           </div>
-          <p className="mt-3 text-sm text-white/75">
+          <p className="mt-3 text-[15px] text-white/85">
             Location de maisons, biens et services gérés en toute transparence
             par une agence de confiance.
           </p>
@@ -33,7 +33,7 @@ export function Footer() {
 
         <nav aria-label="Liens rapides">
           <FooterHeading>Liens rapides</FooterHeading>
-          <ul className="space-y-2 text-sm text-white/75">
+          <ul className="space-y-2 text-[15px] text-white/85">
             <li>
               <Link
                 to="/catalogue"
@@ -63,7 +63,7 @@ export function Footer() {
 
         <nav aria-label="Professionnels">
           <FooterHeading>Professionnels</FooterHeading>
-          <ul className="space-y-2 text-sm text-white/75">
+          <ul className="space-y-2 text-[15px] text-white/85">
             <li>
               <Link
                 to="/proposer-un-bien"
@@ -94,7 +94,7 @@ export function Footer() {
         {villes.length > 0 && (
           <nav aria-label="Villes couvertes">
             <FooterHeading>Villes</FooterHeading>
-            <ul className="space-y-2 text-sm text-white/75">
+            <ul className="space-y-2 text-[15px] text-white/85">
               {villesAffichees.map((ville) => (
                 <li key={ville.idVille}>
                   <Link to="/catalogue" className="transition-colors hover:text-accent-300">
@@ -119,7 +119,7 @@ export function Footer() {
 
         <div>
           <FooterHeading>Contact</FooterHeading>
-          <ul className="space-y-2 text-sm text-white/75">
+          <ul className="space-y-2 text-[15px] text-white/85">
             <li className="flex items-center gap-2">
               <MapPin
                 size={15}
@@ -162,7 +162,7 @@ export function Footer() {
       {partenaires.length > 0 && (
         <div className="border-t border-white/10">
           <div className="mx-auto max-w-[1600px] px-5 py-8">
-            <h2 className="text-center text-xs font-semibold uppercase tracking-widest text-white">
+            <h2 className="text-center text-[13px] font-semibold uppercase tracking-wider text-white">
               Nos partenaires
             </h2>
             <span
@@ -180,7 +180,7 @@ export function Footer() {
 
       <div className="border-t border-white/10 px-5 py-4">
         <div className="mx-auto flex max-w-[1600px] flex-col items-center gap-2 sm:flex-row sm:justify-between">
-          <p className="text-xs text-white/70">
+          <p className="text-[13px] text-white/80">
             © {year} GestImmo. Tous droits réservés.
           </p>
           <DeveloperCredit />
@@ -193,7 +193,7 @@ export function Footer() {
 function FooterHeading({ children }: { children: ReactNode }) {
   return (
     <div className="mb-4">
-      <h2 className="text-xs font-semibold uppercase tracking-widest text-white">
+      <h2 className="text-[13px] font-semibold uppercase tracking-wider text-white">
         {children}
       </h2>
       <span

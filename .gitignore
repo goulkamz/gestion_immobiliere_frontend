@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Graphe de code genere par l outil d analyse (regenerable, ne pas versionner)
+.graphify

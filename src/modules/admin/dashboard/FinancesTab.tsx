@@ -1,7 +1,8 @@
-import { useMemo } from "react";
-import { AlertTriangle, ArrowDownToLine, ArrowUpFromLine, CalendarRange, Package, PieChart as PieIcone, TrendingUp } from "lucide-react";
+import { useMemo, useState } from "react";
+import { AlertTriangle, ArrowDownToLine, ArrowRight, ArrowUpFromLine, CalendarRange, Package, PieChart as PieIcone, Search, TrendingUp } from "lucide-react";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { LoadingSpinner } from "@/components/ui";
+import { LoadingSpinner, Modal } from "@/components/ui";
+import type { CategorieFinanceDTO } from "@/api/types";
 import type { AdminStatsDTO } from "@/api/types";
 import { useAdminBailleursCreanciersQuery, useAdminCreancesLocatairesQuery, useAdminFinancesQuery } from "@/hooks/queries/useStatsAdmin";
 import { formatDate, formatMontant } from "@/utils/format";
@@ -9,18 +10,55 @@ import type { PeriodeCalculee } from "./periode";
 import { BandeauStocks, BarreSegmentee, CarteGain, FriseAnciennete, Pastille, ProgressionGrande, SoftCard, TartePleine } from "./financeWidgets";
 import type { PartTarte } from "./financeWidgets";
 import { Figure, PorteeChip, RankedTable, TrendBadge } from "./widgets";
-import { TOOLTIP_STYLE, couleurTaux, montantCompact } from "./helpers";
+import { COULEURS_PARTS, TOOLTIP_STYLE, couleurTaux, montantCompact } from "./helpers";
 import { SelecteurDuree } from "./evolution";
 import { useSerieEvolution } from "./useSerieEvolution";
 
-/** Parts de la tarte : indigo foncé et or en alternance, texte clair sur fond foncé et foncé sur fond clair. */
-const COULEURS_PARTS: { color: string; text: string }[] = [
-  { color: "var(--color-primary-800)", text: "#ffffff" },
-  { color: "var(--color-accent-500)", text: "var(--color-primary-950)" },
-  { color: "var(--color-primary-500)", text: "#ffffff" },
-  { color: "var(--color-accent-300)", text: "var(--color-primary-950)" },
-  { color: "var(--color-primary-300)", text: "var(--color-primary-950)" },
-];
+/** Catégories affichées dans le tableau ; les autres sont dans la fenêtre « Voir tout ». */
+const CATEGORIES_VISIBLES = 5;
+/** Catégories nommées dans la tarte avant de regrouper le reste en « Autres catégories ». */
+const PARTS_CATEGORIES = 3;
+
+function TableauCategories({ lignes, totalNet }: { lignes: CategorieFinanceDTO[]; totalNet: number }) {
+  return (
+    <div className="overflow-x-auto rounded-xl bg-white/70 ring-1 ring-primary-100/60">
+      <table className="w-full min-w-160 text-sm">
+        <thead>
+          <tr className="border-b border-dashed border-primary-200 text-left text-xs font-bold uppercase tracking-wide text-primary-800">
+            <th className="px-4 py-2.5">Catégorie</th>
+            <th className="px-3 py-2.5 text-right">Locations</th>
+            <th className="px-3 py-2.5 text-right">Encaissé</th>
+            <th className="px-3 py-2.5 text-right">Remboursé</th>
+            <th className="px-3 py-2.5 text-right">Net</th>
+            <th className="px-4 py-2.5">Part du net</th>
+          </tr>
+        </thead>
+        <tbody>
+          {lignes.map((c) => {
+            const part = totalNet > 0 ? Math.round((Math.max(0, c.net) / totalNet) * 100) : 0;
+            return (
+              <tr key={c.categorie} className="border-b border-dashed border-primary-100 last:border-0">
+                <td className="px-4 py-3 font-medium text-slate-800">{c.categorie}</td>
+                <td className="px-3 py-3 text-right text-slate-700">{c.nbLocations}</td>
+                <td className="px-3 py-3 text-right text-slate-700">{formatMontant(c.encaisse)}</td>
+                <td className="px-3 py-3 text-right text-slate-700">{formatMontant(c.rembourse)}</td>
+                <td className="px-3 py-3 text-right font-semibold text-primary-700">{formatMontant(c.net)}</td>
+                <td className="px-4 py-3">
+                  <div className="flex min-w-32 items-center gap-2">
+                    <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-primary-100/70">
+                      <div className="h-full rounded-full bg-linear-to-r from-primary-300 to-primary-700" style={{ width: `${Math.max(part, 3)}%` }} />
+                    </div>
+                    <span className="w-9 text-right text-xs font-semibold text-slate-600">{part} %</span>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 export function FinancesTab({
   stats,
@@ -40,6 +78,8 @@ export function FinancesTab({
   const creancesQuery = useAdminCreancesLocatairesQuery();
   const creanciersQuery = useAdminBailleursCreanciersQuery();
   const { points } = useSerieEvolution(nbMois);
+  const [categoriesOuvert, setCategoriesOuvert] = useState(false);
+  const [rechercheCategorie, setRechercheCategorie] = useState("");
 
   const fin = finQuery.data;
   const prec = periode.precedente ? precQuery.data : undefined;
@@ -56,12 +96,16 @@ export function FinancesTab({
   const rp = fin.reversementsPeriode;
   const totalNetBs = bs.parCategorie.reduce((s, c) => s + Math.max(0, c.net), 0);
 
-  const parts: PartTarte[] = [
+  const categoriesPositives = bs.parCategorie.filter((c) => c.net > 0);
+  const autresCategories = categoriesPositives.slice(PARTS_CATEGORIES);
+  const partsBrutes = [
     { name: "Commissions", value: fin.commissionsAcquises },
-    ...bs.parCategorie.filter((c) => c.net > 0).map((c) => ({ name: c.categorie, value: c.net })),
-  ]
-    .filter((p) => p.value > 0)
-    .map((p, i) => ({ ...p, ...COULEURS_PARTS[i % COULEURS_PARTS.length]! }));
+    ...categoriesPositives.slice(0, PARTS_CATEGORIES).map((c) => ({ name: c.categorie, value: c.net })),
+    ...(autresCategories.length > 0
+      ? [{ name: `Autres catégories (${autresCategories.length})`, value: autresCategories.reduce((t, c) => t + c.net, 0) }]
+      : []),
+  ].filter((p) => p.value > 0);
+  const parts: PartTarte[] = partsBrutes.map((p, i) => ({ ...p, ...COULEURS_PARTS[Math.min(i, COULEURS_PARTS.length - 1)]! }));
 
   const creances = (creancesQuery.data ?? []).slice().sort((a, b) => b.montantDu - a.montantDu);
   const totalCreances = creances.reduce((s, c) => s + c.montantDu, 0);
@@ -128,7 +172,7 @@ export function FinancesTab({
                     cursor={{ stroke: "var(--color-primary-300)", strokeDasharray: "4 4" }}
                     formatter={(v) => formatMontant(Number(v))}
                   />
-                  <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
+                  <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} formatter={(valeur) => <span className="text-slate-600">{valeur}</span>} />
                   <Line type="monotone" isAnimationActive={false} dataKey="Loyers encaissés" stroke="var(--color-primary-600)" strokeWidth={3} dot={{ r: 4, fill: "#ffffff", strokeWidth: 2 }} activeDot={{ r: 6 }} />
                   <Line type="monotone" isAnimationActive={false} dataKey="Reversements effectués" stroke="var(--color-accent-500)" strokeWidth={3} dot={{ r: 4, fill: "#ffffff", strokeWidth: 2 }} activeDot={{ r: 6 }} />
                   <Line type="monotone" isAnimationActive={false} dataKey="Commissions acquises" stroke="var(--color-success-600)" strokeWidth={3} dot={{ r: 4, fill: "#ffffff", strokeWidth: 2 }} activeDot={{ r: 6 }} />
@@ -272,41 +316,37 @@ export function FinancesTab({
           </div>
 
           {bs.parCategorie.length > 0 ? (
-            <div className="mt-5 overflow-x-auto rounded-xl bg-white/70 ring-1 ring-primary-100/60">
-              <table className="w-full min-w-160 text-sm">
-                <thead>
-                  <tr className="border-b border-dashed border-primary-200 text-left text-xs font-bold uppercase tracking-wide text-primary-800">
-                    <th className="px-4 py-2.5">Catégorie</th>
-                    <th className="px-3 py-2.5 text-right">Locations</th>
-                    <th className="px-3 py-2.5 text-right">Encaissé</th>
-                    <th className="px-3 py-2.5 text-right">Remboursé</th>
-                    <th className="px-3 py-2.5 text-right">Net</th>
-                    <th className="px-4 py-2.5">Part du net</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bs.parCategorie.map((c) => {
-                    const part = totalNetBs > 0 ? Math.round((Math.max(0, c.net) / totalNetBs) * 100) : 0;
-                    return (
-                      <tr key={c.categorie} className="border-b border-dashed border-primary-100 last:border-0">
-                        <td className="px-4 py-3 font-medium text-slate-800">{c.categorie}</td>
-                        <td className="px-3 py-3 text-right text-slate-700">{c.nbLocations}</td>
-                        <td className="px-3 py-3 text-right text-slate-700">{formatMontant(c.encaisse)}</td>
-                        <td className="px-3 py-3 text-right text-slate-700">{formatMontant(c.rembourse)}</td>
-                        <td className="px-3 py-3 text-right font-semibold text-primary-700">{formatMontant(c.net)}</td>
-                        <td className="px-4 py-3">
-                          <div className="flex min-w-32 items-center gap-2">
-                            <div className="h-2.5 flex-1 overflow-hidden rounded-full bg-primary-100/70">
-                              <div className="h-full rounded-full bg-linear-to-r from-primary-300 to-primary-700" style={{ width: `${Math.max(part, 3)}%` }} />
-                            </div>
-                            <span className="w-9 text-right text-xs font-semibold text-slate-600">{part} %</span>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+            <div className="mt-5">
+              <TableauCategories lignes={bs.parCategorie.slice(0, CATEGORIES_VISIBLES)} totalNet={totalNetBs} />
+              {bs.parCategorie.length > CATEGORIES_VISIBLES && (
+                <button
+                  type="button"
+                  onClick={() => setCategoriesOuvert(true)}
+                  className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary-700 hover:underline"
+                >
+                  Voir toutes les catégories ({bs.parCategorie.length})
+                  <ArrowRight size={12} aria-hidden="true" />
+                </button>
+              )}
+              <Modal isOpen={categoriesOuvert} onClose={() => setCategoriesOuvert(false)} title="Toutes les catégories" size="xl" titleTone="indigo">
+                <div className="relative mb-3">
+                  <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+                  <input
+                    type="search"
+                    value={rechercheCategorie}
+                    onChange={(e) => setRechercheCategorie(e.target.value)}
+                    placeholder="Rechercher une catégorie"
+                    aria-label="Rechercher une catégorie"
+                    className="w-full rounded-lg border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-800"
+                  />
+                </div>
+                <div className="max-h-[60vh] overflow-y-auto">
+                  <TableauCategories
+                    lignes={bs.parCategorie.filter((c) => c.categorie.toLowerCase().includes(rechercheCategorie.trim().toLowerCase()))}
+                    totalNet={totalNetBs}
+                  />
+                </div>
+              </Modal>
             </div>
           ) : (
             <p className="mt-5 text-sm text-slate-400">Aucun paiement de biens et services sur cette période.</p>

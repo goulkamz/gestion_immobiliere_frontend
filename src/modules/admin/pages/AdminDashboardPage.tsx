@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import type { CSSProperties } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { CalendarRange, Coins, LayoutDashboard, MapPin, Receipt, RefreshCw } from "lucide-react";
 import { LoadingSpinner } from "@/components/ui";
@@ -14,6 +15,18 @@ import { PERIODES, calculerPeriode } from "@/modules/admin/dashboard/periode";
 import type { PeriodeId } from "@/modules/admin/dashboard/periode";
 import { couleurTaux } from "@/modules/admin/dashboard/helpers";
 import { Onglets, TrendBadge } from "@/modules/admin/dashboard/widgets";
+
+/**
+ * Dans le tableau de bord, l'« attention » est en ambre et le « danger » reste rouge : l'orange du thème est trop
+ * proche du rouge pour les distinguer sur les barres, les pastilles et la frise d'ancienneté. Le remplacement ne vaut
+ * que pour les éléments de cette page (les autres espaces gardent la palette du thème).
+ */
+const PALETTE_ATTENTION = {
+  "--color-warning-50": "#fffbeb",
+  "--color-warning-500": "#f59e0b",
+  "--color-warning-600": "#d97706",
+  "--color-warning-700": "#b45309",
+} as CSSProperties;
 
 const dateHeaderFormatter = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 
@@ -60,7 +73,7 @@ export function AdminDashboardPage() {
   if (statsQuery.isLoading || !stats) return <LoadingSpinner text="Chargement du tableau de bord…" />;
 
   return (
-    <div>
+    <div style={PALETTE_ATTENTION}>
       <div className="mb-6 rounded-2xl bg-linear-to-br from-primary-700 to-primary-900 px-5 py-6 sm:px-8 sm:py-8">
         <p className="text-xs font-semibold uppercase tracking-wide text-primary-200">{dateHeaderFormatter.format(new Date())}</p>
         <h1 className="mt-1 font-heading text-3xl font-bold text-white">
@@ -123,7 +136,7 @@ export function AdminDashboardPage() {
         {onglet === "ensemble" && <OverviewTab stats={stats} nbMois={nbMois} onNbMois={setNbMois} />}
         {onglet === "finances" && <FinancesTab stats={stats} periode={periode} libellePeriode={libellePeriode} nbMois={nbMois} onNbMois={setNbMois} />}
         {onglet === "patrimoine" && <PatrimoineTab stats={stats} periode={periode} libellePeriode={libellePeriode} />}
-        {onglet === "activite" && <ActiviteTab stats={stats} nbMois={nbMois} onNbMois={setNbMois} />}
+        {onglet === "activite" && <ActiviteTab stats={stats} periode={periode} libellePeriode={libellePeriode} nbMois={nbMois} onNbMois={setNbMois} />}
       </div>
     </div>
   );

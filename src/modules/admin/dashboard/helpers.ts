@@ -52,3 +52,12 @@ export function couleurTaux(taux: number): string {
   if (taux >= 50) return "var(--color-warning-600)";
   return "var(--color-danger-600)";
 }
+
+/** Parts de tarte : indigo foncé et or en alternance, texte clair sur fond foncé et foncé sur fond clair. */
+export const COULEURS_PARTS: { color: string; text: string }[] = [
+  { color: "var(--color-primary-800)", text: "#ffffff" },
+  { color: "var(--color-accent-500)", text: "var(--color-primary-950)" },
+  { color: "var(--color-primary-500)", text: "#ffffff" },
+  { color: "var(--color-accent-300)", text: "var(--color-primary-950)" },
+  { color: "var(--color-primary-300)", text: "var(--color-primary-950)" },
+];

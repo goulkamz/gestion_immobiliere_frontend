@@ -12,6 +12,7 @@ export const statsAdminQueryKeys = {
   creancesLocataires: ["stats-admin", "creances-locataires"] as const,
   creanciersBailleurs: ["stats-admin", "creanciers-bailleurs"] as const,
   finances: (b?: BornesPeriode) => ["stats-admin", "finances", b?.debut ?? "debut", b?.fin ?? "fin"] as const,
+  activite: (b?: BornesPeriode) => ["stats-admin", "activite", b?.debut ?? "debut", b?.fin ?? "fin"] as const,
   evolution: (mois: number) => ["stats-admin", "evolution", mois] as const,
 };
 
@@ -56,6 +57,17 @@ export function useAdminEvolutionQuery(mois: number) {
     staleTime: STALE_MS,
     queryKey: statsAdminQueryKeys.evolution(mois),
     queryFn: () => statsAdminApi.getEvolution(mois),
+    placeholderData: keepPreviousData,
+  });
+}
+
+/** Éléments créés pendant la période ; `enabled` évite d'interroger la période précédente quand elle n'existe pas. */
+export function useAdminActiviteQuery(bornes: BornesPeriode | null) {
+  return useQuery({
+    staleTime: STALE_MS,
+    queryKey: statsAdminQueryKeys.activite(bornes ?? undefined),
+    queryFn: () => statsAdminApi.getActivite(bornes ?? undefined),
+    enabled: bornes !== null,
     placeholderData: keepPreviousData,
   });
 }

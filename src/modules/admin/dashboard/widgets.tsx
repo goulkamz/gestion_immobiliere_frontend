@@ -57,14 +57,32 @@ export function TrendBadge({ actuel, precedent, comparaison, onDark = false }: {
 }
 
 /** Anneau de répartition avec légende chiffrée ; message neutre si tous les décomptes sont à 0. */
-export function DonutCard({ title, subtitle, slices, centerLabel }: { title: string; subtitle: string; slices: Slice[]; centerLabel?: string }) {
+export function DonutCard({
+  title,
+  subtitle,
+  slices,
+  centerLabel,
+  soft = false,
+  icon,
+  vertical = false,
+}: {
+  title: string;
+  subtitle: string;
+  slices: Slice[];
+  centerLabel?: string;
+  /** Anneau au-dessus de la légende : pour les cartes étroites (une colonne sur trois). */
+  vertical?: boolean;
+  /** Carte douce (onglets du tableau de bord) au lieu de la carte standard. */
+  soft?: boolean;
+  icon?: ReactNode;
+}) {
   const total = slices.reduce((s, d) => s + d.value, 0);
-  return (
-    <Card title={title} subtitle={subtitle} className="h-full">
+  const contenu = (
+    <>
       {total === 0 ? (
         <p className="py-8 text-center text-sm text-slate-400">Aucune donnée pour le moment.</p>
       ) : (
-        <div className="flex flex-col items-center gap-4 sm:flex-row">
+        <div className={`flex flex-col items-center gap-4 ${vertical ? "" : "sm:flex-row"}`}>
           <div className="relative h-44 w-44 shrink-0">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -92,6 +110,16 @@ export function DonutCard({ title, subtitle, slices, centerLabel }: { title: str
           </ul>
         </div>
       )}
+    </>
+  );
+
+  return soft ? (
+    <SoftCard title={title} subtitle={subtitle} icon={icon} className="h-full">
+      {contenu}
+    </SoftCard>
+  ) : (
+    <Card title={title} subtitle={subtitle} className="h-full">
+      {contenu}
     </Card>
   );
 }

@@ -1,5 +1,6 @@
 import { http } from "./http";
 import type {
+  ActivitePeriodeDTO,
   AdminStatsDTO,
   ApiSuccessResponse,
   BailleurCreancierDTO,
@@ -37,5 +38,6 @@ export const statsAdminApi = {
   getFinances: (b?: BornesPeriode) => unwrap<FinancesPeriodeDTO>(http.get("/stats/admin/finances", { params: params(b) })),
   /** Vide le cache serveur des statistiques (bouton « Actualiser »). */
   viderCache: () => http.post("/stats/admin/cache/vider"),
+  getActivite: (b?: BornesPeriode) => unwrap<ActivitePeriodeDTO>(http.get("/stats/admin/activite", { params: params(b) })),
   getEvolution: (mois = 12) => unwrap<EvolutionMensuelleDTO[]>(http.get("/stats/admin/evolution", { params: { mois } })),
 };

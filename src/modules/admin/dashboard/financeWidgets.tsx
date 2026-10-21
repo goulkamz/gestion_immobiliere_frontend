@@ -26,7 +26,7 @@ export function SoftCard({
   children: ReactNode;
 }) {
   return (
-    <section className={`overflow-hidden rounded-2xl bg-white/85 shadow-lg shadow-primary-900/5 ring-1 ring-primary-100/70 backdrop-blur-sm ${className}`}>
+    <section className={`overflow-hidden rounded-2xl bg-white shadow-lg shadow-primary-900/5 ring-1 ring-primary-100/70 ${className}`}>
       {(title || action) && (
         <header className="flex items-start justify-between gap-3 bg-primary-50 px-5 py-3">
           <div className="flex min-w-0 items-center gap-2.5">

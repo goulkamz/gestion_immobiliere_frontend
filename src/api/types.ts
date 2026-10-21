@@ -1055,3 +1055,14 @@ export interface EvolutionMensuelleDTO {
   inscriptions: number;
   nouveauxContrats: number;
 }
+
+/** `GET /api/stats/admin/activite?debut=&fin=` : éléments créés ou reçus pendant une période (date de création). */
+export interface ActivitePeriodeDTO {
+  debut: string | null;
+  fin: string | null;
+  mandats: number;
+  contratsLocation: number;
+  locationsBienService: number;
+  annonces: number;
+  demandes: number;
+}

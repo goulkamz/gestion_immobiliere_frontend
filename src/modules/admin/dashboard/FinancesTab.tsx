@@ -6,7 +6,7 @@ import type { AdminStatsDTO } from "@/api/types";
 import { useAdminBailleursCreanciersQuery, useAdminCreancesLocatairesQuery, useAdminFinancesQuery } from "@/hooks/queries/useStatsAdmin";
 import { formatDate, formatMontant } from "@/utils/format";
 import type { PeriodeCalculee } from "./periode";
-import { BarreSegmentee, CarteGain, FriseAnciennete, Pastille, ProgressionGrande, SoftCard, TartePleine } from "./financeWidgets";
+import { BandeauStocks, BarreSegmentee, CarteGain, FriseAnciennete, Pastille, ProgressionGrande, SoftCard, TartePleine } from "./financeWidgets";
 import type { PartTarte } from "./financeWidgets";
 import { Figure, PorteeChip, RankedTable, TrendBadge } from "./widgets";
 import { TOOLTIP_STYLE, couleurTaux, montantCompact } from "./helpers";
@@ -45,7 +45,6 @@ export function FinancesTab({
   const prec = periode.precedente ? precQuery.data : undefined;
   const loyers = stats.loyers;
   const rev = stats.reversements;
-  const taux = Math.round(loyers.tauxRecouvrement);
 
   const sparkVolume = useMemo(() => points.slice(-7).map((p) => ({ libelle: p.libelle, valeur: p["Volume encaissé"] })), [points]);
   const sparkRevenu = useMemo(() => points.slice(-7).map((p) => ({ libelle: p.libelle, valeur: p["Revenu agence"] })), [points]);
@@ -53,6 +52,8 @@ export function FinancesTab({
   if (!fin) return <LoadingSpinner text="Chargement des finances…" />;
 
   const bs = fin.biensServices;
+  const lp = fin.loyersPeriode;
+  const rp = fin.reversementsPeriode;
   const totalNetBs = bs.parCategorie.reduce((s, c) => s + Math.max(0, c.net), 0);
 
   const parts: PartTarte[] = [
@@ -66,12 +67,6 @@ export function FinancesTab({
   const totalCreances = creances.reduce((s, c) => s + c.montantDu, 0);
   const creanciers = (creanciersQuery.data ?? []).slice().sort((a, b) => b.montantDu - a.montantDu);
   const totalCreanciers = creanciers.reduce((s, c) => s + c.montantDu, 0);
-
-  const totalReversements = rev.effectue + rev.aReverser + rev.aVenir;
-  // La part reversée se mesure sur ce qui est dû à ce jour : les reversements du mois suivant sont déjà créés
-  // (échéance au 1er) mais pas encore exigibles, ils ne doivent pas empêcher d'atteindre 100 %.
-  const totalDuAbsolu = rev.effectue + rev.aReverser;
-  const partReversee = totalDuAbsolu > 0 ? (rev.effectue / totalDuAbsolu) * 100 : totalReversements > 0 ? 100 : 0;
 
   const anciennete = [
     { label: "0 à 30 jours", montant: loyers.anciennete.jours0a30, couleur: "var(--color-warning-500)" },
@@ -146,59 +141,87 @@ export function FinancesTab({
         <div className="grid gap-5 lg:grid-cols-2">
           <SoftCard title="Loyers à encaisser" subtitle="Ce que les locataires doivent à l'agence." icon={<ArrowDownToLine size={16} />} className="h-full">
             <ProgressionGrande
-              libelle="Recouvrement des loyers dus à ce jour"
-              pourcent={taux}
-              couleur={couleurTaux(taux)}
-              detail={`${formatMontant(loyers.encaisseSurEchu)} encaissés sur ${formatMontant(loyers.echuTotal)} dus`}
-            />
-            <div className="mt-5 grid gap-4 sm:grid-cols-2">
-              <div className="rounded-xl bg-white/70 p-3 ring-1 ring-primary-100/60">
-                <div className="mb-1"><PorteeChip type="periode" /></div>
-                <Figure label="Encaissé sur la période" value={formatMontant(fin.loyersEncaisses)} tone="text-success-700" />
-                <TrendBadge actuel={fin.loyersEncaisses} precedent={prec?.loyersEncaisses} comparaison={periode.comparaison} />
-              </div>
-              <div className="rounded-xl bg-white/70 p-3 ring-1 ring-primary-100/60">
-                <div className="mb-1"><PorteeChip type="stock" /></div>
-                <Figure
-                  label="Reste à encaisser"
-                  value={formatMontant(loyers.resteAEncaisser)}
-                  tone={loyers.resteAEncaisser > 0 ? "text-danger-700" : "text-slate-900"}
-                  hint={`${loyers.nombreImpayesEchus} échéance(s) impayée(s)`}
-                />
-              </div>
-            </div>
-            <p className="mt-4 text-xs text-slate-500">
-              À venir, pas encore exigibles : <span className="font-semibold text-slate-700">{formatMontant(loyers.aVenir)}</span>
-            </p>
-          </SoftCard>
-
-          <SoftCard title="Reversements aux bailleurs" subtitle="Ce que l'agence verse aux bailleurs, et sa commission." icon={<ArrowUpFromLine size={16} />} className="h-full">
-            <ProgressionGrande
-              libelle="Part déjà reversée"
-              pourcent={partReversee}
-              couleur="var(--color-success-600)"
-              detail={`${formatMontant(rev.effectue)} reversés sur ${formatMontant(totalDuAbsolu)} dus à ce jour (hors reversements à venir)`}
+              libelle="Recouvrement des loyers de la période"
+              chip={<PorteeChip type="periode" />}
+              pourcent={lp.tauxRecouvrement}
+              couleur={couleurTaux(Math.round(lp.tauxRecouvrement))}
+              detail={
+                lp.nombreEcheances > 0
+                  ? `${formatMontant(lp.encaissePeriode)} encaissés sur ${formatMontant(lp.dusPeriode)} de loyers échus dans la période`
+                  : "Aucun loyer échu dans la période"
+              }
             />
             <div className="mt-4">
               <BarreSegmentee
                 message={
-                  totalReversements === 0
-                    ? { texte: "Aucun reversement prévu pour le moment.", ton: "neutre" }
-                    : rev.aReverser === 0
-                      ? { texte: "Tous les reversements dus sont à jour.", ton: "ok" }
+                  lp.nombreEcheances === 0
+                    ? { texte: "Aucun loyer échu dans la période.", ton: "neutre" }
+                    : lp.resteAEncaisser === 0
+                      ? { texte: "Tous les loyers de la période sont encaissés.", ton: "ok" }
                       : undefined
                 }
                 segments={[
-                  { label: "Déjà reversé", value: rev.effectue, color: "var(--color-success-600)", montant: formatMontant(rev.effectue) },
-                  { label: "À reverser maintenant", value: rev.aReverser, color: "var(--color-warning-600)", montant: formatMontant(rev.aReverser) },
-                  { label: "À venir", value: rev.aVenir, color: "var(--color-primary-300)", montant: formatMontant(rev.aVenir) },
+                  { label: "Encaissé", value: lp.encaissePeriode, color: "var(--color-success-600)", montant: formatMontant(lp.encaissePeriode) },
+                  { label: "Reste à encaisser", value: lp.resteAEncaisser, color: "var(--color-danger-600)", montant: formatMontant(lp.resteAEncaisser) },
                 ]}
               />
             </div>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               <div className="rounded-xl bg-white/70 p-3 ring-1 ring-primary-100/60">
                 <div className="mb-1"><PorteeChip type="periode" /></div>
-                <Figure label="Reversé sur la période" value={formatMontant(fin.reversementsEffectues)} />
+                <Figure label="Loyers échus dans la période" value={formatMontant(lp.dusPeriode)} hint={`${lp.nombreEcheances} échéance${lp.nombreEcheances > 1 ? "s" : ""}`} />
+              </div>
+              <div className="rounded-xl bg-white/70 p-3 ring-1 ring-primary-100/60">
+                <div className="mb-1"><PorteeChip type="periode" /></div>
+                <Figure label="Argent reçu pendant la période" value={formatMontant(fin.loyersEncaisses)} tone="text-success-700" />
+                <TrendBadge actuel={fin.loyersEncaisses} precedent={prec?.loyersEncaisses} comparaison={periode.comparaison} />
+              </div>
+            </div>
+            <BandeauStocks
+              items={[
+                {
+                  label: "Reste à encaisser",
+                  value: formatMontant(loyers.resteAEncaisser),
+                  tone: loyers.resteAEncaisser > 0 ? "text-danger-700" : "text-success-700",
+                  hint: loyers.nombreImpayesEchus > 0 ? `${loyers.nombreImpayesEchus} échéance(s) impayée(s)` : "Aucun loyer impayé",
+                },
+                { label: "Payé d'avance", value: formatMontant(loyers.payeAvance), tone: "text-primary-700", hint: "Loyers à venir déjà réglés" },
+                { label: "À venir", value: formatMontant(loyers.aVenir), hint: "Pas encore exigibles" },
+              ]}
+            />
+          </SoftCard>
+
+          <SoftCard title="Reversements aux bailleurs" subtitle="Ce que l'agence verse aux bailleurs, et sa commission." icon={<ArrowUpFromLine size={16} />} className="h-full">
+            <ProgressionGrande
+              libelle="Part reversée des reversements de la période"
+              chip={<PorteeChip type="periode" />}
+              pourcent={rp.tauxReverse}
+              couleur="var(--color-success-600)"
+              detail={
+                rp.nombreReversements > 0
+                  ? `${formatMontant(rp.effectue)} reversés sur ${formatMontant(rp.totalPeriode)} dus dans la période`
+                  : "Aucun reversement échu dans la période"
+              }
+            />
+            <div className="mt-4">
+              <BarreSegmentee
+                message={
+                  rp.nombreReversements === 0
+                    ? { texte: "Aucun reversement échu dans la période.", ton: "neutre" }
+                    : rp.aReverser === 0
+                      ? { texte: "Tous les reversements de la période sont à jour.", ton: "ok" }
+                      : undefined
+                }
+                segments={[
+                  { label: "Reversé", value: rp.effectue, color: "var(--color-success-600)", montant: formatMontant(rp.effectue) },
+                  { label: "À reverser", value: rp.aReverser, color: "var(--color-warning-600)", montant: formatMontant(rp.aReverser) },
+                ]}
+              />
+            </div>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-xl bg-white/70 p-3 ring-1 ring-primary-100/60">
+                <div className="mb-1"><PorteeChip type="periode" /></div>
+                <Figure label="Argent versé pendant la période" value={formatMontant(fin.reversementsEffectues)} />
                 <TrendBadge actuel={fin.reversementsEffectues} precedent={prec?.reversementsEffectues} comparaison={periode.comparaison} />
               </div>
               <div className="rounded-xl bg-white/70 p-3 ring-1 ring-primary-100/60">
@@ -207,6 +230,23 @@ export function FinancesTab({
                 <TrendBadge actuel={fin.commissionsAcquises} precedent={prec?.commissionsAcquises} comparaison={periode.comparaison} />
               </div>
             </div>
+            <BandeauStocks
+              items={[
+                {
+                  label: "À reverser maintenant",
+                  value: formatMontant(rev.aReverser),
+                  tone: rev.aReverser > 0 ? "text-warning-700" : "text-success-700",
+                  hint: rev.nombreAReverser > 0 ? `${rev.nombreAReverser} échéance(s)` : "Rien à reverser",
+                },
+                {
+                  label: "Avancé, loyers non encaissés",
+                  value: formatMontant(rev.avanceSansLoyer),
+                  tone: rev.avanceSansLoyer > 0 ? "text-warning-700" : "text-success-700",
+                  hint: rev.nombreAvances > 0 ? `${rev.nombreAvances} reversement${rev.nombreAvances > 1 ? "s" : ""} payé${rev.nombreAvances > 1 ? "s" : ""} avant encaissement` : "Aucune avance",
+                },
+                { label: "À venir", value: formatMontant(rev.aVenir), hint: "Pas encore exigibles" },
+              ]}
+            />
           </SoftCard>
         </div>
 

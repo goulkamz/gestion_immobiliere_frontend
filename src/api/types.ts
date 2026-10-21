@@ -908,6 +908,8 @@ export interface LoyersStatsDTO {
   /** En pourcentage (0 à 100). */
   tauxRecouvrement: number;
   aVenir: number;
+  /** Déjà payé sur les loyers à venir (réglés d'avance). */
+  payeAvance: number;
   /** Impayés échus par ancienneté de l'échéance. */
   anciennete: { jours0a30: number; jours31a60: number; jours61a90: number; plusDe90: number };
 }
@@ -935,6 +937,25 @@ export interface FinancesPeriodeDTO {
     nbLocations: number;
     parCategorie: CategorieFinanceDTO[];
   };
+  /** Loyers dont la date tombe dans la période (déjà échus) : combien est payé, combien reste. */
+  loyersPeriode: {
+    dusPeriode: number;
+    encaissePeriode: number;
+    resteAEncaisser: number;
+    nombreEcheances: number;
+    nombreImpayes: number;
+    /** En pourcentage (0 à 100) ; 0 si rien n'est échu. */
+    tauxRecouvrement: number;
+  };
+  /** Reversements dont la date tombe dans la période (déjà échus) : combien est reversé, combien reste. */
+  reversementsPeriode: {
+    totalPeriode: number;
+    effectue: number;
+    aReverser: number;
+    nombreReversements: number;
+    nombreAReverser: number;
+    tauxReverse: number;
+  };
   /** Loyers encaissés + biens et services nets. */
   volumeEncaisse: number;
   /** Commissions acquises + biens et services nets. */
@@ -949,6 +970,9 @@ export interface ReversementsStatsDTO {
   aVenir: number;
   commissionsAcquises: number;
   commissionsPrevues: number;
+  /** Part des reversements payés dont les loyers du mois n'ont pas été encaissés (avance de l'agence). */
+  avanceSansLoyer: number;
+  nombreAvances: number;
 }
 
 /** `GET /api/stats/admin` (AdminStatsDTO). Les maps sont des décomptes par statut ou par rôle. */

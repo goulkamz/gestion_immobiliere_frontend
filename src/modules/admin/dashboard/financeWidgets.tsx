@@ -208,12 +208,28 @@ export function TartePleine({ parts }: { parts: PartTarte[] }) {
 }
 
 /** Barre de progression épaisse avec grand pourcentage (recouvrement, part reversée). */
-export function ProgressionGrande({ libelle, pourcent, couleur, detail }: { libelle: string; pourcent: number; couleur: string; detail?: string }) {
+export function ProgressionGrande({
+  libelle,
+  pourcent,
+  couleur,
+  detail,
+  chip,
+}: {
+  libelle: string;
+  pourcent: number;
+  couleur: string;
+  detail?: string;
+  /** Étiquette qui précise la portée du chiffre (période ou à ce jour). */
+  chip?: ReactNode;
+}) {
   const p = Math.max(0, Math.min(100, Math.round(pourcent)));
   return (
     <div>
       <div className="flex items-end justify-between gap-3">
-        <p className="text-xs text-slate-500">{libelle}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-xs text-slate-500">{libelle}</p>
+          {chip}
+        </div>
         <p className="font-heading text-3xl font-bold" style={{ color: couleur }}>
           {p}
           <span className="text-lg">%</span>
@@ -292,6 +308,24 @@ export function FriseAnciennete({ etapes }: { etapes: { label: string; montant: 
           );
         })}
       </ol>
+    </div>
+  );
+}
+
+/** Bandeau « À ce jour » : plusieurs chiffres d'état, indépendants de la période choisie, sur une même ligne. */
+export function BandeauStocks({ items }: { items: { label: string; value: string; tone?: string; hint?: string }[] }) {
+  return (
+    <div className="mt-4 rounded-xl bg-white/70 p-3 ring-1 ring-primary-100/60">
+      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-500">À ce jour</span>
+      <dl className="mt-2 grid gap-4 sm:grid-cols-3">
+        {items.map((i) => (
+          <div key={i.label} className="min-w-0">
+            <dt className="text-xs text-slate-500">{i.label}</dt>
+            <dd className={`truncate font-heading text-base font-bold ${i.tone ?? "text-slate-900"}`}>{i.value}</dd>
+            {i.hint && <p className="text-[11px] leading-tight text-slate-400">{i.hint}</p>}
+          </div>
+        ))}
+      </dl>
     </div>
   );
 }

@@ -79,7 +79,7 @@ export function AdminDashboardPage() {
             <TrendBadge actuel={fin?.revenuAgence ?? 0} precedent={prec?.revenuAgence} comparaison={periode.comparaison} onDark />
           </div>
           <div className="rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">
-            <p className="text-xs text-primary-200">Recouvrement des loyers</p>
+            <p className="text-xs text-primary-200">Recouvrement des loyers à ce jour</p>
             <p className="font-heading text-xl font-bold" style={{ color: couleurTaux(taux) }}>
               {taux} %
             </p>

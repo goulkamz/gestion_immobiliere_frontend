@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, CheckCircle2 } from "lucide-react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { formatMontant } from "@/utils/format";
 import { TOOLTIP_STYLE } from "./helpers";
@@ -100,7 +100,7 @@ function BarresArrondies({ serie }: { serie: PointBarre[] }) {
                 style={{ height: `${Math.max(8, Math.round((p.valeur / max) * 100))}%` }}
               />
             </div>
-            <span className={`h-1.5 w-1.5 rounded-full ${estPic ? "bg-primary-700" : "bg-primary-300"}`} aria-hidden="true" />
+            <span className={`h-1.5 w-1.5 rounded-full ${estPic ? "bg-accent-500" : "bg-primary-300"}`} aria-hidden="true" />
             <span className="text-[10px] text-slate-500">{p.libelle}</span>
           </div>
         );
@@ -227,28 +227,44 @@ export function ProgressionGrande({ libelle, pourcent, couleur, detail }: { libe
   );
 }
 
-/** Barre épaisse à plusieurs segments (déjà reversé, à reverser, à venir) avec légende. */
-export function BarreSegmentee({ segments }: { segments: { label: string; value: number; color: string; montant: string }[] }) {
+/**
+ * Barre épaisse à plusieurs segments (déjà reversé, à reverser, à venir). La légende ne liste que les segments
+ * non nuls ; un message d'état peut la compléter (« tout est à jour », « rien de prévu »).
+ */
+export function BarreSegmentee({
+  segments,
+  message,
+}: {
+  segments: { label: string; value: number; color: string; montant: string }[];
+  message?: { texte: string; ton: "ok" | "neutre" };
+}) {
   const total = segments.reduce((s, x) => s + Math.max(0, x.value), 0);
+  const visibles = segments.filter((s) => s.value > 0);
   return (
     <div>
       <div className="flex h-4 gap-0.5 overflow-hidden rounded-full bg-primary-100/70 shadow-inner">
         {total > 0 &&
-          segments
-            .filter((s) => s.value > 0)
-            .map((s) => <div key={s.label} className="h-full" style={{ width: `${(s.value / total) * 100}%`, background: s.color }} title={`${s.label} : ${s.montant}`} />)}
+          visibles.map((s) => <div key={s.label} className="h-full" style={{ width: `${(s.value / total) * 100}%`, background: s.color }} title={`${s.label} : ${s.montant}`} />)}
       </div>
-      <ul className="mt-3 grid gap-1.5 sm:grid-cols-3">
-        {segments.map((s) => (
-          <li key={s.label} className="flex items-center gap-2 text-xs">
-            <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: s.color }} aria-hidden="true" />
-            <div className="min-w-0">
-              <p className="text-slate-500">{s.label}</p>
-              <p className="font-semibold text-slate-800">{s.montant}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {message && (
+        <p className={`mt-3 flex items-center gap-1.5 text-xs font-semibold ${message.ton === "ok" ? "text-success-700" : "text-slate-500"}`}>
+          {message.ton === "ok" && <CheckCircle2 size={14} aria-hidden="true" />}
+          {message.texte}
+        </p>
+      )}
+      {visibles.length > 0 && (
+        <ul className="mt-3 grid gap-1.5 sm:grid-cols-3">
+          {visibles.map((s) => (
+            <li key={s.label} className="flex items-center gap-2 text-xs">
+              <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: s.color }} aria-hidden="true" />
+              <div className="min-w-0">
+                <p className="text-slate-500">{s.label}</p>
+                <p className="font-semibold text-slate-800">{s.montant}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

@@ -68,7 +68,10 @@ export function FinancesTab({
   const totalCreanciers = creanciers.reduce((s, c) => s + c.montantDu, 0);
 
   const totalReversements = rev.effectue + rev.aReverser + rev.aVenir;
-  const partReversee = totalReversements > 0 ? (rev.effectue / totalReversements) * 100 : 0;
+  // La part reversée se mesure sur ce qui est dû à ce jour : les reversements du mois suivant sont déjà créés
+  // (échéance au 1er) mais pas encore exigibles, ils ne doivent pas empêcher d'atteindre 100 %.
+  const totalDuAbsolu = rev.effectue + rev.aReverser;
+  const partReversee = totalDuAbsolu > 0 ? (rev.effectue / totalDuAbsolu) * 100 : totalReversements > 0 ? 100 : 0;
 
   const anciennete = [
     { label: "0 à 30 jours", montant: loyers.anciennete.jours0a30, couleur: "var(--color-warning-500)" },
@@ -173,11 +176,18 @@ export function FinancesTab({
             <ProgressionGrande
               libelle="Part déjà reversée"
               pourcent={partReversee}
-              couleur="var(--color-primary-600)"
-              detail={`${formatMontant(rev.effectue)} reversés sur ${formatMontant(totalReversements)} prévus au total`}
+              couleur="var(--color-success-600)"
+              detail={`${formatMontant(rev.effectue)} reversés sur ${formatMontant(totalDuAbsolu)} dus à ce jour (hors reversements à venir)`}
             />
             <div className="mt-4">
               <BarreSegmentee
+                message={
+                  totalReversements === 0
+                    ? { texte: "Aucun reversement prévu pour le moment.", ton: "neutre" }
+                    : rev.aReverser === 0
+                      ? { texte: "Tous les reversements dus sont à jour.", ton: "ok" }
+                      : undefined
+                }
                 segments={[
                   { label: "Déjà reversé", value: rev.effectue, color: "var(--color-success-600)", montant: formatMontant(rev.effectue) },
                   { label: "À reverser maintenant", value: rev.aReverser, color: "var(--color-warning-600)", montant: formatMontant(rev.aReverser) },
@@ -292,7 +302,7 @@ export function FinancesTab({
           <RankedTable
             soft
             title="Reversements dus aux bailleurs"
-            subtitle="Reversements dont la date est passée et non effectués."
+            subtitle="Reversements en retard"
             icon={<ArrowUpFromLine size={16} />}
             empty="Aucun reversement en attente."
             variant="avatar"

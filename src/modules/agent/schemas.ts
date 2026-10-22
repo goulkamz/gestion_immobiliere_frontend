@@ -175,7 +175,7 @@ export type CreerCompteProprietaireFormValues = z.infer<typeof creerComptePropri
 export type CreerCompteProprietaireFormInput = z.input<typeof creerCompteProprietaireSchema>;
 
 export const creerUtilisateurSchema = creerCompteProprietaireSchema.extend({
-  role: z.enum(["ROLE_BAILLEUR", "ROLE_CLIENT"]),
+  role: z.enum(["ROLE_BAILLEUR", "ROLE_CLIENT", "ROLE_AGENT"]),
   sexe: z.enum(["M", "F"], { message: "Le sexe est requis" }),
   dateNaissance: z.string().min(1, "La date de naissance est requise"),
   telephone1: z
@@ -186,6 +186,10 @@ export const creerUtilisateurSchema = creerCompteProprietaireSchema.extend({
 });
 export type CreerUtilisateurFormValues = z.infer<typeof creerUtilisateurSchema>;
 export type CreerUtilisateurFormInput = z.input<typeof creerUtilisateurSchema>;
+
+export const modifierUtilisateurSchema = creerUtilisateurSchema.omit({ role: true, email: true, password: true });
+export type ModifierUtilisateurFormValues = z.infer<typeof modifierUtilisateurSchema>;
+export type ModifierUtilisateurFormInput = z.input<typeof modifierUtilisateurSchema>;
 
 export const reservationPourClientSchema = z.object({
   idClient: z.coerce.number({ message: "Choisissez un client" }).int().positive("Choisissez un client"),

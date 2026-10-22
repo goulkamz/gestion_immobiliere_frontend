@@ -702,9 +702,22 @@ export interface UserAdminResponse {
   prenom: string;
   email: string;
   telephone: string | null;
+  telephone1?: string | null;
+  sexe?: Sexe | null;
+  dateNaissance?: string | null;
   role: Role;
   flagActif: boolean;
   supprime: boolean;
+}
+
+/** Modification d'un compte par l'admin (e-mail, mot de passe et rôle exclus). */
+export interface UpdateUserByAdminRequest {
+  nom?: string;
+  prenom?: string;
+  sexe?: Sexe;
+  telephone?: string;
+  telephone1?: string;
+  dateNaissance?: string;
 }
 
 export interface CreateUserByAdminRequest {

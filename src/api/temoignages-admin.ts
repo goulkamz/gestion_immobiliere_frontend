@@ -24,6 +24,8 @@ export const temoignagesAdminApi = {
   getOne: (id: number) => unwrap<TemoignageAdminResponse>(http.get(`/admin/temoignages/${id}`)),
   updateStatut: (id: number, body: UpdateStatutTemoignageRequest) =>
     unwrap<TemoignageAdminResponse>(http.patch(`/admin/temoignages/${id}/statut`, body)),
+  /** Suppression définitive (ROLE_ADMIN) : refusée par le serveur pour un témoignage publié. */
+  supprimer: (id: number) => unwrap<null>(http.delete(`/admin/temoignages/${id}`)),
   create: (body: CreateTemoignageAdminRequest) =>
     unwrap<TemoignageAdminResponse>(http.post("/admin/temoignages", body)),
 };

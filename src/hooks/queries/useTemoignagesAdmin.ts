@@ -26,6 +26,17 @@ export function useUpdateStatutTemoignageMutation() {
   });
 }
 
+export function useSupprimerTemoignageMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => temoignagesAdminApi.supprimer(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["temoignages-admin"] });
+      queryClient.invalidateQueries({ queryKey: temoignageQueryKeys.list });
+    },
+  });
+}
+
 export function useCreateAdminTemoignageMutation() {
   const queryClient = useQueryClient();
   return useMutation({

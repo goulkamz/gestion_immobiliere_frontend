@@ -6,10 +6,10 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { AlertTriangle, CheckCircle2, Eye, Plus, Star, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Eye, Plus, Star, Trash2, XCircle } from "lucide-react";
 import { ActionGroup, Button, DataTable, EmptyState, Input, Modal, PageHeader, Pagination, Select, StatutBadge, Textarea } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
-import { useAdminTemoignagesQuery, useCreateAdminTemoignageMutation, useUpdateStatutTemoignageMutation } from "@/hooks/queries/useTemoignagesAdmin";
+import { useAdminTemoignagesQuery, useCreateAdminTemoignageMutation, useSupprimerTemoignageMutation, useUpdateStatutTemoignageMutation } from "@/hooks/queries/useTemoignagesAdmin";
 import { temoignageAdminCreateSchema, type TemoignageAdminCreateFormInput, type TemoignageAdminCreateFormValues } from "../schemas";
 import { useSessionStore, selectRole } from "@/store/sessionStore";
 import { statutLabel } from "@/utils/statut";
@@ -29,11 +29,13 @@ export function AgentTemoignagesPage() {
   const [page, setPage] = useState(0);
   const [viewing, setViewing] = useState<TemoignageAdminResponse | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
+  const [aSupprimer, setASupprimer] = useState<TemoignageAdminResponse | null>(null);
 
   const temoignagesQuery = useAdminTemoignagesQuery({ page, size: 20, statut: statutFilter || undefined });
   const compteurs = useCompteursStatut(useAdminTemoignagesQuery, {}, ["EN_ATTENTE", "PUBLIE", "RETIRE"] as const);
   const statutMutation = useUpdateStatutTemoignageMutation();
   const createMutation = useCreateAdminTemoignageMutation();
+  const supprimerMutation = useSupprimerTemoignageMutation();
 
   const createForm = useForm<TemoignageAdminCreateFormInput, unknown, TemoignageAdminCreateFormValues>({
     resolver: zodResolver(temoignageAdminCreateSchema),
@@ -55,6 +57,18 @@ export function AgentTemoignagesPage() {
       setViewing((v) => (v && v.idTemoignage === t.idTemoignage ? { ...v, statut } : v));
     } catch (err) {
       toast.error(err instanceof ApiError ? err.message : "Changement de statut impossible.");
+    }
+  }
+
+  async function onSupprimer() {
+    if (!aSupprimer) return;
+    try {
+      await supprimerMutation.mutateAsync(aSupprimer.idTemoignage);
+      toast.success("Témoignage supprimé définitivement.");
+      setASupprimer(null);
+      setViewing((v) => (v && v.idTemoignage === aSupprimer.idTemoignage ? null : v));
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : "Suppression impossible.");
     }
   }
 
@@ -110,6 +124,15 @@ export function AgentTemoignagesPage() {
             text: "Retirer",
             icon: <XCircle size={15} aria-hidden="true" />,
             onClick: () => handleChangeStatut(t, "RETIRE"),
+          });
+        }
+        if (isAdmin && t.statut !== "PUBLIE") {
+          items.push({
+            label: "Supprimer définitivement",
+            text: "Supprimer",
+            icon: <Trash2 size={15} aria-hidden="true" />,
+            tone: "danger",
+            onClick: () => setASupprimer(t),
           });
         }
         return <ActionGroup items={items} />;
@@ -223,6 +246,27 @@ export function AgentTemoignagesPage() {
               </div>
             )}
           </div>
+        )}
+      </Modal>
+
+      <Modal isOpen={aSupprimer !== null} onClose={() => setASupprimer(null)} title="Supprimer ce témoignage ?" titleTone="indigo">
+        {aSupprimer && (
+          <>
+            <div className="flex items-start gap-2 rounded-lg bg-danger-50 p-3 text-sm text-danger-700">
+              <AlertTriangle size={16} className="mt-0.5 shrink-0" aria-hidden="true" />
+              <p>
+                Le témoignage de <strong>{aSupprimer.nomAuteur}</strong> sera supprimé définitivement. Cette action est irréversible.
+              </p>
+            </div>
+            <div className="mt-4 flex gap-2">
+              <Button variant="secondary" className="flex-1" onClick={() => setASupprimer(null)}>
+                Annuler
+              </Button>
+              <Button variant="danger" className="flex-1" loading={supprimerMutation.isPending} onClick={onSupprimer}>
+                Supprimer
+              </Button>
+            </div>
+          </>
         )}
       </Modal>
 

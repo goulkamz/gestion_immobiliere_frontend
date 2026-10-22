@@ -23,7 +23,7 @@ import {
 } from "@/hooks/queries/useContratsMandat";
 import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { documentsApi } from "@/api/documents";
-import { useSessionStore } from "@/store/sessionStore";
+import { useSessionStore, selectRole } from "@/store/sessionStore";
 import {
   mandatCreateSchema,
   mandatEditSchema,
@@ -47,6 +47,9 @@ const STATUTS: StatutMandat[] = ["EN_ATTENTE", "ACTIF", "RESILIE", "EXPIRE"];
 const MODIFIABLE: StatutMandat[] = ["EN_ATTENTE", "ACTIF"];
 
 export function AgentMandatsPage() {
+  // Créer, modifier, activer et résilier un mandat est réservé aux agents : l'agent du mandat est celui qui agit,
+  // un admin qui le ferait en deviendrait l'agent en charge. L'admin consulte seulement.
+  const peutGererMandats = useSessionStore(selectRole) !== "ROLE_ADMIN";
   const [detailCour, setDetailCour] = useState<number | null>(null);
   const [search, setSearch] = useState("");
   const [statutFilter, setStatutFilter] = useState<StatutMandat | "">("");
@@ -294,16 +297,16 @@ export function AgentMandatsPage() {
       align: "right",
       render: (m) => {
         const items: ActionGroupItem[] = [];
-        if (MODIFIABLE.includes(m.statut)) {
+        if (peutGererMandats && MODIFIABLE.includes(m.statut)) {
           items.push({ label: "Modifier", text: "Modifier", icon: <Edit2 size={15} aria-hidden="true" />, onClick: () => openEdit(m) });
         }
-        if (m.statut === "EN_ATTENTE") {
+        if (peutGererMandats && m.statut === "EN_ATTENTE") {
           items.push({ label: "Activer", text: "Activer", icon: <CheckCircle2 size={15} aria-hidden="true" />, onClick: () => setActivating(m) });
         }
         if (m.statut !== "EN_ATTENTE") {
           items.push({ label: "Avenants du mandat", text: "Avenants", icon: <FilePen size={15} aria-hidden="true" />, onClick: () => setAvenantsMandat(m) });
         }
-        if (m.statut === "ACTIF") {
+        if (peutGererMandats && m.statut === "ACTIF") {
           items.push({ label: "Résilier", text: "Résilier", icon: <XCircle size={15} aria-hidden="true" />, tone: "danger", onClick: () => openResilier(m) });
         }
         return <ActionGroup items={[{ label: "Voir le détail", text: "Détails", icon: <Eye size={15} aria-hidden="true" />, onClick: () => setDetailCour(m.idCour) }, ...items]} />;
@@ -317,18 +320,24 @@ export function AgentMandatsPage() {
       <PageHeader
         tone="indigo"
         title="Mandats"
-        description="Les mandats de gestion confiés à l'agence."
+        description={
+          peutGererMandats
+            ? "Les mandats de gestion confiés à l'agence."
+            : "Les mandats de gestion confiés à l'agence, en consultation : ils sont créés et gérés par les agents."
+        }
         actions={
-          <Button
-            variant="accent"
-            icon={<Plus size={16} />}
-            onClick={() => {
-              createForm.reset({});
-              setCreateOpen(true);
-            }}
-          >
-            Nouveau mandat
-          </Button>
+          peutGererMandats && (
+            <Button
+              variant="accent"
+              icon={<Plus size={16} />}
+              onClick={() => {
+                createForm.reset({});
+                setCreateOpen(true);
+              }}
+            >
+              Nouveau mandat
+            </Button>
+          )
         }
       />
 

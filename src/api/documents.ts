@@ -1,5 +1,6 @@
 import type { AxiosResponse } from "axios";
 import { http } from "./http";
+import type { ApiSuccessResponse } from "./types";
 
 /**
  * Documents PDF (§12) : réponse binaire brute (`application/pdf`), sans
@@ -27,6 +28,16 @@ export const documentsApi = {
 
   etatDesLieux: (idContrat: number, phase: "entree" | "sortie"): Promise<AxiosResponse<Blob>> =>
     http.get(`/documents/etats-des-lieux/${idContrat}/${phase}`, { responseType: "blob" }),
+
+  /** `periode` : AAAA-MM-JJ, seul le mois compte. Mois en cours = rapport provisoire (jamais enregistré). ROLE_ADMIN. */
+  rapportMensuel: (periode: string): Promise<AxiosResponse<Blob>> =>
+    http.get("/documents/rapports-mensuels", { params: { periode }, responseType: "blob" }),
+
+  /** Premier mois d'activité (AAAA-MM-01) : au-delà vers le passé, un rapport serait vide et figé. ROLE_ADMIN. */
+  premierMoisRapport: async (): Promise<string> => {
+    const { data } = await http.get<ApiSuccessResponse<{ premierMois: string }>>("/documents/rapports-mensuels/premier-mois");
+    return (data.data as { premierMois: string }).premierMois;
+  },
 
   avenant: (idAvenant: number): Promise<AxiosResponse<Blob>> =>
     http.get(`/documents/avenants/${idAvenant}`, { responseType: "blob" }),

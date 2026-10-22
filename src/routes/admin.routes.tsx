@@ -1,34 +1,30 @@
 import { lazy } from "react";
 import { Route } from "react-router-dom";
-import { Construction } from "lucide-react";
-import { EmptyState, PageHeader } from "@/components/ui";
 import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 
-// Pages déjà construites dans l'espace agent, réutilisées telles quelles (elles gèrent le rôle admin)
 const AdminDashboardPage = lazy(() =>
   import("@/modules/admin/pages/AdminDashboardPage").then((m) => ({ default: m.AdminDashboardPage })),
 );
+const AdminLocalisationPage = lazy(() =>
+  import("@/modules/admin/pages/AdminLocalisationPage").then((m) => ({ default: m.AdminLocalisationPage })),
+);
+const AdminParametresPage = lazy(() =>
+  import("@/modules/admin/pages/AdminParametresPage").then((m) => ({ default: m.AdminParametresPage })),
+);
+const AdminJournalPage = lazy(() =>
+  import("@/modules/admin/pages/AdminJournalPage").then((m) => ({ default: m.AdminJournalPage })),
+);
+const AdminRapportsPage = lazy(() =>
+  import("@/modules/admin/pages/AdminRapportsPage").then((m) => ({ default: m.AdminRapportsPage })),
+);
+// Pages de l'espace agent réutilisées telles quelles (elles gèrent le rôle admin)
 const AgentUtilisateursPage = lazy(() =>
   import("@/modules/agent/pages/AgentUtilisateursPage").then((m) => ({ default: m.AgentUtilisateursPage })),
 );
 const AgentTemoignagesPage = lazy(() =>
   import("@/modules/agent/pages/AgentTemoignagesPage").then((m) => ({ default: m.AgentTemoignagesPage })),
 );
-
-/** Page à venir dans une prochaine tranche de l'espace admin. */
-function Bientot({ title }: { title: string }) {
-  return (
-    <div>
-      <PageHeader tone="indigo" title={title} />
-      <EmptyState
-        icon={<Construction size={36} />}
-        title="Section en cours de construction"
-        description="Cette page arrive dans une prochaine étape de l'espace admin."
-      />
-    </div>
-  );
-}
 
 export const adminRoutes = (
   <Route
@@ -42,9 +38,9 @@ export const adminRoutes = (
     <Route index element={<AdminDashboardPage />} />
     <Route path="utilisateurs" element={<AgentUtilisateursPage />} />
     <Route path="temoignages" element={<AgentTemoignagesPage />} />
-    <Route path="localisation" element={<Bientot title="Localisation" />} />
-    <Route path="parametres" element={<Bientot title="Paramètres" />} />
-    <Route path="journal" element={<Bientot title="Journal d'audit" />} />
-    <Route path="rapports" element={<Bientot title="Rapports mensuels" />} />
+    <Route path="localisation" element={<AdminLocalisationPage />} />
+    <Route path="parametres" element={<AdminParametresPage />} />
+    <Route path="journal" element={<AdminJournalPage />} />
+    <Route path="rapports" element={<AdminRapportsPage />} />
   </Route>
 );

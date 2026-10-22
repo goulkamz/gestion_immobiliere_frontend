@@ -1,8 +1,14 @@
 import { useId, useRef } from "react";
-import { ImagePlus, Star, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImagePlus, Star, Trash2 } from "lucide-react";
 import { toast } from "react-toastify";
 import { PHOTO_MAX_COUNT } from "./PhotoPicker";
-import { useAddMediasMutation, useAgenceMediasQuery, useDeleteMediaMutation, useSetPrincipalMediaMutation } from "@/hooks/queries/useMedias";
+import {
+  useAddMediasMutation,
+  useAgenceMediasQuery,
+  useDeleteMediaMutation,
+  useReorderMediasMutation,
+  useSetPrincipalMediaMutation,
+} from "@/hooks/queries/useMedias";
 import { ApiError } from "@/api/http";
 import type { TypeEntiteMedia } from "@/api/types";
 
@@ -15,7 +21,10 @@ interface PhotoManagerProps {
 const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const PHOTO_MAX_MO = 5;
 
-/** Gestion des photos d'une entité existante : ajout, suppression, choix de la photo principale (effet immédiat). */
+/**
+ * Gestion des photos d'une entité existante : ajout, suppression, choix de la photo principale et ordre
+ * d'affichage (effet immédiat). La principale reste toujours en tête : on réordonne les autres photos.
+ */
 export function PhotoManager({ entiteType, entiteId, label = "Photos" }: PhotoManagerProps) {
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -23,10 +32,19 @@ export function PhotoManager({ entiteType, entiteId, label = "Photos" }: PhotoMa
   const addMutation = useAddMediasMutation();
   const deleteMutation = useDeleteMediaMutation();
   const principalMutation = useSetPrincipalMediaMutation();
-  const busy = addMutation.isPending || deleteMutation.isPending || principalMutation.isPending;
+  const reorderMutation = useReorderMediasMutation();
+  const busy = addMutation.isPending || deleteMutation.isPending || principalMutation.isPending || reorderMutation.isPending;
 
   function fail(err: unknown, fallback: string) {
     toast.error(err instanceof ApiError ? err.message : fallback);
+  }
+
+  /** Échange la photo `index` avec sa voisine (`sens` -1 = vers le début, +1 = vers la fin). */
+  function deplacer(index: number, sens: -1 | 1) {
+    const ids = medias.map((m) => m.idMedia);
+    const cible = index + sens;
+    [ids[index], ids[cible]] = [ids[cible]!, ids[index]!];
+    reorderMutation.mutate(ids, { onError: (err) => fail(err, "Changement d'ordre impossible.") });
   }
 
   async function handleSelect(list: FileList | null) {
@@ -59,6 +77,29 @@ export function PhotoManager({ entiteType, entiteId, label = "Photos" }: PhotoMa
           <div key={m.idMedia} className="relative h-16 w-20 overflow-hidden rounded-lg border border-slate-200">
             <img src={m.urlThumbnail ?? m.url} alt={`Photo ${i + 1}`} className="h-full w-full object-cover" />
             {m.isPrincipal && <span className="absolute inset-x-0 bottom-0 bg-primary-700/80 text-center text-[10px] font-medium text-white">Principale</span>}
+            {/* Position 0 = principale, fixe ; la 1re des autres ne peut pas passer devant elle */}
+            {!m.isPrincipal && i > 1 && (
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => deplacer(i, -1)}
+                aria-label={`Déplacer la photo ${i + 1} vers le début`}
+                className="absolute bottom-0.5 left-0.5 rounded-full bg-slate-900/60 p-0.5 text-white hover:bg-primary-600 disabled:opacity-50"
+              >
+                <ChevronLeft size={12} />
+              </button>
+            )}
+            {!m.isPrincipal && i < medias.length - 1 && (
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() => deplacer(i, 1)}
+                aria-label={`Déplacer la photo ${i + 1} vers la fin`}
+                className="absolute bottom-0.5 right-0.5 rounded-full bg-slate-900/60 p-0.5 text-white hover:bg-primary-600 disabled:opacity-50"
+              >
+                <ChevronRight size={12} />
+              </button>
+            )}
             <button
               type="button"
               disabled={busy}

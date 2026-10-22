@@ -63,6 +63,9 @@ export const mediasApi = {
 
   setPrincipal: (idMedia: number) => unwrap<unknown>(http.patch(`/medias/${idMedia}/principal`)),
 
+  /** Nouvel ordre d'affichage d'une entité : les ids de TOUS ses médias, dans l'ordre voulu. */
+  reorder: (idsMediaOrdonnes: number[]) => unwrap<null>(http.patch("/medias/reorder", { idsMediaOrdonnes })),
+
   /** Jusqu'à 10 fichiers par envoi ; le premier devient la photo principale. */
   uploadMultiple: (entiteType: TypeEntiteMedia, entiteId: number, fichiers: File[], principal = true) => {
     const form = new FormData();

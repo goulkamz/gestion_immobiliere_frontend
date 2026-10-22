@@ -28,6 +28,11 @@ export function useSetPrincipalMediaMutation() {
   return useMutation({ mutationFn: (idMedia: number) => mediasApi.setPrincipal(idMedia), onSuccess: invalidate });
 }
 
+export function useReorderMediasMutation() {
+  const invalidate = useInvalidateMedias();
+  return useMutation({ mutationFn: (idsMediaOrdonnes: number[]) => mediasApi.reorder(idsMediaOrdonnes), onSuccess: invalidate });
+}
+
 export function useAddMediasMutation() {
   const invalidate = useInvalidateMedias();
   return useMutation({

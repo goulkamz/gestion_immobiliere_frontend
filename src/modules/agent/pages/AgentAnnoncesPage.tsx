@@ -13,6 +13,7 @@ import {
   Megaphone,
   Plus,
   Settings2,
+  Trash2,
 } from "lucide-react";
 import {
   ActionGroup,
@@ -37,6 +38,7 @@ import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
 import { useAnnoncesQuery } from "@/hooks/queries/usePublicCatalog";
 import {
   useCreateAnnonceMutation,
+  useDeleteAnnonceMutation,
   useUpdateAnnonceMutation,
   useUpdateStatutAnnonceMutation,
 } from "@/hooks/queries/useAnnoncesAgent";
@@ -48,12 +50,16 @@ import {
 import { statutLabel } from "@/utils/statut";
 import { formatDate, formatMontant } from "@/utils/format";
 import { useAttachPhotos } from "@/hooks/queries/useMedias";
+import { useSessionStore, selectRole } from "@/store/sessionStore";
 import { ApiError } from "@/api/http";
 import type { AnnonceResponse, StatutAnnonce } from "@/api/types";
 
 const STATUTS: StatutAnnonce[] = ["ACTIVE", "SUSPENDUE", "EXPIREE"];
 
 export function AgentAnnoncesPage() {
+  // La suppression d'une annonce est réservée à l'admin (règle du serveur)
+  const isAdmin = useSessionStore(selectRole) === "ROLE_ADMIN";
+  const [deleting, setDeleting] = useState<AnnonceResponse | null>(null);
   const [detail, setDetail] = useState<AnnonceResponse | null>(null);
   const { search, setSearch, recherche, page, setPage } = useRechercheServeur();
   const [statutFilter, setStatutFilter] = useState<StatutAnnonce | "">("");
@@ -79,6 +85,7 @@ export function AgentAnnoncesPage() {
   const { attach: attachPhotos, isPending: photosPending } = useAttachPhotos();
   const updateMutation = useUpdateAnnonceMutation();
   const statutMutation = useUpdateStatutAnnonceMutation();
+  const deleteMutation = useDeleteAnnonceMutation();
 
   const [publierImmediatement, setPublierImmediatement] = useState(true);
   const createForm = useForm<AnnonceFormInput, unknown, AnnonceFormValues>({
@@ -160,6 +167,17 @@ export function AgentAnnoncesPage() {
   function openStatut(annonce: AnnonceResponse) {
     setChangingStatut(annonce);
     setNouveauStatut("");
+  }
+
+  async function handleDelete() {
+    if (!deleting) return;
+    try {
+      await deleteMutation.mutateAsync(deleting.idAnnonce);
+      toast.success("Annonce supprimée.");
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : "Suppression impossible.");
+    }
+    setDeleting(null);
   }
 
   async function handleChangeStatut() {
@@ -246,6 +264,17 @@ export function AgentAnnoncesPage() {
             icon: <Settings2 size={15} aria-hidden="true" />,
             onClick: () => openStatut(a),
           },
+          ...(isAdmin
+            ? [
+                {
+                  label: "Supprimer",
+                  text: "Supprimer",
+                  icon: <Trash2 size={15} aria-hidden="true" />,
+                  tone: "danger" as const,
+                  onClick: () => setDeleting(a),
+                },
+              ]
+            : []),
         ];
         return <ActionGroup items={items} />;
       },
@@ -473,6 +502,30 @@ export function AgentAnnoncesPage() {
             Enregistrer
           </Button>
         </form>
+      </Modal>
+
+      <Modal
+        isOpen={deleting !== null}
+        onClose={() => setDeleting(null)}
+        title="Supprimer cette annonce ?"
+        titleTone="indigo"
+      >
+        {deleting && (
+          <>
+            <p className="text-sm text-slate-600">
+              Vous êtes sur le point de supprimer <strong>{deleting.titre}</strong>. Elle disparaît du site et de cette liste.
+              Pour la retirer du site sans la perdre, passez plutôt son statut à « Suspendue ».
+            </p>
+            <div className="mt-4 flex gap-2">
+              <Button variant="secondary" className="flex-1" onClick={() => setDeleting(null)}>
+                Annuler
+              </Button>
+              <Button variant="danger" className="flex-1" loading={deleteMutation.isPending} onClick={handleDelete}>
+                Supprimer
+              </Button>
+            </div>
+          </>
+        )}
       </Modal>
 
       <Modal

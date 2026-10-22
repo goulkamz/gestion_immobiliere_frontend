@@ -23,6 +23,14 @@ export function useUpdateAnnonceMutation() {
   });
 }
 
+export function useDeleteAnnonceMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => annoncesApi.remove(id),
+    onSuccess: () => invalidateAnnonces(queryClient),
+  });
+}
+
 export function useUpdateStatutAnnonceMutation() {
   const queryClient = useQueryClient();
   return useMutation({

@@ -7,6 +7,8 @@ interface StatCardProps {
   value: string | number;
   icon?: ReactNode;
   tone?: StatCardTone;
+  /** Précision sous le libellé (date, nombre de maisons...), qui passe à la ligne au lieu d'être coupée. */
+  detail?: string;
   /** Carte resserrée pour les rangées de 4 ou 5 : marges et pastille réduites, libellé qui passe à la ligne au lieu d'être coupé. */
   compact?: boolean;
 }
@@ -20,7 +22,7 @@ const TONE_CLASSES: Record<StatCardTone, string> = {
 };
 
 /** Carte statistique façon tableau de bord : badge d'icône circulaire plein, valeur en avant, libellé discret en dessous. */
-export function StatCard({ label, value, icon, tone = "primary", compact = false }: StatCardProps) {
+export function StatCard({ label, value, icon, tone = "primary", detail, compact = false }: StatCardProps) {
   return (
     <div className={`flex items-center rounded-2xl border border-primary-100/60 bg-white shadow-sm ${compact ? "gap-3 p-4" : "gap-4 p-5"}`}>
       {icon && (
@@ -31,8 +33,9 @@ export function StatCard({ label, value, icon, tone = "primary", compact = false
         </span>
       )}
       <div className="min-w-0">
-        <p className="font-heading text-2xl font-bold text-slate-900">{value}</p>
+        <p className={`font-heading font-bold text-slate-900 ${String(value).length > 10 ? "text-xl" : "text-2xl"}`}>{value}</p>
         <p className={`text-xs text-slate-500 ${compact ? "leading-tight" : "truncate"}`}>{label}</p>
+        {detail && <p className="text-xs font-medium text-accent-700">{detail}</p>}
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ import { useSessionStore } from "@/store/sessionStore";
 import { useBailleurPatrimoineQuery, useBailleurRevenusQuery } from "@/hooks/queries/useStatsBailleur";
 import { formatMontant, formatMonth } from "@/utils/format";
 import { statutLabel } from "@/utils/statut";
+import { montantCompact } from "@/modules/admin/dashboard/helpers";
 
 const dateHeaderFormatter = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 
@@ -91,7 +92,7 @@ export function BailleurDashboardPage() {
                       <BarChart data={revenusChartData} barGap={6}>
                         <CartesianGrid vertical={false} stroke="var(--color-primary-100)" />
                         <XAxis dataKey="periode" tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "#64748b" }} />
-                        <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "#64748b" }} width={40} />
+                        <YAxis tickFormatter={montantCompact} tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "#64748b" }} width={48} />
                         <Tooltip
                           cursor={{ fill: "var(--color-primary-50)" }}
                           formatter={(value) => formatMontant(typeof value === "number" ? value : Number(value))}

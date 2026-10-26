@@ -17,8 +17,9 @@ import { Card, StatCard, LoadingSpinner } from "@/components/ui";
 import { useSessionStore } from "@/store/sessionStore";
 import { useReservationsQuery } from "@/hooks/queries/useReservations";
 import { useClientEcheancesStatsQuery, useClientRemboursementsStatsQuery } from "@/hooks/queries/useStatsClient";
-import { formatMontant } from "@/utils/format";
+import { formatDate, formatMontant } from "@/utils/format";
 import { statutLabel } from "@/utils/statut";
+import { montantCompact } from "@/modules/admin/dashboard/helpers";
 
 const dateHeaderFormatter = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long" });
 
@@ -38,18 +39,38 @@ export function ClientDashboardPage() {
 
   const reservationsEnAttente = reservationsQuery.data?.content.filter((r) => r.statut === "EN_ATTENTE").length ?? 0;
   const echeancesEnRetard = echeancesQuery.data?.filter((e) => e.statut === "EN_RETARD").length ?? 0;
-  const prochaineEcheance = echeancesQuery.data
-    ?.filter((e) => e.statut !== "PAYE")
-    .sort((a, b) => a.dateEcheance.localeCompare(b.dateEcheance))[0];
+  // Avec plusieurs locations, plusieurs échéances tombent le même jour : on additionne ce qui reste à payer ce jour-là
+  const prochaineEcheance = useMemo(() => {
+    const impayees = (echeancesQuery.data ?? [])
+      .filter((e) => e.statut !== "PAYE")
+      .sort((a, b) => a.dateEcheance.localeCompare(b.dateEcheance));
+    const premiere = impayees[0];
+    if (!premiere) return null;
+    const date = premiere.dateEcheance;
+    const duJour = impayees.filter((e) => e.dateEcheance === date);
+    return {
+      date,
+      reste: duJour.reduce((somme, e) => somme + (e.montantDu - e.montantPaye), 0),
+      nbMaisons: new Set(duJour.map((e) => e.nomCommunMaison ?? e.idEcheance)).size,
+    };
+  }, [echeancesQuery.data]);
   const totalRembourse = remboursementsQuery.data?.reduce((sum, r) => sum + r.montant, 0) ?? 0;
 
   const echeancesChartData = useMemo(() => {
+    // Une barre par période : les échéances de toutes les maisons du même mois sont additionnées
+    const parPeriode = new Map<string, { periode: string; "Dû": number; "Payé": number }>();
     const list = [...(echeancesQuery.data ?? [])].sort((a, b) => a.dateEcheance.localeCompare(b.dateEcheance));
-    return list.slice(-6).map((e) => ({
-      periode: e.moisLibelle ?? new Date(e.dateEcheance).toLocaleDateString("fr-FR", { month: "short" }),
-      "Dû": e.montantDu,
-      "Payé": e.montantPaye,
-    }));
+    for (const e of list) {
+      const ligne = parPeriode.get(e.dateEcheance) ?? {
+        periode: e.moisLibelle ?? new Date(e.dateEcheance).toLocaleDateString("fr-FR", { month: "short" }),
+        "Dû": 0,
+        "Payé": 0,
+      };
+      ligne["Dû"] += e.montantDu;
+      ligne["Payé"] += e.montantPaye;
+      parPeriode.set(e.dateEcheance, ligne);
+    }
+    return Array.from(parPeriode.values()).slice(-6);
   }, [echeancesQuery.data]);
 
   const repartitionChartData = useMemo(() => {
@@ -89,7 +110,12 @@ export function ClientDashboardPage() {
             />
             <StatCard
               label="Prochaine échéance"
-              value={prochaineEcheance ? formatMontant(prochaineEcheance.montantDu - prochaineEcheance.montantPaye) : "-"}
+              detail={
+                prochaineEcheance
+                  ? `${formatDate(prochaineEcheance.date)}${prochaineEcheance.nbMaisons > 1 ? `, ${prochaineEcheance.nbMaisons} maisons` : ""}`
+                  : undefined
+              }
+              value={prochaineEcheance ? formatMontant(prochaineEcheance.reste) : "-"}
               icon={<Clock size={20} />}
               tone="accent"
             />
@@ -105,7 +131,7 @@ export function ClientDashboardPage() {
                     <BarChart data={echeancesChartData} barGap={6}>
                       <CartesianGrid vertical={false} stroke="var(--color-primary-100)" />
                       <XAxis dataKey="periode" tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "#64748b" }} />
-                      <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "#64748b" }} width={40} />
+                      <YAxis tickFormatter={montantCompact} tickLine={false} axisLine={false} tick={{ fontSize: 12, fill: "#64748b" }} width={48} />
                       <Tooltip
                         cursor={{ fill: "var(--color-primary-50)" }}
                         formatter={(value) => formatMontant(typeof value === "number" ? value : Number(value))}

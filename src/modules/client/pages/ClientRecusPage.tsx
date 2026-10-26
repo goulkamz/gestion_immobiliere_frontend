@@ -35,12 +35,17 @@ export function ClientRecusPage() {
   }, [locationsQuery.data]);
 
   const term = search.trim().toLowerCase();
-  const filteredEcheances = term ? echeancesPayees.filter((e) => (e.moisLibelle ?? "").toLowerCase().includes(term)) : echeancesPayees;
+  const filteredEcheances = term
+    ? echeancesPayees.filter(
+        (e) => (e.moisLibelle ?? "").toLowerCase().includes(term) || (e.nomCommunMaison ?? "").toLowerCase().includes(term),
+      )
+    : echeancesPayees;
   const filteredPaiements = term
     ? paiementsLocations.filter((p) => p.idPaiement === cibleId || p.libelleBienService.toLowerCase().includes(term))
     : paiementsLocations;
 
   const echeancesColumns: DataTableColumn<ClientEcheanceDTO>[] = [
+    { key: "maison", header: "Maison", render: (e) => e.nomCommunMaison ?? "-" },
     {
       key: "periode",
       header: "Période",
@@ -61,7 +66,7 @@ export function ClientRecusPage() {
       render: (e) => {
         const key = `quittance-${e.idEcheance}`;
         const fetcher = () => documentsApi.quittance(e.idEcheance);
-        const title = `Quittance - ${e.moisLibelle ?? formatDate(e.dateEcheance)}`;
+        const title = `Quittance - ${e.nomCommunMaison ? `${e.nomCommunMaison}, ` : ""}${e.moisLibelle ?? formatDate(e.dateEcheance)}`;
         return (
           <div className="inline-flex items-center gap-0.5 rounded-lg border border-primary-100 bg-primary-50/60 p-0.5">
             <button
@@ -184,7 +189,7 @@ export function ClientRecusPage() {
             <SearchInput
               value={search}
               onChange={setSearch}
-              placeholder={tab === "loyer" ? "Rechercher une période…" : "Rechercher un bien ou service…"}
+              placeholder={tab === "loyer" ? "Rechercher une maison ou une période…" : "Rechercher un bien ou service…"}
               ariaLabel="Rechercher parmi mes reçus"
               className="sm:w-64"
             />

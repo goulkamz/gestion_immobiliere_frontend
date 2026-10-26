@@ -546,6 +546,7 @@ export interface ClientLocationDTO {
 export interface ClientEcheanceDTO {
   idEcheance: number;
   moisLibelle: string | null;
+  nomCommunMaison: string | null;
   dateEcheance: string;
   montantDu: number;
   montantPaye: number;

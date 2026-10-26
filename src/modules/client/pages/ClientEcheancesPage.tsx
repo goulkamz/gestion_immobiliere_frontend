@@ -33,7 +33,10 @@ export function ClientEcheancesPage() {
     const term = search.trim().toLowerCase();
     if (!term) return list;
     return list.filter(
-      (e) => e.idEcheance === cibleId || (e.moisLibelle ?? "").toLowerCase().includes(term),
+      (e) =>
+        e.idEcheance === cibleId ||
+        (e.moisLibelle ?? "").toLowerCase().includes(term) ||
+        (e.nomCommunMaison ?? "").toLowerCase().includes(term),
     );
   }, [echeancesQuery.data, search, cibleId]);
 
@@ -42,6 +45,11 @@ export function ClientEcheancesPage() {
   );
 
   const columns: DataTableColumn<ClientEcheanceDTO>[] = [
+    {
+      key: "maison",
+      header: "Maison",
+      render: (e) => e.nomCommunMaison ?? "-",
+    },
     {
       key: "periode",
       header: "Période",
@@ -122,7 +130,7 @@ export function ClientEcheancesPage() {
             <SearchInput
               value={search}
               onChange={setSearch}
-              placeholder="Rechercher une période…"
+              placeholder="Rechercher une maison ou une période…"
               ariaLabel="Rechercher parmi mes échéances"
             />
           </div>

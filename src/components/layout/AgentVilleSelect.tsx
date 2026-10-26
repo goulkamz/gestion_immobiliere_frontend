@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { MapPin } from "lucide-react";
 import { Select } from "@/components/ui";
 import { useVillesQuery } from "@/hooks/queries/usePublicCatalog";
@@ -7,7 +8,15 @@ import { useAgentUiStore, type VilleChoix } from "@/store/agentUiStore";
 export function AgentVilleSelect() {
   const ville = useAgentUiStore((s) => s.ville);
   const setVille = useAgentUiStore((s) => s.setVille);
-  const villes = useVillesQuery().data?.content ?? [];
+  const villesQuery = useVillesQuery();
+  const villes = villesQuery.data?.content ?? [];
+
+  // Une ville mémorisée qui n'existe plus (base réinitialisée, ville supprimée) filtrerait toutes les listes
+  // tout en affichant « Toutes les villes » : on revient au choix par défaut.
+  useEffect(() => {
+    if (!villesQuery.data || ville === "" || ville === "autres") return;
+    if (!villes.some((v) => String(v.idVille) === ville)) setVille("");
+  }, [villesQuery.data, villes, ville, setVille]);
 
   return (
     <div className="flex items-center justify-end gap-2">

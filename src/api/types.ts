@@ -960,6 +960,10 @@ export interface FinancesPeriodeDTO {
     nombreImpayes: number;
     /** En pourcentage (0 à 100) ; 0 si rien n'est échu. */
     tauxRecouvrement: number;
+    /** Échéances de la période pas encore exigibles : montant dû, déjà payé d'avance, nombre. */
+    aVenirPeriode: number;
+    payeAvancePeriode: number;
+    nombreAVenir: number;
   };
   /** Reversements dont la date tombe dans la période (déjà échus) : combien est reversé, combien reste. */
   reversementsPeriode: {
@@ -969,6 +973,10 @@ export interface FinancesPeriodeDTO {
     nombreReversements: number;
     nombreAReverser: number;
     tauxReverse: number;
+    /** Reversements de la période pas encore exigibles : net dû, part déjà reversée, nombre. */
+    aVenirTotal: number;
+    aVenirEffectue: number;
+    nombreAVenir: number;
   };
   /** Loyers encaissés + biens et services nets. */
   volumeEncaisse: number;

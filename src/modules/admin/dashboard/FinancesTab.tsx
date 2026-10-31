@@ -221,6 +221,15 @@ export function FinancesTab({
                 <TrendBadge actuel={fin.loyersEncaisses} precedent={prec?.loyersEncaisses} comparaison={periode.comparaison} />
               </div>
             </div>
+            {lp.nombreAVenir > 0 && (
+              <div className="mt-4 rounded-xl bg-accent-50 p-3 text-sm text-accent-900 ring-1 ring-accent-200/70">
+                <p className="font-semibold">Pas encore échus dans la période</p>
+                <p className="mt-0.5">
+                  {formatMontant(lp.aVenirPeriode)} de loyers ({lp.nombreAVenir} échéance{lp.nombreAVenir > 1 ? "s" : ""}), dont{" "}
+                  <span className="font-semibold">{formatMontant(lp.payeAvancePeriode)} déjà payés d&apos;avance</span>.
+                </p>
+              </div>
+            )}
             <BandeauStocks
               items={[
                 {
@@ -274,6 +283,15 @@ export function FinancesTab({
                 <TrendBadge actuel={fin.commissionsAcquises} precedent={prec?.commissionsAcquises} comparaison={periode.comparaison} />
               </div>
             </div>
+            {rp.nombreAVenir > 0 && (
+              <div className="mt-4 rounded-xl bg-accent-50 p-3 text-sm text-accent-900 ring-1 ring-accent-200/70">
+                <p className="font-semibold">Pas encore échus dans la période</p>
+                <p className="mt-0.5">
+                  {formatMontant(rp.aVenirTotal)} à reverser aux bailleurs ({rp.nombreAVenir} reversement{rp.nombreAVenir > 1 ? "s" : ""}), dont{" "}
+                  <span className="font-semibold">{formatMontant(rp.aVenirEffectue)} déjà versés d&apos;avance</span>.
+                </p>
+              </div>
+            )}
             <BandeauStocks
               items={[
                 {

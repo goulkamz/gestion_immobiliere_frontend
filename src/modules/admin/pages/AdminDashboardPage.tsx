@@ -11,7 +11,7 @@ import { ActiviteTab } from "@/modules/admin/dashboard/ActiviteTab";
 import { FinancesTab } from "@/modules/admin/dashboard/FinancesTab";
 import { OverviewTab } from "@/modules/admin/dashboard/OverviewTab";
 import { PatrimoineTab } from "@/modules/admin/dashboard/PatrimoineTab";
-import { PERIODES, calculerPeriode } from "@/modules/admin/dashboard/periode";
+import { PERIODES, calculerMois, calculerPeriode, libelleMois, moisCourant } from "@/modules/admin/dashboard/periode";
 import type { PeriodeId } from "@/modules/admin/dashboard/periode";
 import { couleurTaux } from "@/modules/admin/dashboard/helpers";
 import { Onglets, TrendBadge } from "@/modules/admin/dashboard/widgets";
@@ -43,6 +43,7 @@ export function AdminDashboardPage() {
   const prenom = useSessionStore((s) => s.profile?.prenom);
   const [onglet, setOnglet] = useState<OngletId>("ensemble");
   const [periodeId, setPeriodeId] = useState<PeriodeId>("mois");
+  const [moisChoisi, setMoisChoisi] = useState<string>(moisCourant());
   const [nbMois, setNbMois] = useState<number>(12);
   const [actualisation, setActualisation] = useState(false);
   const queryClient = useQueryClient();
@@ -58,8 +59,12 @@ export function AdminDashboardPage() {
     }
   }
 
-  const periode = useMemo(() => calculerPeriode(periodeId), [periodeId]);
-  const libellePeriode = PERIODES.find((p) => p.id === periodeId)?.label.toLowerCase() ?? "";
+  const periode = useMemo(
+    () => (periodeId === "mois-choisi" ? calculerMois(moisChoisi) : calculerPeriode(periodeId)),
+    [periodeId, moisChoisi],
+  );
+  const libellePeriode =
+    periodeId === "mois-choisi" ? libelleMois(moisChoisi) : (PERIODES.find((p) => p.id === periodeId)?.label.toLowerCase() ?? "");
 
   const statsQuery = useAdminStatsQuery();
   const finQuery = useAdminFinancesQuery(periode.courante);
@@ -128,6 +133,15 @@ export function AdminDashboardPage() {
               </option>
             ))}
           </select>
+          {periodeId === "mois-choisi" && (
+            <input
+              type="month"
+              value={moisChoisi}
+              onChange={(e) => e.target.value && setMoisChoisi(e.target.value)}
+              className="rounded-md border border-primary-100 bg-white px-2 py-1 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-primary-300"
+              aria-label="Mois à afficher"
+            />
+          )}
         </label>
         </div>
       </div>

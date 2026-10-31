@@ -1,9 +1,10 @@
 import type { BornesPeriode } from "@/api/stats-admin";
 
-export type PeriodeId = "mois" | "trimestre" | "annee" | "tout";
+export type PeriodeId = "mois" | "mois-choisi" | "trimestre" | "annee" | "tout";
 
 export const PERIODES: { id: PeriodeId; label: string }[] = [
   { id: "mois", label: "Ce mois-ci" },
+  { id: "mois-choisi", label: "Un mois précis" },
   { id: "trimestre", label: "3 derniers mois" },
   { id: "annee", label: "Cette année" },
   { id: "tout", label: "Depuis le début" },
@@ -11,6 +12,7 @@ export const PERIODES: { id: PeriodeId; label: string }[] = [
 
 const COMPARAISONS: Record<PeriodeId, string> = {
   mois: "au mois précédent",
+  "mois-choisi": "au mois précédent",
   trimestre: "aux 3 mois précédents",
   annee: "à l'année précédente",
   tout: "",
@@ -60,4 +62,23 @@ export function calculerPeriode(id: PeriodeId, ref: Date = new Date()): PeriodeC
     default:
       return { courante: {}, precedente: null, comparaison: "" };
   }
+}
+
+/** Mois courant au format de l'entrée de type « month » (aaaa-mm). */
+export function moisCourant(ref: Date = new Date()): string {
+  return `${ref.getFullYear()}-${String(ref.getMonth() + 1).padStart(2, "0")}`;
+}
+
+/** Période d'un mois choisi (aaaa-mm), comparée au mois qui le précède. Un mois invalide donne le mois courant. */
+export function calculerMois(aaaaMm: string): PeriodeCalculee {
+  const [a, m] = aaaaMm.split("-").map(Number);
+  const ref = a && m ? new Date(a, m - 1, 1) : new Date();
+  return calculerPeriode("mois", ref);
+}
+
+/** Libellé « novembre 2026 » d'un mois aaaa-mm. */
+export function libelleMois(aaaaMm: string): string {
+  const [a, m] = aaaaMm.split("-").map(Number);
+  if (!a || !m) return "";
+  return new Date(a, m - 1, 1).toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
 }

@@ -964,6 +964,10 @@ export interface FinancesPeriodeDTO {
     aVenirPeriode: number;
     payeAvancePeriode: number;
     nombreAVenir: number;
+    /** Argent reçu avant le début de la période pour des loyers de la période, avec les dates (aaaa-mm-jj) du premier et du dernier paiement. */
+    payeAvantPeriode: number;
+    premierPaiementAvance: string | null;
+    dernierPaiementAvance: string | null;
   };
   /** Reversements dont la date tombe dans la période (déjà échus) : combien est reversé, combien reste. */
   reversementsPeriode: {

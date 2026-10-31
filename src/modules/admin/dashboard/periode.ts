@@ -82,3 +82,16 @@ export function libelleMois(aaaaMm: string): string {
   if (!a || !m) return "";
   return new Date(a, m - 1, 1).toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
 }
+
+/**
+ * « payés d'avance en octobre 2026 » ou « payés d'avance entre septembre et octobre 2026 » : le mois vient des dates
+ * réelles des paiements, jamais d'un mois écrit en dur.
+ */
+export function libelleAvance(premier: string | null, dernier: string | null): string {
+  if (!premier || !dernier) return "payés d'avance";
+  const mois = (iso: string) => new Date(`${iso}T00:00:00`).toLocaleDateString("fr-FR", { month: "long" });
+  const annee = (iso: string) => iso.slice(0, 4);
+  if (premier.slice(0, 7) === dernier.slice(0, 7)) return `payés d'avance en ${mois(premier)} ${annee(premier)}`;
+  if (annee(premier) === annee(dernier)) return `payés d'avance entre ${mois(premier)} et ${mois(dernier)} ${annee(dernier)}`;
+  return `payés d'avance entre ${mois(premier)} ${annee(premier)} et ${mois(dernier)} ${annee(dernier)}`;
+}

@@ -11,7 +11,7 @@ import { ActiviteTab } from "@/modules/admin/dashboard/ActiviteTab";
 import { FinancesTab } from "@/modules/admin/dashboard/FinancesTab";
 import { OverviewTab } from "@/modules/admin/dashboard/OverviewTab";
 import { PatrimoineTab } from "@/modules/admin/dashboard/PatrimoineTab";
-import { PERIODES, calculerMois, calculerPeriode, libelleMois, moisCourant } from "@/modules/admin/dashboard/periode";
+import { PERIODES, calculerMois, calculerPeriode, libelleAvance, libelleMois, moisCourant } from "@/modules/admin/dashboard/periode";
 import type { PeriodeId } from "@/modules/admin/dashboard/periode";
 import { couleurTaux } from "@/modules/admin/dashboard/helpers";
 import { Onglets, TrendBadge } from "@/modules/admin/dashboard/widgets";
@@ -90,6 +90,11 @@ export function AdminDashboardPage() {
             <p className="text-xs text-primary-200">Volume encaissé ({libellePeriode})</p>
             <p className="font-heading text-xl font-bold text-white">{formatMontant(fin?.volumeEncaisse ?? 0)}</p>
             <TrendBadge actuel={fin?.volumeEncaisse ?? 0} precedent={prec?.volumeEncaisse} comparaison={periode.comparaison} onDark />
+            {fin && fin.loyersPeriode.payeAvantPeriode > 0 && (
+              <p className="mt-1 text-[11px] font-medium text-accent-300">
+                + {formatMontant(fin.loyersPeriode.payeAvantPeriode)} {libelleAvance(fin.loyersPeriode.premierPaiementAvance, fin.loyersPeriode.dernierPaiementAvance)}
+              </p>
+            )}
           </div>
           <div className="rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">
             <p className="text-xs text-primary-200">Revenu de l'agence ({libellePeriode})</p>

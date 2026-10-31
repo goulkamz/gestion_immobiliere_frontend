@@ -6,6 +6,7 @@ import type { CategorieFinanceDTO } from "@/api/types";
 import type { AdminStatsDTO } from "@/api/types";
 import { useAdminBailleursCreanciersQuery, useAdminCreancesLocatairesQuery, useAdminFinancesQuery } from "@/hooks/queries/useStatsAdmin";
 import { formatDate, formatMontant } from "@/utils/format";
+import { libelleAvance } from "./periode";
 import type { PeriodeCalculee } from "./periode";
 import { BandeauStocks, BarreSegmentee, CarteGain, FriseAnciennete, Pastille, ProgressionGrande, SoftCard, TartePleine } from "./financeWidgets";
 import type { PartTarte } from "./financeWidgets";
@@ -217,7 +218,16 @@ export function FinancesTab({
               </div>
               <div className="rounded-xl bg-white/70 p-3 ring-1 ring-primary-100/60">
                 <div className="mb-1"><PorteeChip type="periode" /></div>
-                <Figure label="Argent reçu pendant la période" value={formatMontant(fin.loyersEncaisses)} tone="text-success-700" />
+                <Figure
+                  label="Argent reçu pendant la période"
+                  value={formatMontant(fin.loyersEncaisses)}
+                  tone="text-success-700"
+                  hint={
+                    lp.payeAvantPeriode > 0
+                      ? `+ ${formatMontant(lp.payeAvantPeriode)} ${libelleAvance(lp.premierPaiementAvance, lp.dernierPaiementAvance)}`
+                      : undefined
+                  }
+                />
                 <TrendBadge actuel={fin.loyersEncaisses} precedent={prec?.loyersEncaisses} comparaison={periode.comparaison} />
               </div>
             </div>

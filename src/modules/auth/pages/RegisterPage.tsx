@@ -35,7 +35,7 @@ export function RegisterPage() {
   }
 
   return (
-    <PageLayout narrow decorated backgroundImage="/images/maison-5.jpg">
+    <PageLayout narrow decorated backgroundImage="/images/fonds/creer-un-compte.webp">
       <FormCard
         tone="indigo"
         icon={UserPlus}

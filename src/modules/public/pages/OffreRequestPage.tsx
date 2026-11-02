@@ -4,7 +4,7 @@ import { OffreForm } from "../components/OffreForm";
 
 export function OffreRequestPage() {
   return (
-    <PageLayout narrow decorated backgroundImage="/images/maison-3.jpg">
+    <PageLayout narrow decorated backgroundImage="/images/fonds/proposer-un-bien.webp">
       <FormCard
         tone="indigo"
         icon={Building2}

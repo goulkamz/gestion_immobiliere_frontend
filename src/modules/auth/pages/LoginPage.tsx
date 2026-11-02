@@ -31,7 +31,7 @@ export function LoginPage() {
   }
 
   return (
-    <PageLayout narrow decorated backgroundImage="/images/maison-2.jpg">
+    <PageLayout narrow decorated backgroundImage="/images/fonds/connexion.webp">
       <FormCard
         tone="indigo"
         icon={LogIn}

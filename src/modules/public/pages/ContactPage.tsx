@@ -13,7 +13,7 @@ export function ContactPage() {
   const state = (location.state ?? {}) as ContactPageState;
 
   return (
-    <PageLayout narrow decorated backgroundImage="/images/service-2.jpg">
+    <PageLayout narrow decorated backgroundImage="/images/fonds/contact.webp">
       <FormCard tone="indigo" icon={MessageCircle} title="Nous contacter" description="Une question ? Écrivez-nous, l'agence vous répond rapidement." maxWidthClassName="max-w-lg">
         <ContactForm defaultSujet={state.sujet} defaultMessage={state.message} />
       </FormCard>

@@ -32,7 +32,7 @@ export function ResetPasswordPage() {
   }
 
   return (
-    <PageLayout narrow decorated backgroundImage="/images/maison-8.jpg">
+    <PageLayout narrow decorated backgroundImage="/images/fonds/reinitialisation.webp">
       <FormCard
         tone="indigo"
         icon={ShieldCheck}

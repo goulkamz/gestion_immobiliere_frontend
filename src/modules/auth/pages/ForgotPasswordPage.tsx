@@ -28,7 +28,7 @@ export function ForgotPasswordPage() {
   }
 
   return (
-    <PageLayout narrow decorated backgroundImage="/images/maison-7.jpg">
+    <PageLayout narrow decorated backgroundImage="/images/fonds/mot-de-passe-oublie.webp">
       <FormCard
         tone="indigo"
         icon={KeyRound}

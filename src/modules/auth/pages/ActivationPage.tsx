@@ -44,7 +44,7 @@ export function ActivationPage() {
   }
 
   return (
-    <PageLayout narrow decorated backgroundImage="/images/maison-4.jpg">
+    <PageLayout narrow decorated backgroundImage="/images/fonds/activation.webp">
       <FormCard
         tone="indigo"
         icon={MailCheck}

@@ -5,7 +5,7 @@ import { DemandeForm } from "../components/DemandeForm";
 
 export function DemandeRequestPage() {
   return (
-    <PageLayout narrow decorated backgroundImage="/images/maison-6.jpg">
+    <PageLayout narrow decorated backgroundImage="/images/fonds/deposer-une-demande.webp">
       <FormCard
         tone="indigo"
         icon={ClipboardList}

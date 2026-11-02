@@ -9,8 +9,8 @@ import type { Temoignage } from "@/api/types";
 
 /**
  * Section "Ils nous font confiance". Ne casse jamais la page : une erreur
- * de chargement ou une liste vide font simplement disparaître la section
- * (pas de message d'erreur intrusif sur une section non critique).
+ * de chargement fait disparaître la section (pas de message d'erreur intrusif
+ * sur une section non critique). Une liste vide affiche une invitation à laisser un avis.
  */
 export function TestimonialsSection() {
   const temoignagesQuery = useTemoignagesQuery();
@@ -32,19 +32,35 @@ export function TestimonialsSection() {
   }
 
   const temoignages = temoignagesQuery.data ?? [];
-  if (temoignages.length === 0) return null;
+
+  if (temoignages.length === 0) {
+    return (
+      <section
+        className="mt-16 rounded-2xl bg-white px-4 py-12 text-center shadow-sm ring-1 ring-primary-100/60 sm:px-8"
+        aria-labelledby="temoignages-title"
+      >
+        <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">Témoignages</p>
+        <h2 id="temoignages-title" className="mt-2 font-heading text-2xl font-bold text-slate-900 sm:text-3xl">
+          Ils nous font confiance
+        </h2>
+        <p className="mx-auto mt-2 max-w-xl text-sm text-slate-500">
+          Aucun avis n'est encore publié. Soyez le premier à partager votre expérience avec GestImmo.
+        </p>
+        <Link
+          to="/laisser-un-avis"
+          className="mt-5 inline-block text-sm font-semibold text-primary-700 hover:underline"
+        >
+          Laisser un avis
+        </Link>
+      </section>
+    );
+  }
 
   return (
     <section
-      className="relative mt-16 overflow-hidden rounded-2xl bg-linear-to-b from-primary-50 via-white to-primary-50/60 px-4 py-12 sm:px-8"
+      className="relative mt-16 overflow-hidden rounded-2xl bg-white px-4 py-12 shadow-sm ring-1 ring-primary-100/60 sm:px-8"
       aria-labelledby="temoignages-title"
     >
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary-300/30 blur-3xl" />
-        <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-primary-500/20 blur-3xl" />
-        <div className="absolute -bottom-32 left-1/4 h-80 w-80 rounded-full bg-primary-400/20 blur-3xl" />
-      </div>
-
       <div className="relative mb-10 text-center">
         <p className="text-sm font-semibold uppercase tracking-widest text-primary-600">Témoignages</p>
         <h2 id="temoignages-title" className="mt-2 font-heading text-2xl font-bold text-slate-900 sm:text-3xl">

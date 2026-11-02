@@ -39,7 +39,6 @@ export { CompteursStatut } from "./CompteursStatut";
 export type { StatCardTone } from "./StatCard";
 export { DataTable } from "./DataTable";
 export type { DataTableColumn } from "./DataTable";
-export { GradientBlobs } from "./GradientBlobs";
 export { PropertyCard } from "./PropertyCard";
 export { MediaGallery } from "./MediaGallery";
 export { EntityPhotoPreview } from "./EntityPhotoPreview";

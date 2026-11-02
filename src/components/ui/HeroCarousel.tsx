@@ -152,13 +152,6 @@ export function HeroCarousel({ slides, children }: HeroCarouselProps) {
         </div>
       ))}
 
-      {/* Nuages de dégradé décoratifs, communs à toutes les diapositives */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute top-1/4 right-0 h-104 w-104 rounded-full bg-primary-300/20 blur-3xl" />
-        <div className="absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-primary-300/10 blur-3xl" />
-      </div>
-
       {slides.length > 1 && (
         <>
           <button

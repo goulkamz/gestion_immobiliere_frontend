@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
-import { ArrowLink, GradientBlobs } from "@/components/ui";
+import { ArrowLink } from "@/components/ui";
 import { useInViewAnimation } from "@/hooks/useInViewAnimation";
 import type { Domaine } from "../data/domaines";
 
@@ -31,8 +31,6 @@ function DomaineImage({ domaine, className }: { domaine: Domaine; className: str
           }}
           aria-hidden="true"
         />
-        <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
-        <div className="absolute -bottom-12 -left-8 h-36 w-36 rounded-full bg-primary-900/20 blur-2xl" aria-hidden="true" />
         <span className="relative flex h-20 w-20 items-center justify-center rounded-full bg-white/15 shadow-inner ring-1 ring-white/30 backdrop-blur-sm">
           <Icon size={36} className="text-white" strokeWidth={1.5} aria-hidden="true" />
         </span>
@@ -76,7 +74,6 @@ export function DomaineCard({ domaine, phare = false, delayMs = 0 }: DomaineCard
           />
         </div>
         <div className="relative flex flex-col justify-center overflow-hidden bg-linear-to-br from-primary-700 via-primary-800 to-primary-950 p-6 text-white sm:p-8">
-          <GradientBlobs />
           <span className="relative inline-flex w-fit items-center gap-2 rounded-full bg-accent-400 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-primary-950">
             <Icon size={14} aria-hidden="true" />
             Domaine phare

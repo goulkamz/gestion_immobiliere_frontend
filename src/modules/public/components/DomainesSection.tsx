@@ -14,12 +14,9 @@ export function DomainesSection() {
 
   return (
     <section
-      className="relative mt-8 overflow-hidden rounded-3xl bg-linear-to-b from-primary-50/70 via-white to-white p-6 shadow-sm ring-1 ring-primary-100/60 sm:p-8"
+      className="relative mt-8 overflow-hidden rounded-3xl bg-white p-6 shadow-sm ring-1 ring-primary-100/60 sm:p-8"
       aria-labelledby="domaines-title"
     >
-      <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-accent-200/20 blur-3xl" aria-hidden="true" />
-      <div className="pointer-events-none absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-primary-200/25 blur-3xl" aria-hidden="true" />
-
       <div className="relative mb-8 text-center">
         <p className="text-xs font-semibold uppercase tracking-widest text-primary-600">Nos services</p>
         <h2 id="domaines-title" className="mt-1 font-heading text-2xl font-bold text-slate-900 sm:text-3xl">

@@ -12,6 +12,10 @@ import type { TemoignageRole } from "@/api/types";
 
 const ROLES: Exclude<TemoignageRole, "AGENCE">[] = ["PROPRIETAIRE", "LOCATAIRE", "AUTRE"];
 
+// Valeurs vides explicites : sans elles, `reset` laisse les champs remplis et le rôle
+// s'affiche présélectionné sur la première option au lieu du choix vide.
+const EMPTY_VALUES = { nomAuteur: "", role: "", texte: "", note: "", siteWeb: "" } as unknown as TemoignageFormInput;
+
 export function TemoignageForm() {
   const mutation = useCreateTemoignageMutation();
   const [sent, setSent] = useState(false);
@@ -23,7 +27,7 @@ export function TemoignageForm() {
     formState: { errors },
   } = useForm<TemoignageFormInput, unknown, TemoignageFormValues>({
     resolver: zodResolver(temoignageSchema),
-    defaultValues: { siteWeb: "" },
+    defaultValues: EMPTY_VALUES,
   });
 
   async function onSubmit(values: TemoignageFormValues) {
@@ -36,7 +40,7 @@ export function TemoignageForm() {
         siteWeb: values.siteWeb ?? "",
       });
       setSent(true);
-      reset({ siteWeb: "" });
+      reset(EMPTY_VALUES);
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.status === 429) {

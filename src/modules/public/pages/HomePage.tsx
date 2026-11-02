@@ -200,7 +200,7 @@ export function HomePage() {
         {/* Catégories populaires */}
         {categoryGroups.length > 0 && (
           <section
-            className="mt-8 rounded-3xl bg-primary-50/50 p-6 ring-1 ring-primary-100/60 sm:p-8"
+            className="mt-8 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-primary-100/60 sm:p-8"
             aria-labelledby="categories-title"
           >
             <SectionHeader
@@ -220,7 +220,7 @@ export function HomePage() {
 
         {/* Derniers biens ajoutés */}
         <section
-          className="mt-8 rounded-3xl bg-primary-50/50 p-6 ring-1 ring-primary-100/60 sm:p-8"
+          className="mt-8 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-primary-100/60 sm:p-8"
           aria-labelledby="derniers-title"
         >
           <SectionHeader
@@ -258,11 +258,6 @@ export function HomePage() {
 
         {/* Double CTA */}
         <section className="relative mt-16 overflow-hidden rounded-2xl bg-linear-to-br from-primary-700 to-primary-900 p-8 text-white md:p-12">
-          <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-            <div className="absolute -top-24 -left-24 h-96 w-96 rounded-full bg-primary-400/30 blur-3xl" />
-            <div className="absolute top-1/3 -right-32 h-[28rem] w-[28rem] rounded-full bg-primary-300/20 blur-3xl" />
-            <div className="absolute -bottom-32 left-1/4 h-80 w-80 rounded-full bg-primary-500/20 blur-3xl" />
-          </div>
           <div className="relative grid gap-8 md:grid-cols-2">
             <div>
               <h2 className="font-heading text-xl font-bold">Vous êtes propriétaire ?</h2>

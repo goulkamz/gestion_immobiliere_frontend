@@ -126,6 +126,31 @@ export interface UserInfoResponse {
   roles: string[];
 }
 
+/** Réponse de `/auth/signin` quand le compte a la double authentification : pas de session tant que le code n'est pas vérifié. */
+export interface TwoFactorChallenge {
+  challengeToken: string;
+}
+
+export interface TwoFactorVerifyRequest {
+  challengeToken: string;
+  code: string;
+  faireConfiance: boolean;
+}
+
+export interface TwoFactorStatus {
+  disponible: boolean;
+  actif: boolean;
+  codesSecoursRestants: number;
+  heuresConfiance: number;
+}
+
+export interface TwoFactorSetup {
+  secret: string;
+  urlOtpAuth: string;
+  /** Image du QR code (data URI ou base64 PNG selon le serveur). */
+  qrCode: string;
+}
+
 export interface ResetPasswordRequest {
   code: string;
   newPassword: string;

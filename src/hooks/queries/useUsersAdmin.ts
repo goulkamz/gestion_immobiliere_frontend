@@ -50,6 +50,10 @@ export function useRestaurerUserMutation() {
   });
 }
 
+export function useReinitialiserDeuxFacteursMutation() {
+  return useMutation({ mutationFn: (id: number) => usersAdminApi.reinitialiserDeuxFacteurs(id) });
+}
+
 export function useCreateUserAdminMutation() {
   const queryClient = useQueryClient();
   return useMutation({

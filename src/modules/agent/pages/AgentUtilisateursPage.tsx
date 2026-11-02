@@ -3,10 +3,10 @@ import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { AlertTriangle, Ban, CheckCircle2, List, Pencil, Plus, Repeat, RotateCcw, Trash2, UserCheck, UserCog, UserX, Users, XCircle } from "lucide-react";
+import { AlertTriangle, Ban, CheckCircle2, List, Pencil, Plus, Repeat, RotateCcw, ShieldOff, Trash2, UserCheck, UserCog, UserX, Users, XCircle } from "lucide-react";
 import { ActionGroup, Badge, Button, DataTable, EmptyState, Input, Modal, PageHeader, SearchInput, Select, StatCard } from "@/components/ui";
 import type { ActionGroupItem, DataTableColumn } from "@/components/ui";
-import { useCreateUserAdminMutation, useRestaurerUserMutation, useSupprimerUserMutation, useUpdateUserMutation, useUpdateUserRoleMutation, useUpdateUserStatusMutation, useUsersByRoleQuery } from "@/hooks/queries/useUsersAdmin";
+import { useCreateUserAdminMutation, useReinitialiserDeuxFacteursMutation, useRestaurerUserMutation, useSupprimerUserMutation, useUpdateUserMutation, useUpdateUserRoleMutation, useUpdateUserStatusMutation, useUsersByRoleQuery } from "@/hooks/queries/useUsersAdmin";
 import { useSessionStore, selectRole } from "@/store/sessionStore";
 import {
   creerUtilisateurSchema,
@@ -33,6 +33,8 @@ export function AgentUtilisateursPage() {
   const [search, setSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [aSupprimer, setASupprimer] = useState<UserAdminResponse | null>(null);
+  const [aReinitialiser, setAReinitialiser] = useState<UserAdminResponse | null>(null);
+  const reinitialiserMutation = useReinitialiserDeuxFacteursMutation();
   const [aModifier, setAModifier] = useState<UserAdminResponse | null>(null);
   const [roleCible, setRoleCible] = useState<UserAdminResponse | null>(null);
   const [nouveauRole, setNouveauRole] = useState<RoleOnglet>("ROLE_CLIENT");
@@ -77,6 +79,17 @@ export function AgentUtilisateursPage() {
       setCreateOpen(false);
     } catch (err) {
       toast.error(err instanceof ApiError ? err.message : "Création du compte impossible.");
+    }
+  }
+
+  async function onReinitialiserDeuxFacteurs() {
+    if (!aReinitialiser) return;
+    try {
+      await reinitialiserMutation.mutateAsync(aReinitialiser.idUser);
+      toast.success("La double authentification a été réinitialisée.");
+      setAReinitialiser(null);
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : "Réinitialisation impossible.");
     }
   }
 
@@ -187,6 +200,9 @@ export function AgentUtilisateursPage() {
                       u.flagActif
                         ? { label: "Désactiver le compte", text: "Désactiver", icon: <Ban size={15} aria-hidden="true" />, onClick: () => onToggleActif(u) }
                         : { label: "Activer le compte", text: "Activer", icon: <CheckCircle2 size={15} aria-hidden="true" />, onClick: () => onToggleActif(u) },
+                      ...(u.role === "ROLE_CLIENT" || u.role === "ROLE_BAILLEUR"
+                        ? []
+                        : [{ label: "Réinitialiser la double authentification", text: "Réinit. 2FA", icon: <ShieldOff size={15} aria-hidden="true" />, onClick: () => setAReinitialiser(u) }]),
                       { label: "Supprimer le compte", text: "Supprimer", icon: <Trash2 size={15} aria-hidden="true" />, tone: "danger", onClick: () => setASupprimer(u) },
                     ];
                     return <ActionGroup items={items} />;
@@ -324,6 +340,25 @@ export function AgentUtilisateursPage() {
               </Button>
               <Button className="flex-1" loading={roleMutation.isPending} onClick={onChangerRole}>
                 Confirmer
+              </Button>
+            </div>
+          </>
+        )}
+      </Modal>
+
+      <Modal isOpen={aReinitialiser !== null} onClose={() => setAReinitialiser(null)} title="Réinitialiser la double authentification ?" titleTone="indigo">
+        {aReinitialiser && (
+          <>
+            <p className="text-sm text-slate-600">
+              La double authentification de <strong>{aReinitialiser.prenom} {aReinitialiser.nom}</strong> sera désactivée et ses codes de secours effacés.
+              La personne pourra la réactiver depuis son profil.
+            </p>
+            <div className="mt-4 flex gap-2">
+              <Button variant="secondary" className="flex-1" onClick={() => setAReinitialiser(null)}>
+                Annuler
+              </Button>
+              <Button variant="danger" className="flex-1" loading={reinitialiserMutation.isPending} onClick={onReinitialiserDeuxFacteurs}>
+                Réinitialiser
               </Button>
             </div>
           </>

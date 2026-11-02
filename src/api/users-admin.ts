@@ -33,4 +33,6 @@ export const usersAdminApi = {
   supprimer: (id: number) => unwrap<null>(http.delete(`/admin/users/${id}`)),
   /** Réactive un compte supprimé (ROLE_ADMIN uniquement). */
   restaurer: (id: number) => unwrap<UserAdminResponse>(http.patch(`/admin/users/${id}/restaurer`)),
+  /** Réinitialise la double authentification d'un compte (ROLE_ADMIN uniquement) : désactivée, codes de secours effacés. */
+  reinitialiserDeuxFacteurs: (id: number) => unwrap<null>(http.delete(`/admin/users/${id}/2fa`)),
 };

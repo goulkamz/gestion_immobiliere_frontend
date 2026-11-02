@@ -4,6 +4,7 @@ import type {
   AuthenticateRequest,
   CreateUserRequest,
   ResetPasswordRequest,
+  TwoFactorVerifyRequest,
   UpdateProfileRequest,
 } from "@/api/types";
 import { useSessionStore } from "@/store/sessionStore";
@@ -37,19 +38,69 @@ export function useMeQuery() {
   });
 }
 
-export function useLoginMutation() {
+/** Charge le profil une fois la session ouverte (cookies httpOnly déjà posés par le serveur). */
+function useOuvertureSession() {
   const queryClient = useQueryClient();
   const setProfile = useSessionStore((s) => s.setProfile);
-  return useMutation({
-    mutationFn: (body: AuthenticateRequest) => authApi.signin(body),
-    onSuccess: async () => {
+  return async () => {
       // Les cookies httpOnly sont déjà posés par le serveur ; on charge le profil directement
       // (plutôt qu'un invalidateQueries, sans effet si la query "me" a été retirée du cache par
       // un logout précédent via removeQueries — invalider une entrée absente ne la recrée pas).
       const profile = await authApi.me();
       setProfile(profile);
       queryClient.setQueryData(authQueryKeys.me, profile);
+  };
+}
+
+export function useLoginMutation() {
+  const ouvrirSession = useOuvertureSession();
+  return useMutation({
+    mutationFn: (body: AuthenticateRequest) => authApi.signin(body),
+    onSuccess: async (result) => {
+      if (result.kind === "SESSION") await ouvrirSession();
     },
+  });
+}
+
+export function useVerifyTwoFactorMutation() {
+  const ouvrirSession = useOuvertureSession();
+  return useMutation({
+    mutationFn: (body: TwoFactorVerifyRequest) => authApi.verifyTwoFactor(body),
+    onSuccess: () => ouvrirSession(),
+  });
+}
+
+export const twoFactorQueryKey = ["auth", "2fa-status"] as const;
+
+export function useTwoFactorStatusQuery(enabled = true) {
+  return useQuery({ queryKey: twoFactorQueryKey, queryFn: () => authApi.twoFactorStatus(), enabled, staleTime: 60 * 1000 });
+}
+
+export function useTwoFactorInitierMutation() {
+  return useMutation({ mutationFn: () => authApi.twoFactorInitier() });
+}
+
+export function useTwoFactorConfirmerMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (code: string) => authApi.twoFactorConfirmer(code),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: twoFactorQueryKey }),
+  });
+}
+
+export function useTwoFactorDesactiverMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (v: { motDePasse: string; code: string }) => authApi.twoFactorDesactiver(v.motDePasse, v.code),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: twoFactorQueryKey }),
+  });
+}
+
+export function useTwoFactorRegenererCodesMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (code: string) => authApi.twoFactorRegenererCodes(code),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: twoFactorQueryKey }),
   });
 }
 

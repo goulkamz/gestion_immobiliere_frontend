@@ -7,6 +7,7 @@ import { useSessionStore } from "@/store/sessionStore";
 import { useUpdateProfileMutation } from "@/hooks/queries/useAuth";
 import { formatDate, libelleRole } from "@/utils/format";
 import { ApiError } from "@/api/http";
+import { TwoFactorCard } from "../components/TwoFactorCard";
 import type { UpdateProfileRequest } from "@/api/types";
 
 export function ProfilePage() {
@@ -79,6 +80,7 @@ export function ProfilePage() {
             <Button className="mt-6" icon={<Pencil size={16} />} onClick={() => setEditing(true)}>
               Modifier
             </Button>
+            <TwoFactorCard />
           </>
         )}
       </FormCard>

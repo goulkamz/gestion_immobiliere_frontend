@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { TwoFactorBanner } from "./TwoFactorBanner";
 import { PageLayout } from "@/components/ui";
 import { useAgentUiStore } from "@/store/agentUiStore";
 import { AdminSidebar } from "./AdminSidebar";
@@ -12,6 +13,7 @@ export function AdminLayout() {
       <div className={`grid grid-cols-1 gap-6 ${collapsed ? "lg:grid-cols-[64px_1fr]" : "lg:grid-cols-[240px_1fr]"}`}>
         <AdminSidebar />
         <div className="min-w-0">
+          <TwoFactorBanner />
           <Outlet />
         </div>
       </div>

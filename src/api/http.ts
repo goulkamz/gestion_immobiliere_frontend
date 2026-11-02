@@ -46,7 +46,7 @@ export function registerSessionExpiredHandler(handler: () => void): void {
 }
 
 function isAuthRoute(url: string | undefined): boolean {
-  return !!url && (url.includes("/auth/signin") || url.includes("/auth/refresh-token") || url.includes("/auth/logout"));
+  return !!url && (url.includes("/auth/signin") || url.includes("/auth/2fa/verify") || url.includes("/auth/refresh-token") || url.includes("/auth/logout"));
 }
 
 http.interceptors.request.use((config: InternalAxiosRequestConfig) => config);

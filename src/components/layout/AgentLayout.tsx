@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import { TwoFactorBanner } from "./TwoFactorBanner";
 import { PageLayout } from "@/components/ui";
 import { useAgentUiStore } from "@/store/agentUiStore";
 import { AgentSidebar } from "./AgentSidebar";
@@ -19,6 +20,7 @@ export function AgentLayout() {
           </div>
           {/* key : changer de ville remet à zéro la page, la recherche et les filtres de la liste affichée. */}
           <div key={ville}>
+            <TwoFactorBanner />
             <Outlet />
           </div>
         </div>

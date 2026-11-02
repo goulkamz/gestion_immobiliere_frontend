@@ -50,15 +50,12 @@ import {
 import { statutLabel } from "@/utils/statut";
 import { formatDate, formatMontant } from "@/utils/format";
 import { useAttachPhotos } from "@/hooks/queries/useMedias";
-import { useSessionStore, selectRole } from "@/store/sessionStore";
 import { ApiError } from "@/api/http";
 import type { AnnonceResponse, StatutAnnonce } from "@/api/types";
 
 const STATUTS: StatutAnnonce[] = ["ACTIVE", "SUSPENDUE", "EXPIREE"];
 
 export function AgentAnnoncesPage() {
-  // La suppression d'une annonce est réservée à l'admin (règle du serveur)
-  const isAdmin = useSessionStore(selectRole) === "ROLE_ADMIN";
   const [deleting, setDeleting] = useState<AnnonceResponse | null>(null);
   const [detail, setDetail] = useState<AnnonceResponse | null>(null);
   const { search, setSearch, recherche, page, setPage } = useRechercheServeur();
@@ -264,17 +261,13 @@ export function AgentAnnoncesPage() {
             icon: <Settings2 size={15} aria-hidden="true" />,
             onClick: () => openStatut(a),
           },
-          ...(isAdmin
-            ? [
-                {
-                  label: "Supprimer",
-                  text: "Supprimer",
-                  icon: <Trash2 size={15} aria-hidden="true" />,
-                  tone: "danger" as const,
-                  onClick: () => setDeleting(a),
-                },
-              ]
-            : []),
+          {
+            label: "Supprimer",
+            text: "Supprimer",
+            icon: <Trash2 size={15} aria-hidden="true" />,
+            tone: "danger" as const,
+            onClick: () => setDeleting(a),
+          },
         ];
         return <ActionGroup items={items} />;
       },

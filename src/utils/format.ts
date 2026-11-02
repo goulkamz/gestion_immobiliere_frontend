@@ -16,6 +16,20 @@ export function formatMontant(value: number | null | undefined): string {
   return currencyFormatter.format(value).replace(/\u202F/g, ESPACE_FINE_INSECABLE);
 }
 
+const LIBELLES_ROLES: Record<string, string> = {
+  CLIENT: "Client",
+  BAILLEUR: "Bailleur",
+  AGENT: "Agent",
+  ADMIN: "Administrateur",
+};
+
+/** Rôle lisible pour l'affichage : "ROLE_BAILLEUR" devient "Bailleur" (le préfixe est technique, jamais montré). */
+export function libelleRole(role: string | null | undefined): string {
+  if (!role) return "-";
+  const code = role.replace(/^ROLE_/, "");
+  return LIBELLES_ROLES[code] ?? code.charAt(0) + code.slice(1).toLowerCase();
+}
+
 const MOIS_COURTS = [
   "jan", "fév", "mar", "avr", "mai", "juin",
   "juil", "août", "sep", "oct", "nov", "déc",

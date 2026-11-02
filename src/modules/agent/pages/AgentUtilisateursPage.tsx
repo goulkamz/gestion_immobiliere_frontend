@@ -17,6 +17,7 @@ import {
   type ModifierUtilisateurFormValues,
 } from "../schemas";
 import { passwordStrengthMessage } from "@/utils/validation";
+import { libelleRole } from "@/utils/format";
 import { ApiError } from "@/api/http";
 import type { UserAdminResponse } from "@/api/types";
 
@@ -154,7 +155,7 @@ export function AgentUtilisateursPage() {
     { key: "telephone", header: "Téléphone", render: (u) => u.telephone ?? "-" },
     ...(supprimes
       ? [
-          { key: "role", header: "Rôle", render: (u: UserAdminResponse) => u.role.replace("ROLE_", "").toLowerCase() },
+          { key: "role", header: "Rôle", render: (u: UserAdminResponse) => libelleRole(u.role) },
           {
             key: "actions",
             header: "Actions",
@@ -301,7 +302,7 @@ export function AgentUtilisateursPage() {
         {roleCible && (
           <>
             <p className="text-sm text-slate-600">
-              Compte de <strong>{roleCible.prenom} {roleCible.nom}</strong>, actuellement {ROLE_LABEL[roleCible.role as RoleOnglet]?.toLowerCase() ?? roleCible.role}.
+              Compte de <strong>{roleCible.prenom} {roleCible.nom}</strong>, actuellement {ROLE_LABEL[roleCible.role as RoleOnglet]?.toLowerCase() ?? libelleRole(roleCible.role).toLowerCase()}.
             </p>
             <div className="mt-3 flex items-start gap-2 rounded-lg bg-danger-50 p-3 text-sm text-danger-700">
               <AlertTriangle size={16} className="mt-0.5 shrink-0" aria-hidden="true" />

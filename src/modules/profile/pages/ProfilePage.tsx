@@ -5,7 +5,7 @@ import { Pencil, UserCircle } from "lucide-react";
 import { Button, FormCard, Input, PageLayout } from "@/components/ui";
 import { useSessionStore } from "@/store/sessionStore";
 import { useUpdateProfileMutation } from "@/hooks/queries/useAuth";
-import { formatDate } from "@/utils/format";
+import { formatDate, libelleRole } from "@/utils/format";
 import { ApiError } from "@/api/http";
 import type { UpdateProfileRequest } from "@/api/types";
 
@@ -43,7 +43,7 @@ export function ProfilePage() {
   }
 
   return (
-    <PageLayout narrow decorated backgroundImage="/images/maison-1.jpg">
+    <PageLayout narrow decorated backgroundImage="/images/fonds/profil.webp">
       <FormCard tone="indigo" icon={UserCircle} title="Mon profil" description="Email et rôle ne sont pas modifiables ici." maxWidthClassName="max-w-lg">
         {editing ? (
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
@@ -69,7 +69,7 @@ export function ProfilePage() {
           <>
             <dl className="grid gap-2 text-sm">
               <ProfileRow label="Email" value={profile.email} />
-              <ProfileRow label="Rôle" value={profile.role} />
+              <ProfileRow label="Rôle" value={libelleRole(profile.role)} />
               <ProfileRow label="Nom" value={profile.nom} />
               <ProfileRow label="Prénom" value={profile.prenom} />
               <ProfileRow label="Téléphone" value={profile.telephone || "-"} />

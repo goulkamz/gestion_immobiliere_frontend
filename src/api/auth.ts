@@ -14,7 +14,7 @@ import type {
 } from "./types";
 
 /** Résultat de la première étape : session ouverte, ou code de vérification à saisir. */
-export type SigninResult = { kind: "SESSION"; user: UserInfoResponse } | { kind: "TWO_FACTOR"; challengeToken: string };
+export type SigninResult = { kind: "SESSION"; user: UserInfoResponse } | { kind: "TWO_FACTOR"; challengeToken: string; heuresConfiance: number };
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
   const { data } = await promise;
@@ -24,7 +24,10 @@ async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Pro
 export const authApi = {
   signin: async (body: AuthenticateRequest): Promise<SigninResult> => {
     const { data } = await http.post<ApiSuccessResponse<UserInfoResponse | TwoFactorChallenge>>("/auth/signin", body);
-    if (data.code === "TWO_FACTOR_REQUIRED") return { kind: "TWO_FACTOR", challengeToken: (data.data as TwoFactorChallenge).challengeToken };
+    if (data.code === "TWO_FACTOR_REQUIRED") {
+      const { challengeToken, heuresConfiance } = data.data as TwoFactorChallenge;
+      return { kind: "TWO_FACTOR", challengeToken, heuresConfiance };
+    }
     return { kind: "SESSION", user: data.data as UserInfoResponse };
   },
 

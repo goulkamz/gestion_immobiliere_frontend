@@ -129,6 +129,8 @@ export interface UserInfoResponse {
 /** Réponse de `/auth/signin` quand le compte a la double authentification : pas de session tant que le code n'est pas vérifié. */
 export interface TwoFactorChallenge {
   challengeToken: string;
+  /** Durée pendant laquelle un appareil de confiance est dispensé du code (paramètre admin). */
+  heuresConfiance: number;
 }
 
 export interface TwoFactorVerifyRequest {

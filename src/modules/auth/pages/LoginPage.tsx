@@ -17,6 +17,7 @@ export function LoginPage() {
   const [challengeToken, setChallengeToken] = useState<string | null>(null);
   const [code, setCode] = useState("");
   const [faireConfiance, setFaireConfiance] = useState(false);
+  const [heuresConfiance, setHeuresConfiance] = useState(12);
   const {
     register,
     handleSubmit,
@@ -34,6 +35,7 @@ export function LoginPage() {
       const result = await loginMutation.mutateAsync(values);
       if (result.kind === "TWO_FACTOR") {
         setChallengeToken(result.challengeToken);
+        setHeuresConfiance(result.heuresConfiance);
         return;
       }
       redirigerApresConnexion();
@@ -85,7 +87,7 @@ export function LoginPage() {
             />
             <label className="flex items-center gap-2 text-sm text-slate-700">
               <input type="checkbox" checked={faireConfiance} onChange={(e) => setFaireConfiance(e.target.checked)} />
-              Faire confiance à cet appareil pendant 12 h
+              Faire confiance à cet appareil pendant {heuresConfiance} h
             </label>
             <Button type="submit" fullWidth loading={verifyMutation.isPending} disabled={!code.trim()}>
               Valider

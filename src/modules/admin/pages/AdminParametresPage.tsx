@@ -16,6 +16,7 @@ const LIBELLES: Record<string, { libelle: string; unite?: string }> = {
   DELAI_EXPIRATION_RESERVATION_HEURES: { libelle: "Expiration d'une réservation non confirmée", unite: "heures" },
   MEDIAS_RETENTION_JOURS: { libelle: "Conservation d'un média supprimé", unite: "jours" },
   MEDIAS_MAX_FICHIERS_PAR_LOT: { libelle: "Fichiers maximum par envoi groupé", unite: "fichiers" },
+  DUREE_CONFIANCE_APPAREIL_2FA_HEURES: { libelle: "Durée de confiance d'un appareil (double authentification)", unite: "heures" },
 };
 
 /** Même règles que le serveur (validerFormat), plus l'exigence d'une valeur positive ou nulle pour les nombres. */

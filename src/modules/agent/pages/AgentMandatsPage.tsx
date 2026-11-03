@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
-import { AlertTriangle, Building2, CheckCircle2, Download, Edit2, Eye, FilePen, FileSignature, Plus, User, XCircle } from "lucide-react";
+import { AlertTriangle, Building2, CheckCircle2, Download, Edit2, Eye, FilePen, FileSignature, Plus, Trash2, User, XCircle } from "lucide-react";
 import { AvenantFields } from "@/components/ui/AvenantFields";
 import { AvenantsModal } from "@/components/ui/AvenantsModal";
 import { documentsAvenants } from "@/utils/avenants";
@@ -20,6 +20,7 @@ import {
   useModesFacturationQuery,
   useModifierContratMandatMutation,
   useResilierContratMandatMutation,
+  useSupprimerContratMandatMutation,
 } from "@/hooks/queries/useContratsMandat";
 import { useDocumentDownload } from "@/hooks/queries/useDocumentDownload";
 import { documentsApi } from "@/api/documents";
@@ -59,6 +60,7 @@ export function AgentMandatsPage() {
   const [editing, setEditing] = useState<ContratMandatResponse | null>(null);
   const [avenantsMandat, setAvenantsMandat] = useState<ContratMandatResponse | null>(null);
   const [activating, setActivating] = useState<ContratMandatResponse | null>(null);
+  const [deleting, setDeleting] = useState<ContratMandatResponse | null>(null);
   const [resiliating, setResiliating] = useState<ContratMandatResponse | null>(null);
 
   // Recherche envoyée au serveur après une courte pause de saisie
@@ -84,6 +86,7 @@ export function AgentMandatsPage() {
   const modifierMutation = useModifierContratMandatMutation();
   const activerMutation = useActiverContratMandatMutation();
   const resilierMutation = useResilierContratMandatMutation();
+  const supprimerMutation = useSupprimerContratMandatMutation();
   const { openPreview, download, closePreview, downloadPreview, preview, isPending } = useDocumentDownload();
   const avenantsQuery = useAvenantsMandatQuery(avenantsMandat?.idMandat ?? 0, { enabled: avenantsMandat !== null });
 
@@ -218,6 +221,17 @@ export function AgentMandatsPage() {
     }
   }
 
+  async function handleSupprimer() {
+    if (!deleting) return;
+    try {
+      await supprimerMutation.mutateAsync(deleting.idMandat);
+      toast.success("Mandat supprimé.");
+      setDeleting(null);
+    } catch (err) {
+      toast.error(err instanceof ApiError ? err.message : "Suppression impossible.");
+    }
+  }
+
   function openResilier(mandat: ContratMandatResponse) {
     setResiliating(mandat);
     resilierForm.reset({ motifResiliation: "" });
@@ -302,6 +316,10 @@ export function AgentMandatsPage() {
         }
         if (peutGererMandats && m.statut === "EN_ATTENTE") {
           items.push({ label: "Activer", text: "Activer", icon: <CheckCircle2 size={15} aria-hidden="true" />, onClick: () => setActivating(m) });
+        }
+        // Ouvert à l'admin comme à l'agent : un mandat en attente n'a encore ni reversement ni agent responsable
+        if (m.statut === "EN_ATTENTE") {
+          items.push({ label: "Supprimer", text: "Supprimer", icon: <Trash2 size={15} aria-hidden="true" />, tone: "danger", onClick: () => setDeleting(m) });
         }
         if (m.statut !== "EN_ATTENTE") {
           items.push({ label: "Avenants du mandat", text: "Avenants", icon: <FilePen size={15} aria-hidden="true" />, onClick: () => setAvenantsMandat(m) });
@@ -494,6 +512,25 @@ export function AgentMandatsPage() {
               </Button>
               <Button variant="primary" className="flex-1" loading={activerMutation.isPending} onClick={handleActiver}>
                 Activer
+              </Button>
+            </div>
+          </>
+        )}
+      </Modal>
+
+      <Modal isOpen={deleting !== null} onClose={() => setDeleting(null)} title="Supprimer ce mandat ?" titleTone="indigo">
+        {deleting && (
+          <>
+            <p className="text-sm text-slate-600">
+              Le mandat en attente sur <strong>{deleting.referenceCour}</strong> sera supprimé, ainsi que son brouillon de document. Cette action est
+              définitive.
+            </p>
+            <div className="mt-4 flex gap-2">
+              <Button variant="secondary" className="flex-1" onClick={() => setDeleting(null)}>
+                Annuler
+              </Button>
+              <Button variant="danger" className="flex-1" loading={supprimerMutation.isPending} onClick={handleSupprimer}>
+                Supprimer
               </Button>
             </div>
           </>

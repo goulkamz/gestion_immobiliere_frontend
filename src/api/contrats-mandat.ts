@@ -41,6 +41,9 @@ export const contratsMandatApi = {
 
   modifier: (id: number, body: UpdateContratMandatRequest) => unwrap<ContratMandatResponse>(http.patch(`/contrats-mandat/${id}/modifier`, body)),
 
+  /** Seul un mandat EN_ATTENTE se supprime (409 sinon) : un mandat activé se résilie. */
+  supprimer: (id: number) => unwrap<null>(http.delete(`/contrats-mandat/${id}`)),
+
   // Nom d'URL trompeur côté backend (hérité) : résilie bien le MANDAT, pas une location.
   resilier: (id: number, body: ResilierMandatRequest) =>
     unwrap<ContratMandatResponse>(http.patch(`/contrats-mandat/${id}/resilierContratLocation`, body)),

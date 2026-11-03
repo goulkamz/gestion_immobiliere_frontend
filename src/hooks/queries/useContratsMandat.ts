@@ -55,6 +55,14 @@ export function useActiverContratMandatMutation() {
   });
 }
 
+export function useSupprimerContratMandatMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => contratsMandatApi.supprimer(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["contrats-mandat"] }),
+  });
+}
+
 export function useModifierContratMandatMutation() {
   const queryClient = useQueryClient();
   return useMutation({

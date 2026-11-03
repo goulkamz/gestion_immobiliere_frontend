@@ -200,9 +200,9 @@ export function AgentUtilisateursPage() {
                       u.flagActif
                         ? { label: "Désactiver le compte", text: "Désactiver", icon: <Ban size={15} aria-hidden="true" />, onClick: () => onToggleActif(u) }
                         : { label: "Activer le compte", text: "Activer", icon: <CheckCircle2 size={15} aria-hidden="true" />, onClick: () => onToggleActif(u) },
-                      ...(u.role === "ROLE_CLIENT" || u.role === "ROLE_BAILLEUR"
+                      ...(u.role === "ROLE_CLIENT" || u.role === "ROLE_BAILLEUR" 
                         ? []
-                        : [{ label: "Réinitialiser la double authentification", text: "Réinit. 2FA", icon: <ShieldOff size={15} aria-hidden="true" />, onClick: () => setAReinitialiser(u) }]),
+                        : [{ label: u.totpActif ? "Réinitialiser la double authentification" : "Double authentification non activée", text: "Réinit. 2FA", icon: <ShieldOff size={15} aria-hidden="true" />, onClick: () => setAReinitialiser(u), disabled: !u.totpActif }]),
                       { label: "Supprimer le compte", text: "Supprimer", icon: <Trash2 size={15} aria-hidden="true" />, tone: "danger", onClick: () => setASupprimer(u) },
                     ];
                     return <ActionGroup items={items} />;

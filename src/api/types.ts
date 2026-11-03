@@ -734,6 +734,7 @@ export interface UserAdminResponse {
   role: Role;
   flagActif: boolean;
   supprime: boolean;
+  totpActif: boolean;
 }
 
 /** Modification d'un compte par l'admin (e-mail, mot de passe et rôle exclus). */

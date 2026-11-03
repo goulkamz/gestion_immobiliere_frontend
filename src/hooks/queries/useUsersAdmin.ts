@@ -51,7 +51,11 @@ export function useRestaurerUserMutation() {
 }
 
 export function useReinitialiserDeuxFacteursMutation() {
-  return useMutation({ mutationFn: (id: number) => usersAdminApi.reinitialiserDeuxFacteurs(id) });
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => usersAdminApi.reinitialiserDeuxFacteurs(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin-users"] }),
+  });
 }
 
 export function useCreateUserAdminMutation() {

@@ -241,7 +241,7 @@ export function AgentUtilisateursPage() {
         )}
       </div>
 
-      <div className="mb-4 inline-flex rounded-xl border border-primary-100 bg-primary-50/60 p-1">
+      <div className="mb-4 flex w-fit max-w-full overflow-x-auto rounded-xl border border-primary-100 bg-primary-50/60 p-1">
         <button type="button" onClick={() => setOnglet("ROLE_BAILLEUR")} className={tabClass(onglet === "ROLE_BAILLEUR")}>
           <UserCheck size={15} aria-hidden="true" />
           Bailleurs

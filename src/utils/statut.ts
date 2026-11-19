@@ -4,9 +4,9 @@ import type { BadgeVariant } from "@/components/ui/Badge";
 
 /** Mappe les statuts métier les plus courants vers une variante de badge cohérente. */
 export function statutToBadgeVariant(statut: string): BadgeVariant {
-  const positifs = ["ACTIVE", "ACTIF", "DISPONIBLE", "CONFIRMEE", "PAYE", "TRAITE", "TRAITEE", "SATISFAITE", "PRET", "REGLE", "CONVERTIE", "LU", "PUBLIE"];
-  const negatifs = ["EXPIREE", "EXPIRE", "SUSPENDUE", "ANNULE", "ANNULEE", "RESILIE", "EN_MAINTENANCE", "EN_RETARD", "ECHEC", "RETIRE", "REFUSEE"];
-  const attente = ["EN_ATTENTE", "NON_LU", "EN_COURS", "RESERVEE"];
+  const positifs = ["ACTIVE", "ACTIF", "DISPONIBLE", "CONFIRMEE", "PAYE", "TRAITE", "TRAITEE", "SATISFAITE", "PRET", "REGLE", "CONVERTIE", "LU", "PUBLIE", "SOLDEE", "ACCEPTE", "REALISE"];
+  const negatifs = ["EXPIREE", "EXPIRE", "SUSPENDUE", "ANNULE", "ANNULEE", "RESILIE", "EN_MAINTENANCE", "EN_RETARD", "ECHEC", "RETIRE", "REFUSEE", "REJETE"];
+  const attente = ["EN_ATTENTE", "NON_LU", "EN_COURS", "RESERVEE", "A_RENEGOCIER", "A_REGLER"];
   if (positifs.includes(statut)) return "success";
   if (negatifs.includes(statut)) return "danger";
   if (attente.includes(statut)) return "warning";
@@ -28,6 +28,12 @@ export const STATUT_ICONS: Record<string, LucideIcon> = {
   TERMINE: CheckCircle2,
   PUBLIE: CheckCircle2,
   TRAITEE: CheckCircle2,
+  SOLDEE: CheckCircle2,
+  ACCEPTE: CheckCircle2,
+  REALISE: CheckCircle2,
+  REJETE: XCircle,
+  A_RENEGOCIER: AlertTriangle,
+  A_REGLER: AlertTriangle,
   EXPIREE: XCircle,
   EXPIRE: XCircle,
   SUSPENDUE: XCircle,
@@ -76,6 +82,12 @@ const LABELS: Record<string, string> = {
   REFUSEE: "Refusée",
   PUBLIE: "Publié",
   RETIRE: "Retiré",
+  SOLDEE: "Soldée",
+  ACCEPTE: "Accepté",
+  REALISE: "Réalisé",
+  REJETE: "Rejeté",
+  A_RENEGOCIER: "À renégocier",
+  A_REGLER: "Dû par le bailleur",
 };
 
 /** Libellé humanisé (français) d'un statut backend, avec repli sur une version espacée/capitalisée. */

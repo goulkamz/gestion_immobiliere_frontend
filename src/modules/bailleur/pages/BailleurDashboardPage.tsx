@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { Building2, Home, PiggyBank, Percent } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Building2, FileCheck2, Home, PiggyBank, Percent, Wrench } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -15,7 +16,7 @@ import {
 } from "recharts";
 import { Card, StatCard, LoadingSpinner } from "@/components/ui";
 import { useSessionStore } from "@/store/sessionStore";
-import { useBailleurPatrimoineQuery, useBailleurRevenusQuery } from "@/hooks/queries/useStatsBailleur";
+import { useBailleurDepensesStatsQuery, useBailleurPatrimoineQuery, useBailleurRevenusQuery } from "@/hooks/queries/useStatsBailleur";
 import { formatMontant, formatMonth } from "@/utils/format";
 import { statutLabel } from "@/utils/statut";
 import { montantCompact } from "@/modules/admin/dashboard/helpers";
@@ -33,6 +34,9 @@ export function BailleurDashboardPage() {
   const prenom = useSessionStore((s) => s.profile?.prenom);
   const patrimoineQuery = useBailleurPatrimoineQuery();
   const revenusQuery = useBailleurRevenusQuery();
+  // Secondaire : le tableau de bord s'affiche même si ce bloc échoue
+  const depenses = useBailleurDepensesStatsQuery().data;
+  const aDesDepenses = depenses !== undefined && (depenses.nombreEnCours > 0 || depenses.nombreDues > 0 || depenses.devisEnAttente > 0);
 
   const isLoading = patrimoineQuery.isLoading || revenusQuery.isLoading;
 
@@ -82,6 +86,48 @@ export function BailleurDashboardPage() {
             />
             <StatCard label="Total reçu" value={formatMontant(totalRecu)} icon={<PiggyBank size={20} />} tone="warning" />
           </div>
+
+          {aDesDepenses && depenses && (
+            <Card title="Travaux et dépenses" subtitle="Dépenses avancées par l'agence sur vos cours et devis soumis à votre accord" className="mt-6">
+              <div className="grid gap-3 sm:grid-cols-3">
+                <Link to="/espace-bailleur/depenses" className="rounded-xl border border-primary-100 bg-primary-50/40 p-4 transition-colors hover:bg-primary-50">
+                  <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    <Wrench size={14} aria-hidden="true" /> Reste à retenir
+                  </p>
+                  <p className="mt-1 font-heading text-xl font-bold text-slate-900">{formatMontant(depenses.resteARetenir)}</p>
+                  <p className="mt-0.5 text-xs text-slate-500">
+                    {depenses.nombreEnCours > 0
+                      ? `${depenses.nombreEnCours} dépense${depenses.nombreEnCours > 1 ? "s" : ""} retenue${depenses.nombreEnCours > 1 ? "s" : ""} sur vos prochains reversements`
+                      : "Aucune dépense en cours"}
+                  </p>
+                </Link>
+                <Link
+                  to="/espace-bailleur/depenses"
+                  className={`rounded-xl border p-4 transition-colors ${depenses.duDirectement > 0 ? "border-amber-200 bg-amber-50/60 hover:bg-amber-50" : "border-primary-100 bg-primary-50/40 hover:bg-primary-50"}`}
+                >
+                  <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    <PiggyBank size={14} aria-hidden="true" /> À régler à l&apos;agence
+                  </p>
+                  <p className="mt-1 font-heading text-xl font-bold text-slate-900">{formatMontant(depenses.duDirectement)}</p>
+                  <p className="mt-0.5 text-xs text-slate-500">
+                    {depenses.nombreDues > 0 ? "Solde dû après la résiliation de votre mandat" : "Rien à régler directement"}
+                  </p>
+                </Link>
+                <Link
+                  to="/espace-bailleur/devis"
+                  className={`rounded-xl border p-4 transition-colors ${depenses.devisEnAttente > 0 ? "border-amber-200 bg-amber-50/60 hover:bg-amber-50" : "border-primary-100 bg-primary-50/40 hover:bg-primary-50"}`}
+                >
+                  <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+                    <FileCheck2 size={14} aria-hidden="true" /> Devis à valider
+                  </p>
+                  <p className="mt-1 font-heading text-xl font-bold text-slate-900">{depenses.devisEnAttente}</p>
+                  <p className="mt-0.5 text-xs text-slate-500">
+                    {depenses.devisEnAttente > 0 ? "Votre réponse est attendue" : "Aucun devis en attente de votre réponse"}
+                  </p>
+                </Link>
+              </div>
+            </Card>
+          )}
 
           {(revenusChartData.length > 0 || repartitionChartData.length > 0) && (
             <div className="mt-6 grid gap-4 lg:grid-cols-3">

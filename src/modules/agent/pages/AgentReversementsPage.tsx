@@ -32,7 +32,8 @@ import { formatDate, formatMonth, formatMontant } from "@/utils/format";
 import { moisOccupation } from "@/utils/mandat";
 import { ApiError } from "@/api/http";
 import type { CalculCumulResponse, CalculGroupeMandatsResponse } from "@/api/echeances";
-import type { ContratMandatResponse, EcheanceMandatResponse, EcheanceResponse, ModeFacturation } from "@/api/types";
+import { useRetenuesReversementQuery } from "@/hooks/queries/useDepenses";
+import type { ContratMandatResponse, DepenseImputationResponse, EcheanceMandatResponse, EcheanceResponse, ModeFacturation } from "@/api/types";
 
 function moisCourant(): string {
   const d = new Date();
@@ -65,6 +66,8 @@ export function AgentReversementsPage() {
   const [resultatCumul, setResultatCumul] = useState<CalculCumulResponse | null>(null);
   const [confirmingVirement, setConfirmingVirement] = useState<EcheanceResponse | null>(null);
   const [page, setPage] = useState(0);
+  const [retenuesEcheance, setRetenuesEcheance] = useState<number | null>(null);
+  const retenuesQuery = useRetenuesReversementQuery(retenuesEcheance);
 
   const villeFiltre = useVilleFiltre();
   const { cibleId, effacer: effacerCible } = useCible();
@@ -187,6 +190,26 @@ export function AgentReversementsPage() {
     }
   }
 
+  /** Montant des dépenses du bailleur retenues sur un reversement ; un clic en montre le détail. */
+  function retenueCell(idEcheance: number, retenue: number | null | undefined) {
+    if (!retenue) return "-";
+    return (
+      <button
+        type="button"
+        title="Voir les dépenses retenues"
+        className="font-medium text-primary-700 underline decoration-dotted underline-offset-2 hover:text-primary-900"
+        onClick={() => setRetenuesEcheance(idEcheance)}
+      >
+        {formatMontant(retenue)}
+      </button>
+    );
+  }
+
+  const retenuesColumns: DataTableColumn<DepenseImputationResponse>[] = [
+    { key: "depense", header: "Dépense", render: (i) => i.libelleDepense },
+    { key: "montant", header: "Retenu", align: "right", render: (i) => formatMontant(i.montant) },
+  ];
+
   const retardColumns: DataTableColumn<EcheanceMandatResponse>[] = [
     {
       key: "mandat",
@@ -208,6 +231,7 @@ export function AgentReversementsPage() {
     { key: "occupation", header: "Occupation", render: (e) => moisOccupation(e.periodeMois) },
     { key: "du", header: "Montant dû", align: "right", render: (e) => formatMontant(e.montantLoyersDus) },
     { key: "commission", header: "Commission", align: "right", render: (e) => formatMontant(e.commissionDeduite) },
+    { key: "retenue", header: "Dépenses", align: "right", render: (e) => retenueCell(e.idEcheance, e.retenueDepenses) },
     { key: "net", header: "Net à reverser", align: "right", render: (e) => formatMontant(e.montantNetAReverser) },
     { key: "statut", header: "Statut", render: (e) => <StatutBadge statut={e.statut} /> },
   ];
@@ -251,9 +275,10 @@ export function AgentReversementsPage() {
       key: "du",
       header: "Montant dû",
       align: "right",
-      render: (e) => formatMontant(e.montantDu + (e.commissionDeduite ?? 0)),
+      render: (e) => formatMontant(e.montantDu + (e.commissionDeduite ?? 0) + (e.retenueDepenses ?? 0)),
     },
     { key: "commission", header: "Commission", align: "right", render: (e) => formatMontant(e.commissionDeduite) },
+    { key: "retenue", header: "Dépenses", align: "right", render: (e) => retenueCell(e.idEcheance, e.retenueDepenses) },
     { key: "net", header: "Net à reverser", align: "right", render: (e) => formatMontant(e.montantDu) },
     { key: "verse", header: "Versé", align: "right", render: (e) => formatMontant(e.montantPaye) },
     { key: "statut", header: "Statut", render: (e) => <StatutBadge statut={e.statut} /> },
@@ -284,6 +309,7 @@ export function AgentReversementsPage() {
     { key: "occupation", header: "Occupation", render: (e) => moisOccupation(e.periodeMois) },
     { key: "du", header: "Montant dû", align: "right", render: (e) => formatMontant(e.montantLoyersDus) },
     { key: "commission", header: "Commission", align: "right", render: (e) => formatMontant(e.commissionDeduite) },
+    { key: "retenue", header: "Dépenses", align: "right", render: (e) => (e.retenueDepenses ? formatMontant(e.retenueDepenses) : "-") },
     { key: "net", header: "Net à reverser", align: "right", render: (e) => formatMontant(e.montantNetAReverser) },
   ];
 
@@ -315,7 +341,7 @@ export function AgentReversementsPage() {
       <PageHeader
         tone="indigo"
         title="Reversements aux bailleurs"
-        description="Calculez et confirmez les virements dus aux bailleurs pour leurs mandats de gestion (loyers dus moins commission)."
+        description="Calculez et confirmez les virements dus aux bailleurs pour leurs mandats de gestion (loyers dus moins commission et dépenses à leur charge)."
       />
 
       {(enRetardQuery.isError || (enRetardQuery.data?.length ?? 0) > 0) && (
@@ -466,7 +492,7 @@ export function AgentReversementsPage() {
               {resultatCumul.nombreMois} mois calculé{resultatCumul.nombreMois > 1 ? "s" : ""}. Le virement se confirme ensuite échéance par échéance
               dans la liste des reversements calculés.
             </p>
-            <dl className="grid grid-cols-3 gap-3 text-sm">
+            <dl className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
               <div>
                 <dt className="text-slate-500">Loyers dus</dt>
                 <dd className="font-semibold text-slate-900">{formatMontant(resultatCumul.montantLoyersDus)}</dd>
@@ -474,6 +500,10 @@ export function AgentReversementsPage() {
               <div>
                 <dt className="text-slate-500">Commission</dt>
                 <dd className="font-semibold text-slate-900">{formatMontant(resultatCumul.commissionDeduite)}</dd>
+              </div>
+              <div>
+                <dt className="text-slate-500">Dépenses retenues</dt>
+                <dd className="font-semibold text-slate-900">{formatMontant(resultatCumul.retenueDepenses ?? 0)}</dd>
               </div>
               <div>
                 <dt className="text-slate-500">Net à reverser</dt>
@@ -547,12 +577,32 @@ export function AgentReversementsPage() {
         </div>
       </Modal>
 
+      <Modal isOpen={retenuesEcheance !== null} onClose={() => setRetenuesEcheance(null)} title="Dépenses retenues sur ce reversement" titleTone="indigo">
+        {retenuesQuery.isError ? (
+          <EmptyState icon={<AlertTriangle size={32} />} title="Impossible de charger les retenues" description="Réessayez dans quelques instants." />
+        ) : (
+          <div className="space-y-3">
+            <p className="text-sm text-slate-600">
+              Dépenses à la charge du bailleur, déduites du net à reverser. La commission reste calculée sur les loyers.
+            </p>
+            <DataTable
+              data={retenuesQuery.data ?? []}
+              columns={retenuesColumns}
+              keyExtractor={(i) => i.idImputation}
+              loading={retenuesQuery.isLoading}
+              emptyMessage="Aucune dépense retenue sur ce reversement."
+            />
+          </div>
+        )}
+      </Modal>
+
       <Modal isOpen={confirmingVirement !== null} onClose={() => setConfirmingVirement(null)} title="Confirmer le virement" titleTone="indigo">
         {confirmingVirement && (
           <form className="space-y-4" onSubmit={virementForm.handleSubmit(onConfirmerVirement)} noValidate>
             <p className="text-sm text-slate-600">
               Montant net à reverser : <span className="font-semibold text-slate-900">{formatMontant(confirmingVirement.montantDu)}</span>
               {" - "}échéance du {formatDate(confirmingVirement.dateEcheance)} (occupation : {moisOccupation(confirmingVirement.dateEcheance)})
+              {confirmingVirement.retenueDepenses ? `, après ${formatMontant(confirmingVirement.retenueDepenses)} de dépenses retenues` : ""}
             </p>
             <Input
               label="Mode de versement"

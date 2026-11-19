@@ -71,6 +71,7 @@ export function useCalculerReversementMutation() {
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: echeancesQueryKeys.enAttenteMandat(variables.idMandat) });
       queryClient.invalidateQueries({ queryKey: echeancesQueryKeys.enRetardMandat() });
+      queryClient.invalidateQueries({ queryKey: ["depenses"] });
     },
   });
 }
@@ -81,6 +82,8 @@ export function useCalculerReversementsTousMutation() {
     mutationFn: ({ periode }: { periode: string }) => echeancesApi.calculerReversementsTous(periode),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["echeances"] });
+      // Un calcul retient les dépenses du bailleur : leurs montants retenus et restants changent
+      queryClient.invalidateQueries({ queryKey: ["depenses"] });
     },
   });
 }
@@ -91,6 +94,8 @@ export function useCalculerCumulMutation() {
     mutationFn: ({ idMandat, jusquA }: { idMandat: number; jusquA: string }) => echeancesApi.calculerCumul(idMandat, jusquA),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["echeances"] });
+      // Un calcul retient les dépenses du bailleur : leurs montants retenus et restants changent
+      queryClient.invalidateQueries({ queryKey: ["depenses"] });
     },
   });
 }
@@ -101,6 +106,8 @@ export function useCalculerCumulTousMutation() {
     mutationFn: ({ jusquA }: { jusquA: string }) => echeancesApi.calculerCumulTous(jusquA),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["echeances"] });
+      // Un calcul retient les dépenses du bailleur : leurs montants retenus et restants changent
+      queryClient.invalidateQueries({ queryKey: ["depenses"] });
     },
   });
 }
@@ -112,6 +119,8 @@ export function useConfirmerVirementMutation() {
       echeancesApi.confirmerVirement(idEcheance, body),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["echeances"] });
+      // Un calcul retient les dépenses du bailleur : leurs montants retenus et restants changent
+      queryClient.invalidateQueries({ queryKey: ["depenses"] });
     },
   });
 }

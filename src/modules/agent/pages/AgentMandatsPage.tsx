@@ -1,4 +1,6 @@
 import { useVilleFiltre } from "@/hooks/useVilleFiltre";
+import { useLigneCiblee } from "@/hooks/useLigneCiblee";
+import { contratsMandatApi } from "@/api/contrats-mandat";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { CompteursStatut } from "@/components/ui";
 import { useEffect, useMemo, useState } from "react";
@@ -38,8 +40,7 @@ import {
 } from "../schemas";
 import { ApiError } from "@/api/http";
 import { statutLabel } from "@/utils/statut";
-import { MODE_FACTURATION_LABELS } from "@/utils/mandat";
-import type { ContratMandatResponse, ModeFacturation, StatutMandat, TypeMandat } from "@/api/types";
+import { MODE_FACTURATION_LABELS } from "@/utils/mandat";import type { ContratMandatResponse, ModeFacturation, StatutMandat, TypeMandat } from "@/api/types";
 
 const TYPE_MANDAT_LABELS: Record<TypeMandat, string> = { GESTION: "Gestion", LOCATION: "Location", VENTE: "Vente" };
 // LOCATION et VENTE traitées hors système (annonces) pour l'instant : non proposées à la création ni à la modification
@@ -95,6 +96,15 @@ export function AgentMandatsPage() {
   const resilierForm = useForm<ResilierMandatFormInput, unknown, ResilierMandatFormValues>({ resolver: zodResolver(resilierMandatSchema) });
 
   const mandats = useMemo(() => mandatsQuery.data?.content ?? [], [mandatsQuery.data]);
+  const retraitPlafond = Boolean(editForm.watch("retirerPlafond"));
+
+  // Ligne ciblée par une notification (?cible=<id>) : repérée, ou épinglée en tête si elle n'est pas dans la page
+  const { data: lignes, cibleId, effacer: effacerCible } = useLigneCiblee({
+    rows: mandats,
+    getId: (m) => m.idMandat,
+    fetchOne: contratsMandatApi.getContratMandat,
+    queryKey: ["contrats-mandat"],
+  });
 
   // Les cours ayant déjà un mandat actif ne peuvent pas en recevoir un second (l'activation
   // échouerait) : le sélecteur n'interroge que les cours sans mandat actif, côté serveur.
@@ -138,6 +148,7 @@ export function AgentMandatsPage() {
         dateFin: values.dateFin ? `${values.dateFin}T00:00:00` : undefined,
         commission: values.commission,
         modeFacturation: values.modeFacturation,
+        plafondDepenseSansAccord: values.plafondDepenseSansAccord,
       });
       toast.success("Mandat créé, en attente d'activation.");
       createForm.reset({});
@@ -154,6 +165,8 @@ export function AgentMandatsPage() {
       dateFin: mandat.dateFin ? mandat.dateFin.slice(0, 10) : "",
       commission: mandat.commission ?? undefined,
       modeFacturation: mandat.modeFacturation ?? undefined,
+      plafondDepenseSansAccord: mandat.plafondDepenseSansAccord ?? "",
+      retirerPlafond: false,
       motif: "",
       accordClient: false,
     });
@@ -183,6 +196,8 @@ export function AgentMandatsPage() {
           dateFin: values.dateFin ? `${values.dateFin}T00:00:00` : undefined,
           commission: values.commission,
           modeFacturation: values.modeFacturation,
+          // Retirer le plafond remplace toute nouvelle valeur (le champ reste prérempli avec l'ancienne)
+          ...(values.retirerPlafond ? { retirerPlafond: true } : { plafondDepenseSansAccord: values.plafondDepenseSansAccord }),
           ...(actif ? { motif: values.motif, accordClient: true } : {}),
         },
       });
@@ -392,7 +407,9 @@ export function AgentMandatsPage() {
             </div>
           </div>
           <DataTable
-            data={mandats}
+            data={lignes}
+            highlightKey={cibleId}
+            onDismissHighlight={effacerCible}
             columns={columns}
             keyExtractor={(m) => m.idMandat}
             loading={mandatsQuery.isLoading}
@@ -446,6 +463,15 @@ export function AgentMandatsPage() {
               {...createForm.register("modeFacturation")}
             />
           </div>
+          <Input
+            label="Plafond des dépenses sans accord du bailleur"
+            type="number"
+            min={0}
+            step="1"
+            helperText="Montant jusqu'auquel l'agence engage des travaux urgents sans accord préalable. Vide = aucun plafond."
+            error={createForm.formState.errors.plafondDepenseSansAccord?.message}
+            {...createForm.register("plafondDepenseSansAccord")}
+          />
           <Button type="submit" fullWidth loading={createMutation.isPending}>
             Créer le mandat
           </Button>
@@ -474,6 +500,22 @@ export function AgentMandatsPage() {
               error={editForm.formState.errors.modeFacturation?.message}
               {...editForm.register("modeFacturation")}
             />
+            <Input
+              label="Plafond des dépenses sans accord du bailleur"
+              type="number"
+              min={0}
+              step="1"
+              disabled={retraitPlafond}
+              helperText="Montant jusqu'auquel l'agence engage des travaux urgents sans accord préalable. Vide = aucun plafond."
+              error={editForm.formState.errors.plafondDepenseSansAccord?.message}
+              {...editForm.register("plafondDepenseSansAccord")}
+            />
+            {editing.plafondDepenseSansAccord != null && (
+              <label className="flex items-start gap-2 text-sm text-slate-700">
+                <input type="checkbox" className="mt-0.5 h-4 w-4 rounded border-slate-300" {...editForm.register("retirerPlafond")} />
+                <span>Retirer le plafond : toute dépense pourra alors être engagée sans accord préalable du bailleur</span>
+              </label>
+            )}
             {editing.statut === "ACTIF" && (
               <AvenantFields
                 motif={editForm.register("motif")}

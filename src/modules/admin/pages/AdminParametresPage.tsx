@@ -16,6 +16,8 @@ const LIBELLES: Record<string, { libelle: string; unite?: string }> = {
   DELAI_EXPIRATION_RESERVATION_HEURES: { libelle: "Expiration d'une réservation non confirmée", unite: "heures" },
   MEDIAS_RETENTION_JOURS: { libelle: "Conservation d'un média supprimé", unite: "jours" },
   MEDIAS_MAX_FICHIERS_PAR_LOT: { libelle: "Fichiers maximum par envoi groupé", unite: "fichiers" },
+  DELAI_REPONSE_DEVIS_JOURS: { libelle: "Délai de réponse du bailleur à un devis avant expiration", unite: "jours" },
+  DELAI_RAPPEL_DEVIS_ACCEPTE_JOURS: { libelle: "Délai avant de rappeler à l'agent un devis accepté sans dépense enregistrée", unite: "jours" },
   DUREE_CONFIANCE_APPAREIL_2FA_HEURES: { libelle: "Durée de confiance d'un appareil (double authentification)", unite: "heures" },
 };
 

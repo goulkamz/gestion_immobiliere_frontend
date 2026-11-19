@@ -32,6 +32,8 @@ const AgentEcheancesPage = lazy(() => import("@/modules/agent/pages/AgentEcheanc
 const AgentReversementsPage = lazy(() =>
   import("@/modules/agent/pages/AgentReversementsPage").then((m) => ({ default: m.AgentReversementsPage })),
 );
+const AgentDevisPage = lazy(() => import("@/modules/agent/pages/AgentDevisPage").then((m) => ({ default: m.AgentDevisPage })));
+const AgentDepensesPage = lazy(() => import("@/modules/agent/pages/AgentDepensesPage").then((m) => ({ default: m.AgentDepensesPage })));
 const AgentTemoignagesPage = lazy(() =>
   import("@/modules/agent/pages/AgentTemoignagesPage").then((m) => ({ default: m.AgentTemoignagesPage })),
 );
@@ -64,6 +66,8 @@ export const agentRoutes = (
     <Route path="offres" element={<AgentOffresPage />} />
     <Route path="echeances" element={<AgentEcheancesPage />} />
     <Route path="reversements" element={<AgentReversementsPage />} />
+    <Route path="depenses" element={<AgentDepensesPage />} />
+    <Route path="devis" element={<AgentDevisPage />} />
     <Route path="temoignages" element={<AgentTemoignagesPage />} />
   </Route>
 );

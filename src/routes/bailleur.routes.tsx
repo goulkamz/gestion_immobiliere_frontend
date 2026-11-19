@@ -21,6 +21,12 @@ const BailleurEcheancesPage = lazy(() =>
 const BailleurRevenusPage = lazy(() =>
   import("@/modules/bailleur/pages/BailleurRevenusPage").then((m) => ({ default: m.BailleurRevenusPage })),
 );
+const BailleurDepensesPage = lazy(() =>
+  import("@/modules/bailleur/pages/BailleurDepensesPage").then((m) => ({ default: m.BailleurDepensesPage })),
+);
+const BailleurDevisPage = lazy(() =>
+  import("@/modules/bailleur/pages/BailleurDevisPage").then((m) => ({ default: m.BailleurDevisPage })),
+);
 
 export const bailleurRoutes = (
   <Route
@@ -37,5 +43,7 @@ export const bailleurRoutes = (
     <Route path="contrats" element={<BailleurContratsPage />} />
     <Route path="echeances" element={<BailleurEcheancesPage />} />
     <Route path="revenus" element={<BailleurRevenusPage />} />
+    <Route path="depenses" element={<BailleurDepensesPage />} />
+    <Route path="devis" element={<BailleurDevisPage />} />
   </Route>
 );

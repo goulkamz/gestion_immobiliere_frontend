@@ -1,12 +1,14 @@
 import { useCible } from "@/hooks/useLigneCiblee";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { echeancesApi } from "@/api/echeances";
 import { AlertTriangle, Building2, Calendar } from "lucide-react";
 import {
   CompteursStatut,
   DataTable,
   EmptyState,
+  Modal,
   PageHeader,
   Pagination,
   SearchInput,
@@ -15,12 +17,13 @@ import {
 } from "@/components/ui";
 import type { DataTableColumn } from "@/components/ui";
 import { useEcheancesQuery } from "@/hooks/queries/useEcheances";
+import { useRetenuesReversementQuery } from "@/hooks/queries/useDepenses";
 import { useCoursQuery } from "@/hooks/queries/useCours";
 import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { useRechercheServeur } from "@/hooks/useRechercheServeur";
 import { formatDate, formatMontant } from "@/utils/format";
 import { moisOccupation } from "@/utils/mandat";
-import type { EcheanceResponse } from "@/api/types";
+import type { DepenseImputationResponse, EcheanceResponse } from "@/api/types";
 
 const STATUTS = ["EN_ATTENTE", "PAYE", "EN_RETARD"] as const;
 
@@ -28,12 +31,17 @@ interface RevenuRow extends EcheanceResponse {
   loyersDus: number;
 }
 
-// Loyers dus = net reversé + commission de l'agence (même calcul que côté agent).
+// Loyers dus = net reversé + commission de l'agence + dépenses retenues (même calcul que côté agent).
 const versRows = (list: EcheanceResponse[] | undefined): RevenuRow[] =>
   (list ?? []).map((e) => ({
     ...e,
-    loyersDus: e.montantDu + (e.commissionDeduite ?? 0),
+    loyersDus: e.montantDu + (e.commissionDeduite ?? 0) + (e.retenueDepenses ?? 0),
   }));
+
+const RETENUES_COLUMNS: DataTableColumn<DepenseImputationResponse>[] = [
+  { key: "depense", header: "Dépense", render: (i) => i.libelleDepense },
+  { key: "montant", header: "Retenu", align: "right", render: (i) => formatMontant(i.montant) },
+];
 
 export function BailleurRevenusPage() {
   const {
@@ -45,6 +53,8 @@ export function BailleurRevenusPage() {
   } = useRechercheServeur();
   const [pageCumul, setPageCumul] = useState(0);
   const [courFilter, setCourFilter] = useState("");
+  const [retenuesEcheance, setRetenuesEcheance] = useState<number | null>(null);
+  const retenuesQuery = useRetenuesReversementQuery(retenuesEcheance);
 
   // Périmètre (mes mandats), recherche, cour, mode et pagination sont appliqués côté serveur
   const filtres = {
@@ -140,6 +150,24 @@ export function BailleurRevenusPage() {
       render: (e) => formatMontant(e.commissionDeduite),
     },
     {
+      key: "retenue",
+      header: "Dépenses retenues",
+      align: "right",
+      render: (e) =>
+        e.retenueDepenses ? (
+          <button
+            type="button"
+            title="Voir les dépenses retenues"
+            className="font-medium text-primary-700 underline decoration-dotted underline-offset-2 hover:text-primary-900"
+            onClick={() => setRetenuesEcheance(e.idEcheance)}
+          >
+            {formatMontant(e.retenueDepenses)}
+          </button>
+        ) : (
+          "-"
+        ),
+    },
+    {
       key: "du",
       header: "Net à vous reverser",
       align: "right",
@@ -168,7 +196,7 @@ export function BailleurRevenusPage() {
       <PageHeader
         tone="indigo"
         title="Mes revenus"
-        description="Ce que l'agence vous reverse : les loyers dus de la cour, moins sa commission. Une échéance du 1er d'un mois correspond à l'occupation du mois précédent."
+        description="Ce que l'agence vous reverse : les loyers dus de la cour, moins sa commission et les dépenses à votre charge qu'elle a avancées. Une échéance du 1er d'un mois correspond à l'occupation du mois précédent."
       />
 
       <CompteursStatut
@@ -268,6 +296,30 @@ export function BailleurRevenusPage() {
           )}
         </>
       )}
+
+      <Modal isOpen={retenuesEcheance !== null} onClose={() => setRetenuesEcheance(null)} title="Dépenses retenues sur ce reversement" titleTone="indigo">
+        {retenuesQuery.isError ? (
+          <EmptyState icon={<AlertTriangle size={32} />} title="Impossible de charger les retenues" description="Réessayez dans quelques instants." />
+        ) : (
+          <div className="space-y-3">
+            <p className="text-sm text-slate-600">
+              Dépenses à votre charge avancées par l&apos;agence, déduites du net à vous reverser. La commission reste calculée sur les loyers.
+            </p>
+            <DataTable
+              data={retenuesQuery.data ?? []}
+              columns={RETENUES_COLUMNS}
+              keyExtractor={(i) => i.idImputation}
+              loading={retenuesQuery.isLoading}
+              emptyMessage="Aucune dépense retenue sur ce reversement."
+            />
+            <p className="text-sm">
+              <Link to="/espace-bailleur/depenses" className="font-medium text-primary-700 underline underline-offset-2 hover:text-primary-900">
+                Voir toutes mes dépenses
+              </Link>
+            </p>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

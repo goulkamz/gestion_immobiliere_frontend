@@ -319,6 +319,29 @@ export function FinancesTab({
                 { label: "À venir", value: formatMontant(rev.aVenir), hint: "Pas encore exigibles" },
               ]}
             />
+            {(rev.nombreDepensesEnCours > 0 || rev.nombreDepensesDues > 0) && (
+              <BandeauStocks
+                items={[
+                  {
+                    label: "Dépenses avancées, à retenir",
+                    value: formatMontant(rev.depensesResteARetenir),
+                    hint:
+                      rev.nombreDepensesEnCours > 0
+                        ? `${rev.nombreDepensesEnCours} dépense${rev.nombreDepensesEnCours > 1 ? "s" : ""} en cours de retenue`
+                        : "Aucune dépense en cours",
+                  },
+                  {
+                    label: "Dépenses dues par les bailleurs",
+                    value: formatMontant(rev.depensesDuesParBailleurs),
+                    tone: rev.depensesDuesParBailleurs > 0 ? "text-warning-700" : "text-success-700",
+                    hint:
+                      rev.nombreDepensesDues > 0
+                        ? `${rev.nombreDepensesDues} dépense${rev.nombreDepensesDues > 1 ? "s" : ""} après résiliation du mandat`
+                        : "Aucun mandat résilié avec un solde",
+                  },
+                ]}
+              />
+            )}
           </SoftCard>
         </div>
 

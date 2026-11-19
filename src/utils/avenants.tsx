@@ -13,14 +13,19 @@ const LIBELLES_CHAMPS: Record<ChampAvenant, string> = {
   commission: "Commission",
   modeFacturation: "Mode de facturation",
   typeMandat: "Type de mandat",
+  plafondDepenseSansAccord: "Plafond des dépenses sans accord",
 };
 
 const LIBELLES_TYPES_MANDAT: Record<string, string> = { GESTION: "Gestion", LOCATION: "Location", VENTE: "Vente" };
 
 function formaterValeur(champ: ChampAvenant, valeur: string | null): string {
-  if (valeur === null || valeur === "") return champ === "dateSortie" || champ === "dateFin" ? "Durée indéterminée" : "-";
+  if (valeur === null || valeur === "") {
+    if (champ === "plafondDepenseSansAccord") return "Aucun plafond";
+    return champ === "dateSortie" || champ === "dateFin" ? "Durée indéterminée" : "-";
+  }
   switch (champ) {
     case "montantLoyer":
+    case "plafondDepenseSansAccord":
       return formatMontant(Number(valeur));
     case "commission":
       return `${Number(valeur)} %`;

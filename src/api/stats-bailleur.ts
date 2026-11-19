@@ -1,5 +1,5 @@
 import { http } from "./http";
-import type { ApiSuccessResponse, BailleurPatrimoineDTO, BailleurRevenuDTO } from "./types";
+import type { ApiSuccessResponse, BailleurDepensesDTO, BailleurPatrimoineDTO, BailleurRevenuDTO } from "./types";
 
 async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Promise<T> {
   const { data } = await promise;
@@ -9,4 +9,5 @@ async function unwrap<T>(promise: Promise<{ data: ApiSuccessResponse<T> }>): Pro
 export const statsBailleurApi = {
   getPatrimoine: () => unwrap<BailleurPatrimoineDTO>(http.get("/stats/bailleur/patrimoine")),
   getRevenus: () => unwrap<BailleurRevenuDTO[]>(http.get("/stats/bailleur/revenus")),
+  getDepenses: () => unwrap<BailleurDepensesDTO>(http.get("/stats/bailleur/depenses")),
 };

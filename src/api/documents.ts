@@ -41,4 +41,8 @@ export const documentsApi = {
 
   avenant: (idAvenant: number): Promise<AxiosResponse<Blob>> =>
     http.get(`/documents/avenants/${idAvenant}`, { responseType: "blob" }),
+
+  /** Reçu du règlement direct d'une dépense par le bailleur (refusé, 409, si le règlement a été annulé). */
+  recuReglementDepense: (idReglement: number): Promise<AxiosResponse<Blob>> =>
+    http.get(`/documents/recus-reglements/${idReglement}`, { responseType: "blob" }),
 };

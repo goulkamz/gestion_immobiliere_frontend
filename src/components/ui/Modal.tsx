@@ -26,6 +26,9 @@ const SIZE_CLASSES: Record<ModalSize, string> = {
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+// Fenêtres ouvertes, de la plus ancienne à la plus récente : Échap et Tab ne concernent que celle du dessus
+const pileModales: symbol[] = [];
+
 export function Modal({ isOpen, onClose, title, size = "md", footer, closeOnOverlay = true, children, titleTone = "plain" }: ModalProps) {
   const titleId = useId();
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -39,6 +42,8 @@ export function Modal({ isOpen, onClose, title, size = "md", footer, closeOnOver
   useEffect(() => {
     if (!isOpen) return;
 
+    const identifiant = Symbol("modal");
+    pileModales.push(identifiant);
     previouslyFocused.current = document.activeElement as HTMLElement | null;
     document.body.style.overflow = "hidden";
 
@@ -47,6 +52,7 @@ export function Modal({ isOpen, onClose, title, size = "md", footer, closeOnOver
     (focusable?.[0] ?? dialog)?.focus();
 
     function handleKeyDown(event: KeyboardEvent) {
+      if (pileModales[pileModales.length - 1] !== identifiant) return;
       if (event.key === "Escape") {
         onCloseRef.current();
         return;
@@ -70,7 +76,10 @@ export function Modal({ isOpen, onClose, title, size = "md", footer, closeOnOver
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "";
+      const rang = pileModales.indexOf(identifiant);
+      if (rang !== -1) pileModales.splice(rang, 1);
+      // Une fenêtre reste ouverte en dessous : le défilement de la page reste bloqué
+      document.body.style.overflow = pileModales.length > 0 ? "hidden" : "";
       previouslyFocused.current?.focus();
     };
   }, [isOpen]);

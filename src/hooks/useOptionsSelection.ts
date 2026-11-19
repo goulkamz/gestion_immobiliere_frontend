@@ -69,6 +69,18 @@ export function useMandatsActifsOptions(recherche: string): RemoteComboboxResult
   };
 }
 
+/** Cours sous mandat de gestion actif, identifiées par l'id de la cour (saisie et filtre des dépenses du bailleur). */
+export function useCoursSousGestionOptions(recherche: string): RemoteComboboxResult {
+  const query = useContratsMandatQuery({ statut: "ACTIF", size: TAILLE, recherche: recherche || undefined });
+  return {
+    options: (query.data?.content ?? [])
+      .filter((m) => m.typeMandat === "GESTION")
+      .map((m) => ({ value: m.idCour, label: `${m.referenceCour} (${m.nomProprietaire})` })),
+    total: query.data?.page.totalElements,
+    isFetching: query.isFetching,
+  };
+}
+
 /** Cours (création d'une maison), libellées avec leur référence et leur propriétaire. */
 export function useCoursOptions(recherche: string): RemoteComboboxResult {
   const query = useCoursQuery({ size: TAILLE, recherche: recherche || undefined });

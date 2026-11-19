@@ -45,6 +45,8 @@ export interface CalculCumulResponse {
   nombreMois: number;
   montantLoyersDus: number;
   commissionDeduite: number;
+  /** Total des dépenses du bailleur retenues sur les mois calculés. */
+  retenueDepenses?: number;
   montantNetAReverser: number;
   echeances: EcheanceMandatResponse[];
 }

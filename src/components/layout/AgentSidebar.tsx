@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import {
   ChevronsLeft,
+  ScrollText,
   ChevronsRight,
   LayoutDashboard,
   Building2,
@@ -19,6 +20,7 @@ import {
   MessageSquareQuote,
   Users,
   KeyRound,
+  Wrench,
 } from "lucide-react";
 import { useAgentUiStore } from "@/store/agentUiStore";
 
@@ -39,6 +41,8 @@ const LINKS = [
   { to: "/espace-agent/offres", label: "Offres", icon: HandCoins },
   { to: "/espace-agent/echeances", label: "Échéances", icon: Receipt },
   { to: "/espace-agent/reversements", label: "Reversements bailleurs", icon: Banknote },
+  { to: "/espace-agent/depenses", label: "Dépenses bailleurs", icon: Wrench },
+  { to: "/espace-agent/devis", label: "Devis de travaux", icon: ScrollText },
   { to: "/espace-agent/temoignages", label: "Témoignages", icon: MessageSquareQuote },
 ];
 

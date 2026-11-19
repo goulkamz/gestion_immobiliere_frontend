@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { ChevronsLeft, ChevronsRight, LayoutDashboard, Building2, FileSignature, TrendingUp, FileText, Receipt } from "lucide-react";
+import { ChevronsLeft, ChevronsRight, LayoutDashboard, Building2, FileSignature, TrendingUp, FileText, Receipt, Wrench, ScrollText } from "lucide-react";
 import { useBailleurUiStore } from "@/store/bailleurUiStore";
 
 const LINKS = [
@@ -9,6 +9,8 @@ const LINKS = [
   { to: "/espace-bailleur/contrats", label: "Contrats de location", icon: FileText },
   { to: "/espace-bailleur/echeances", label: "Échéances locataires", icon: Receipt },
   { to: "/espace-bailleur/revenus", label: "Mes revenus", icon: TrendingUp },
+  { to: "/espace-bailleur/depenses", label: "Mes dépenses", icon: Wrench },
+  { to: "/espace-bailleur/devis", label: "Devis de travaux", icon: ScrollText },
 ];
 
 /** Navigation verticale de l'espace bailleur, repliable pour libérer de l'espace au contenu. */

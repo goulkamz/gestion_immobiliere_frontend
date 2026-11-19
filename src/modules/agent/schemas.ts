@@ -56,6 +56,125 @@ export const bienServiceCreateSchema = bienServiceEditSchema.extend({
 export type BienServiceCreateFormValues = z.infer<typeof bienServiceCreateSchema>;
 export type BienServiceCreateFormInput = z.input<typeof bienServiceCreateSchema>;
 
+/** Montant facultatif : un champ vide reste « non renseigné » (z.coerce seul le changerait en 0). */
+const montantFacultatif = z.preprocess(
+  (v) => (v === "" || v === null || v === undefined ? undefined : v),
+  z.coerce.number({ message: "Montant invalide" }).min(0, "Le montant ne peut pas être négatif").optional(),
+);
+
+const CATEGORIES_DEPENSE = ["ETANCHEITE", "PLOMBERIE", "ELECTRICITE", "VIDANGE", "MACONNERIE", "MENUISERIE", "PEINTURE", "AUTRE"] as const;
+
+/** Dépense à la charge du bailleur (modification : la cour et la maison ne changent plus). */
+export const depenseEditSchema = z.object({
+  libelle: z.string().trim().min(1, "Le libellé est requis").max(254, "254 caractères maximum"),
+  categorie: z.enum(CATEGORIES_DEPENSE, { message: "Choisissez une catégorie" }),
+  prestataire: z.string().max(254, "254 caractères maximum").optional(),
+  description: z.string().optional(),
+  dateDepense: z
+    .string()
+    .min(1, "La date est requise")
+    .refine((d) => d <= new Date().toISOString().slice(0, 10), "La date ne peut pas être dans le futur"),
+  montant: z.coerce.number({ message: "Le montant est requis" }).positive("Le montant doit être positif"),
+  nombreMois: z.coerce.number({ message: "Indiquez un nombre de mois" }).int("Nombre entier attendu").min(1, "Au moins 1 mois").max(60, "60 mois maximum"),
+  // Exigés seulement au-dessus du plafond du mandat (vérifié dans la page, qui connaît le plafond)
+  accordBailleur: z.boolean().optional(),
+  accordMotif: z.string().max(500, "500 caractères maximum").optional(),
+});
+export type DepenseEditFormValues = z.infer<typeof depenseEditSchema>;
+export type DepenseEditFormInput = z.input<typeof depenseEditSchema>;
+
+export const depenseCreateSchema = depenseEditSchema.extend({
+  idCour: z.coerce.number({ message: "Choisissez une cour" }).int().positive("Choisissez une cour"),
+  idMaison: z.preprocess((v) => (v === "" || v === null || v === undefined ? undefined : v), z.coerce.number().int().positive().optional()),
+});
+export type DepenseCreateFormValues = z.infer<typeof depenseCreateSchema>;
+export type DepenseCreateFormInput = z.input<typeof depenseCreateSchema>;
+
+export const annulerDepenseSchema = z.object({
+  motif: z.string().trim().min(1, "Le motif est requis").max(254, "254 caractères maximum"),
+});
+export type AnnulerDepenseFormValues = z.infer<typeof annulerDepenseSchema>;
+export type AnnulerDepenseFormInput = z.input<typeof annulerDepenseSchema>;
+
+/** Annulation d'un règlement saisi par erreur, abandon de créance : le motif est toujours obligatoire. */
+export const annulerReglementSchema = annulerDepenseSchema;
+export type AnnulerReglementFormValues = AnnulerDepenseFormValues;
+export type AnnulerReglementFormInput = AnnulerDepenseFormInput;
+export const abandonnerDepenseSchema = annulerDepenseSchema;
+export type AbandonnerDepenseFormValues = AnnulerDepenseFormValues;
+export type AbandonnerDepenseFormInput = AnnulerDepenseFormInput;
+
+/** Nouvel étalement du solde restant ; l'accord du bailleur n'est exigé que pour raccourcir (vérifié dans la page). */
+export const reechelonnerDepenseSchema = z.object({
+  nombreMoisRestants: z.coerce
+    .number({ message: "Indiquez un nombre de reversements" })
+    .int("Nombre entier attendu")
+    .min(1, "Au moins 1 reversement")
+    .max(60, "60 reversements maximum"),
+  motif: z.string().trim().min(1, "Le motif est requis").max(254, "254 caractères maximum"),
+  accordBailleur: z.boolean().optional(),
+});
+export type ReechelonnerDepenseFormValues = z.infer<typeof reechelonnerDepenseSchema>;
+export type ReechelonnerDepenseFormInput = z.input<typeof reechelonnerDepenseSchema>;
+
+/** Règlement direct du bailleur (le plafond du montant est vérifié dans la page, qui connaît le solde). */
+export const reglementDepenseSchema = z.object({
+  montant: z.coerce.number({ message: "Le montant est requis" }).positive("Le montant doit être positif"),
+  dateReglement: z
+    .string()
+    .min(1, "La date est requise")
+    .refine((d) => d <= new Date().toISOString().slice(0, 10), "La date ne peut pas être dans le futur"),
+  modeReglement: z.string().max(50, "50 caractères maximum").optional(),
+  reference: z.string().max(254, "254 caractères maximum").optional(),
+  commentaire: z.string().max(500, "500 caractères maximum").optional(),
+});
+export type ReglementDepenseFormValues = z.infer<typeof reglementDepenseSchema>;
+export type ReglementDepenseFormInput = z.input<typeof reglementDepenseSchema>;
+
+/** Devis de travaux soumis au bailleur (modification ou révision : la cour et la maison ne changent plus). */
+export const devisEditSchema = z.object({
+  libelle: z.string().trim().min(1, "Le libellé est requis").max(254, "254 caractères maximum"),
+  categorie: z.enum(CATEGORIES_DEPENSE, { message: "Choisissez une catégorie" }),
+  prestataire: z.string().max(254, "254 caractères maximum").optional(),
+  description: z.string().optional(),
+  montant: z.coerce.number({ message: "Le montant est requis" }).positive("Le montant doit être positif"),
+  nombreMois: z.coerce.number({ message: "Indiquez un nombre de mois" }).int("Nombre entier attendu").min(1, "Au moins 1 mois").max(60, "60 mois maximum"),
+});
+export const devisCreateSchema = devisEditSchema.extend({
+  idCour: z.coerce.number({ message: "Choisissez une cour" }).int().positive("Choisissez une cour"),
+  idMaison: z.preprocess((v) => (v === "" || v === null || v === undefined ? undefined : v), z.coerce.number().int().positive().optional()),
+});
+export type DevisCreateFormValues = z.infer<typeof devisCreateSchema>;
+export type DevisCreateFormInput = z.input<typeof devisCreateSchema>;
+
+export const retirerDevisSchema = z.object({
+  commentaire: z.string().trim().min(1, "Le motif est requis").max(254, "254 caractères maximum"),
+});
+export type RetirerDevisFormValues = z.infer<typeof retirerDevisSchema>;
+export type RetirerDevisFormInput = z.input<typeof retirerDevisSchema>;
+
+/** Accord d'un devis donné par le bailleur hors plateforme : qui, quand, comment, et à quelle date. */
+export const accordHorsPlateformeSchema = z.object({
+  motif: z.string().trim().min(1, "Précisez qui a donné l'accord et comment").max(500, "500 caractères maximum"),
+  dateAccord: z
+    .string()
+    .min(1, "La date est requise")
+    .refine((d) => d <= new Date().toISOString().slice(0, 10), "La date ne peut pas être dans le futur"),
+});
+export type AccordHorsPlateformeFormValues = z.infer<typeof accordHorsPlateformeSchema>;
+export type AccordHorsPlateformeFormInput = z.input<typeof accordHorsPlateformeSchema>;
+
+/** Dépense enregistrée à partir d'un devis accepté (le plafond du montant est vérifié dans la page, qui connaît le devis). */
+export const depenseDepuisDevisSchema = z.object({
+  dateDepense: z
+    .string()
+    .min(1, "La date est requise")
+    .refine((d) => d <= new Date().toISOString().slice(0, 10), "La date ne peut pas être dans le futur"),
+  montant: z.coerce.number({ message: "Le montant est requis" }).positive("Le montant doit être positif"),
+});
+export type DepenseDepuisDevisFormValues = z.infer<typeof depenseDepuisDevisSchema>;
+export type DepenseDepuisDevisFormInput = z.input<typeof depenseDepuisDevisSchema>;
+
 export const mandatCreateSchema = z
   .object({
     idCour: z.coerce.number({ message: "Choisissez une cour" }).int().positive("Choisissez une cour"),
@@ -64,6 +183,7 @@ export const mandatCreateSchema = z
     dateFin: z.string().optional(),
     commission: z.coerce.number().min(0).optional().or(z.literal("").transform(() => undefined)),
     modeFacturation: z.enum(["MENSUEL", "CUMUL", "COMMISSION"], { message: "Choisissez un mode de facturation" }),
+    plafondDepenseSansAccord: montantFacultatif,
   })
   .refine((d) => !d.dateFin || d.dateFin > d.dateDebut, { message: "La date de fin doit être après la date de début", path: ["dateFin"] });
 export type MandatCreateFormValues = z.infer<typeof mandatCreateSchema>;
@@ -74,6 +194,9 @@ export const mandatEditSchema = z.object({
   dateFin: z.string().optional(),
   commission: z.coerce.number().min(0).optional().or(z.literal("").transform(() => undefined)),
   modeFacturation: z.enum(["MENSUEL", "CUMUL", "COMMISSION"], { message: "Choisissez un mode de facturation" }),
+  plafondDepenseSansAccord: montantFacultatif,
+  // Cochée : le plafond existant est supprimé (la nouvelle valeur éventuelle est alors ignorée)
+  retirerPlafond: z.boolean().optional(),
   // Mandat ACTIF : un avenant est créé, motif et accord du client sont alors exigés (vérifié dans la page)
   motif: z.string().optional(),
   accordClient: z.boolean().optional(),

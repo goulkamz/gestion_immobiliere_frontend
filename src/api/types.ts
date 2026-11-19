@@ -513,6 +513,8 @@ export interface EcheanceResponse {
   montantPaye: number;
   penalite: number | null;
   commissionDeduite: number | null;
+  /** Dépenses du bailleur retenues sur ce reversement (MANDAT) ; déjà déduites de montantDu. */
+  retenueDepenses?: number | null;
   statut: StatutEcheance;
   /** Libellés renvoyés par la liste agent : maison et locataire (LOCATION). */
   nomCommunMaison?: string | null;
@@ -532,6 +534,7 @@ export interface EcheanceMandatResponse {
   periodeMois: string;
   montantLoyersDus: number | null;
   commissionDeduite: number | null;
+  retenueDepenses?: number | null;
   montantNetAReverser: number | null;
   statut: StatutEcheance;
 }
@@ -612,6 +615,8 @@ export interface ContratMandatResponse {
   typeMandat: TypeMandat;
   commission: number | null;
   modeFacturation: ModeFacturation | null;
+  /** Montant jusqu'auquel l'agence engage une dépense sans accord préalable du bailleur (null = aucun plafond). */
+  plafondDepenseSansAccord?: number | null;
   statut: StatutMandat;
   motifResiliation: string | null;
   /** Renseignés uniquement par la réponse d'une modification qui a créé un avenant. */
@@ -624,6 +629,16 @@ export interface BailleurPatrimoineDTO {
   nbMaisons: number;
   maisonsParStatut: Record<string, number>;
   tauxOccupation: number | null;
+}
+
+/** `GET /api/stats/bailleur/depenses` : dépenses avancées par l'agence et devis en attente de réponse. */
+export interface BailleurDepensesDTO {
+  resteARetenir: number;
+  nombreEnCours: number;
+  /** Solde dû directement à l'agence (mandat résilié). */
+  duDirectement: number;
+  nombreDues: number;
+  devisEnAttente: number;
 }
 
 export interface BailleurRevenuDTO {
@@ -771,6 +786,7 @@ export interface CreateContratMandatRequest {
   typeMandat: TypeMandat;
   commission?: number;
   modeFacturation: ModeFacturation;
+  plafondDepenseSansAccord?: number;
 }
 
 export interface ResilierMandatRequest {
@@ -801,6 +817,9 @@ export interface UpdateContratMandatRequest {
   commission?: number;
   modeFacturation?: ModeFacturation;
   typeMandat?: TypeMandat;
+  plafondDepenseSansAccord?: number;
+  /** Supprime le plafond des dépenses sans accord (incompatible avec une nouvelle valeur). */
+  retirerPlafond?: boolean;
   /** Mandat ACTIF : motif et accord du client obligatoires (un avenant est créé). Mandat EN_ATTENTE : ignorés. */
   motif?: string;
   accordClient?: boolean;
@@ -820,7 +839,219 @@ export interface UpdateContratLocationRequest {
   dateEffet?: string;
 }
 
-export type ChampAvenant = "montantLoyer" | "dateSortie" | "dateFin" | "commission" | "modeFacturation" | "typeMandat";
+export type ChampAvenant =
+  | "montantLoyer"
+  | "dateSortie"
+  | "dateFin"
+  | "commission"
+  | "modeFacturation"
+  | "typeMandat"
+  | "plafondDepenseSansAccord";
+
+// ─── Dépenses à la charge du bailleur ──────────────────────────────────
+export type CategorieDepense = "ETANCHEITE" | "PLOMBERIE" | "ELECTRICITE" | "VIDANGE" | "MACONNERIE" | "MENUISERIE" | "PEINTURE" | "AUTRE";
+/**
+ * EN_COURS : retenue sur les reversements. A_REGLER : mandat résilié, le solde est dû par le bailleur (retenu sur les
+ * derniers reversements, sinon réglé directement à l'agence). SOLDEE : entièrement récupérée. ANNULEE.
+ */
+export type StatutDepense = "EN_COURS" | "A_REGLER" | "SOLDEE" | "ANNULEE";
+
+/** Règlement fait directement par le bailleur à l'agence, hors reversement (mandat résilié). */
+export interface DepenseReglementResponse {
+  idReglement: number;
+  montant: number;
+  dateReglement: string;
+  modeReglement: string | null;
+  reference: string | null;
+  commentaire: string | null;
+  /** Règlement saisi par erreur : conservé mais ne compte plus (pas de reçu). */
+  annule: boolean;
+  motifAnnulation: string | null;
+  dateAnnulation: string | null;
+}
+
+/** Ce qui a été retenu d'une dépense sur un reversement (échéance MANDAT). */
+export interface DepenseImputationResponse {
+  idImputation: number;
+  idDepense: number;
+  libelleDepense: string;
+  idEcheance: number;
+  /** Date d'échéance du reversement (le 1er du mois). */
+  periodeMois: string;
+  montant: number;
+  statutReversement: StatutEcheance;
+}
+
+export interface DepenseResponse {
+  idDepense: number;
+  idMandat: number;
+  idCour: number;
+  referenceCour: string;
+  idMaison: number | null;
+  nomMaison: string | null;
+  nomProprietaire: string;
+  libelle: string;
+  categorie: CategorieDepense;
+  description: string | null;
+  prestataire: string | null;
+  dateDepense: string;
+  montant: number;
+  /** Nombre de reversements sur lesquels la dépense est retenue (1 = d'un coup). */
+  nombreMois: number;
+  mensualite: number;
+  /** Reversements encore prévus pour solder la dépense (null si elle n'est plus en cours). */
+  moisRestants: number | null;
+  montantImpute: number;
+  /** Réglé directement par le bailleur, hors reversement (mandat résilié). */
+  montantRegle: number;
+  montantRestant: number;
+  /** Étalement d'origine si la dépense a été rééchelonnée (null sinon). */
+  nombreMoisInitial: number | null;
+  motifReechelonnement: string | null;
+  dateReechelonnement: string | null;
+  accordBailleur: boolean;
+  /** Accord attesté par l'agent : qui, quand, comment (null si l'accord vient d'un devis accepté sur la plateforme). */
+  accordMotif: string | null;
+  /** Reste dû abandonné par l'agence (abandon de créance, décidé par l'admin), 0 sinon. */
+  montantAbandonne: number;
+  motifAbandon: string | null;
+  dateAbandon: string | null;
+  /** Créance abandonnée puis rétablie par l'admin (trace). */
+  motifRetablissement: string | null;
+  dateRetablissement: string | null;
+  /** Contestation du bailleur (une seule par dépense) et réponse de l'agence. */
+  motifContestation: string | null;
+  dateContestation: string | null;
+  reponseContestation: string | null;
+  dateReponseContestation: string | null;
+  /** Contestation ouverte, sans réponse de l'agence. */
+  contestationOuverte: boolean;
+  /** Mandat toujours actif mais dont la date de fin est dépassée, alors que la dépense est en cours de retenue. */
+  mandatEchu: boolean;
+  dateFinMandat: string | null;
+  /** Devis accepté par le bailleur dont la dépense est issue (null = saisie directe). */
+  idDevis: number | null;
+  statut: StatutDepense;
+  motifAnnulation: string | null;
+  /** Renseigné uniquement par le détail (`GET /depenses/{id}`). */
+  imputations: DepenseImputationResponse[] | null;
+  /** Règlements directs du bailleur ; renseigné uniquement par le détail. */
+  reglements: DepenseReglementResponse[] | null;
+}
+
+/** Nouvel étalement du solde restant d'une dépense en cours. */
+export interface ReechelonnerDepenseRequest {
+  nombreMoisRestants: number;
+  motif: string;
+  /** Obligatoire à vrai pour raccourcir l'étalement (409 sinon). */
+  accordBailleur?: boolean;
+}
+
+/** Règlement direct du bailleur pour une dépense due après la résiliation du mandat. */
+export interface ReglementDepenseRequest {
+  montant: number;
+  /** yyyy-MM-dd, aujourd'hui par défaut, jamais dans le futur. */
+  dateReglement?: string;
+  modeReglement?: string;
+  reference?: string;
+  commentaire?: string;
+}
+
+export interface CreateDepenseRequest {
+  idCour: number;
+  idMaison?: number;
+  libelle: string;
+  categorie: CategorieDepense;
+  description?: string;
+  prestataire?: string;
+  /** yyyy-MM-dd, aujourd'hui par défaut, jamais dans le futur. */
+  dateDepense?: string;
+  montant: number;
+  nombreMois?: number;
+  /** Obligatoire à vrai quand le montant dépasse le plafond convenu dans le mandat. */
+  accordBailleur?: boolean;
+  /** Obligatoire avec l'accord au-dessus du plafond : qui l'a donné, quand et comment. */
+  accordMotif?: string;
+}
+
+/** Mandat actif dont la date de fin est dépassée et qui porte encore des dépenses en cours de retenue. */
+export interface MandatEchuDepenses {
+  idMandat: number;
+  referenceCour: string;
+  dateFin: string;
+  nombreDepenses: number;
+  resteARetenir: number;
+}
+
+/** Possible tant qu'aucune retenue n'a été faite (409 sinon). */
+export type UpdateDepenseRequest = Partial<Omit<CreateDepenseRequest, "idCour" | "idMaison">>;
+
+// ─── Devis de travaux soumis au bailleur ───────────────────────────────
+/**
+ * EN_ATTENTE : le bailleur doit répondre. A_RENEGOCIER : il demande une révision, l'agence modifie et soumet à nouveau.
+ * ACCEPTE : la dépense peut être enregistrée. REALISE : dépense enregistrée. REJETE : travaux hors plateforme. ANNULE : retiré par l'agence.
+ * EXPIRE : resté sans réponse au-delà du délai ; l'agence le modifie pour le soumettre à nouveau.
+ */
+export type StatutDevis = "EN_ATTENTE" | "A_RENEGOCIER" | "ACCEPTE" | "REJETE" | "ANNULE" | "REALISE" | "EXPIRE";
+
+export interface DevisResponse {
+  idDevis: number;
+  idMandat: number;
+  idCour: number;
+  referenceCour: string;
+  idMaison: number | null;
+  nomMaison: string | null;
+  nomProprietaire: string;
+  libelle: string;
+  categorie: CategorieDepense;
+  description: string | null;
+  prestataire: string | null;
+  montant: number;
+  /** Étalement proposé : nombre de reversements sur lesquels la dépense serait retenue (1 = d'un coup). */
+  nombreMois: number;
+  mensualite: number;
+  /** Plafond du mandat au-delà duquel l'accord du bailleur est nécessaire (null = aucun plafond). */
+  plafondDepenseSansAccord: number | null;
+  statut: StatutDevis;
+  /** Dernière réponse du bailleur : ce qu'il demande de revoir, ou pourquoi il rejette. */
+  commentaireBailleur: string | null;
+  dateReponse: string | null;
+  /** 1 à la création, +1 à chaque révision soumise après une demande de renégociation. */
+  nombreSoumissions: number;
+  motifAnnulation: string | null;
+  dateSoumission: string | null;
+  /** Date à laquelle le devis expire faute de réponse (uniquement tant qu'il est en attente). */
+  dateLimiteReponse: string | null;
+  /** Dépense enregistrée à partir du devis (statut REALISE). */
+  idDepense: number | null;
+  /** Accord donné hors plateforme et enregistré par l'agent ; le bailleur peut le contester tant que la dépense n'existe pas. */
+  accordHorsPlateforme: boolean;
+  accordMotif: string | null;
+  accordDate: string | null;
+  /** Un devis PDF de l'artisan est joint. */
+  pieceJointe: boolean;
+}
+
+/** Accord d'un devis donné par le bailleur hors plateforme : qui, quand, comment. */
+export interface AccordHorsPlateformeRequest {
+  motif: string;
+  /** yyyy-MM-dd, jamais dans le futur. */
+  dateAccord: string;
+}
+
+export interface CreateDevisRequest {
+  idCour: number;
+  idMaison?: number;
+  libelle: string;
+  categorie: CategorieDepense;
+  description?: string;
+  prestataire?: string;
+  montant: number;
+  nombreMois?: number;
+}
+
+/** Possible en attente de réponse, à renégocier ou expiré (409 sinon) ; dans les deux derniers cas le devis est soumis à nouveau. */
+export type UpdateDevisRequest = Partial<Omit<CreateDevisRequest, "idCour" | "idMaison">>;
 
 /** Avenant à un contrat de location ou à un mandat (`GET /contrats-location|mandat/{id}/avenants`). */
 export interface AvenantResponse {
@@ -1027,6 +1258,12 @@ export interface ReversementsStatsDTO {
   /** Part des reversements payés dont les loyers du mois n'ont pas été encaissés (avance de l'agence). */
   avanceSansLoyer: number;
   nombreAvances: number;
+  /** Dépenses avancées pour les bailleurs, pas encore retenues sur les reversements. */
+  depensesResteARetenir: number;
+  nombreDepensesEnCours: number;
+  /** Solde dû directement par les bailleurs (mandats résiliés). */
+  depensesDuesParBailleurs: number;
+  nombreDepensesDues: number;
 }
 
 /** `GET /api/stats/admin` (AdminStatsDTO). Les maps sont des décomptes par statut ou par rôle. */

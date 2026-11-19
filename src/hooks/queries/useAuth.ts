@@ -8,7 +8,6 @@ import type {
   UpdateProfileRequest,
 } from "@/api/types";
 import { useSessionStore } from "@/store/sessionStore";
-import { notificationQueryKeys } from "./useNotifications";
 import { logger } from "@/utils/logger";
 
 export const authQueryKeys = {
@@ -43,6 +42,9 @@ function useOuvertureSession() {
   const queryClient = useQueryClient();
   const setProfile = useSessionStore((s) => s.setProfile);
   return async () => {
+      // Aucune donnée d'une session précédente ne doit survivre : sans cela, les listes mises en cache par l'utilisateur
+      // d'avant (agent, autre bailleur) restent affichées jusqu'à 30 s, même après un changement de compte
+      queryClient.clear();
       // Les cookies httpOnly sont déjà posés par le serveur ; on charge le profil directement
       // (plutôt qu'un invalidateQueries, sans effet si la query "me" a été retirée du cache par
       // un logout précédent via removeQueries — invalider une entrée absente ne la recrée pas).
@@ -141,8 +143,8 @@ export function useLogoutMutation() {
     mutationFn: () => authApi.logout(),
     onSettled: () => {
       clear();
-      queryClient.removeQueries({ queryKey: authQueryKeys.me });
-      queryClient.removeQueries({ queryKey: notificationQueryKeys.root });
+      // Tout le cache est vidé (listes de devis, dépenses, contrats... de l'utilisateur qui part), pas seulement le profil
+      queryClient.clear();
       logger.log("Déconnexion effectuée.");
     },
   });

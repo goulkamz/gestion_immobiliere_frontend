@@ -20,7 +20,12 @@ export function AnnoncesTicker({ annonces }: AnnoncesTickerProps) {
 
   return (
     <div className="overflow-hidden border-b border-primary-100/70 bg-primary-50/70 py-2" aria-label="Dernières annonces">
-      <div className="flex w-max animate-[marquee_35s_linear_infinite] gap-10 motion-reduce:animate-none">
+      <div
+        className="flex w-max animate-[marquee_1s_linear_infinite] gap-10 motion-reduce:animate-none"
+        // Durée proportionnelle au nombre d'annonces : vitesse constante (~56 px/s), lisible
+        // quel que soit le nombre d'annonces (une durée fixe accélérait quand la liste grandissait).
+        style={{ animationDuration: `${repeated.length * 5}s` }}
+      >
         {items.map((annonce, index) => (
           <Link
             key={`${annonce.idAnnonce}-${index}`}

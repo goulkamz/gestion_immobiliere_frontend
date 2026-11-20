@@ -53,18 +53,13 @@ import {
   type RetirerDevisFormValues,
 } from "../schemas";
 import { CATEGORIE_DEPENSE_LABELS, CATEGORIES_DEPENSE, etalementLabel } from "@/utils/depense";
-import { DEVIS_STATUT_LABELS, STATUTS_DEVIS } from "@/utils/devis";
+import { DEVIS_COMPTEUR_LABELS, DEVIS_STATUT_LABELS, STATUTS_DEVIS } from "@/utils/devis";
 import { formatDate, formatMontant } from "@/utils/format";
 import type { DevisResponse, StatutDevis } from "@/api/types";
 
 // Compteurs : ce qui demande une action de l'agence ou attend le bailleur (les statuts clos restent dans le filtre)
-const STATUTS_COMPTEURS = ["EN_ATTENTE", "A_RENEGOCIER", "ACCEPTE", "REALISE"] as const;
-const LIBELLES_COMPTEURS: Partial<Record<StatutDevis, string>> = {
-  EN_ATTENTE: "En attente",
-  A_RENEGOCIER: "À renégocier",
-  ACCEPTE: "Acceptés",
-  REALISE: "Réalisés",
-};
+const STATUTS_COMPTEURS = STATUTS_DEVIS;
+const LIBELLES_COMPTEURS = DEVIS_COMPTEUR_LABELS;
 
 function aujourdhui(): string {
   return new Date().toISOString().slice(0, 10);

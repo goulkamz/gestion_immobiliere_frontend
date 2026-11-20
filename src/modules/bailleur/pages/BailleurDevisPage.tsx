@@ -20,17 +20,12 @@ import { useCompteursStatut } from "@/hooks/useCompteursStatut";
 import { useLigneCiblee } from "@/hooks/useLigneCiblee";
 import { reponseDevisSchema, type ReponseDevisFormInput, type ReponseDevisFormValues } from "../schemas";
 import { CATEGORIE_DEPENSE_LABELS, etalementLabel } from "@/utils/depense";
-import { DEVIS_STATUT_LABELS, STATUTS_DEVIS } from "@/utils/devis";
+import { DEVIS_COMPTEUR_LABELS, DEVIS_STATUT_LABELS, STATUTS_DEVIS } from "@/utils/devis";
 import { formatDate, formatMontant } from "@/utils/format";
 import type { DevisResponse, StatutDevis } from "@/api/types";
 
-const STATUTS_COMPTEURS = ["EN_ATTENTE", "A_RENEGOCIER", "ACCEPTE", "REALISE"] as const;
-const LIBELLES_COMPTEURS: Partial<Record<StatutDevis, string>> = {
-  EN_ATTENTE: "À valider",
-  A_RENEGOCIER: "À renégocier",
-  ACCEPTE: "Acceptés",
-  REALISE: "Réalisés",
-};
+const STATUTS_COMPTEURS = STATUTS_DEVIS;
+const LIBELLES_COMPTEURS: Record<StatutDevis, string> = { ...DEVIS_COMPTEUR_LABELS, EN_ATTENTE: "À valider" };
 
 type Reponse = "renegocier" | "rejeter";
 

@@ -51,7 +51,7 @@ export function Carousel({ children, ariaLabel, autoplayMs = 3500 }: CarouselPro
         type="button"
         onClick={() => scrollByStep(-1)}
         aria-label="Précédent"
-        className="absolute left-1 top-1/2 flex -translate-y-1/2 items-center justify-center rounded-full border border-primary-100/70 bg-white/95 p-1.5 text-primary-700 shadow-md transition-colors hover:bg-primary-600 hover:text-white sm:p-2"
+        className="absolute left-1 top-1/2 hidden sm:flex -translate-y-1/2 items-center justify-center rounded-full border border-primary-100/70 bg-white/95 p-1.5 text-primary-700 shadow-md transition-colors hover:bg-primary-600 hover:text-white sm:p-2"
       >
         <ChevronLeft size={16} className="sm:hidden" />
         <ChevronLeft size={18} className="hidden sm:block" />
@@ -60,7 +60,7 @@ export function Carousel({ children, ariaLabel, autoplayMs = 3500 }: CarouselPro
         type="button"
         onClick={() => scrollByStep(1)}
         aria-label="Suivant"
-        className="absolute right-1 top-1/2 flex -translate-y-1/2 items-center justify-center rounded-full border border-primary-100/70 bg-white/95 p-1.5 text-primary-700 shadow-md transition-colors hover:bg-primary-600 hover:text-white sm:p-2"
+        className="absolute right-1 top-1/2 hidden sm:flex -translate-y-1/2 items-center justify-center rounded-full border border-primary-100/70 bg-white/95 p-1.5 text-primary-700 shadow-md transition-colors hover:bg-primary-600 hover:text-white sm:p-2"
       >
         <ChevronRight size={16} className="sm:hidden" />
         <ChevronRight size={18} className="hidden sm:block" />

@@ -25,9 +25,9 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
 };
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  sm: "h-8 px-3.5 text-sm gap-1.5",
-  md: "h-10 px-5 text-sm gap-2",
-  lg: "h-12 px-7 text-base gap-2",
+  sm: "min-h-8 py-1 px-3.5 text-sm gap-1.5",
+  md: "min-h-10 py-1.5 px-5 text-sm gap-2",
+  lg: "min-h-12 py-2 px-7 text-base gap-2",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
@@ -50,7 +50,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <button
       ref={ref}
       disabled={isDisabled}
-      className={`inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full font-medium transition-all disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${fullWidth ? "w-full" : ""} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full text-center font-medium transition-all [&.flex-1]:min-w-0 [&.flex-1]:whitespace-normal [&.min-w-0]:whitespace-normal disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${fullWidth ? "w-full" : ""} ${className}`}
       {...rest}
     >
       {loading ? (

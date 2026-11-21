@@ -78,7 +78,7 @@ export function NotificationBell() {
         <div
           role="dialog"
           aria-label="Notifications"
-          className="absolute right-0 top-[calc(100%+6px)] z-40 w-80 max-w-[calc(100vw-2rem)] origin-top-right animate-[fade-up_0.15s_ease-out] overflow-hidden rounded-xl border border-primary-100/70 bg-white shadow-lg shadow-primary-900/10"
+          className="fixed inset-x-3 top-[4.25rem] z-40 origin-top animate-[fade-up_0.15s_ease-out] sm:absolute sm:inset-x-auto sm:right-0 sm:top-[calc(100%+6px)] sm:w-80 sm:origin-top-right sm:animate-[fade-up_0.15s_ease-out] overflow-hidden rounded-xl border border-primary-100/70 bg-white shadow-lg shadow-primary-900/10"
         >
           <div className="flex items-center justify-between border-b border-slate-100 px-4 py-2.5">
             <span className="text-sm font-semibold text-slate-800">Notifications</span>

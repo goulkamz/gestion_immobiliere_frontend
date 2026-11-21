@@ -158,7 +158,7 @@ export function HeroCarousel({ slides, children }: HeroCarouselProps) {
             type="button"
             onClick={() => go(-1)}
             aria-label="Diapositive précédente"
-            className="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/30 bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/25 sm:left-4 sm:p-2.5"
+            className="absolute left-2 top-1/2 z-10 hidden sm:block -translate-y-1/2 rounded-full border border-white/30 bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/25 sm:left-4 sm:p-2.5"
           >
             <ChevronLeft size={20} />
           </button>
@@ -166,7 +166,7 @@ export function HeroCarousel({ slides, children }: HeroCarouselProps) {
             type="button"
             onClick={() => go(1)}
             aria-label="Diapositive suivante"
-            className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border border-white/30 bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/25 sm:right-4 sm:p-2.5"
+            className="absolute right-2 top-1/2 z-10 hidden sm:block -translate-y-1/2 rounded-full border border-white/30 bg-white/10 p-2 text-white backdrop-blur-sm transition-colors hover:bg-white/25 sm:right-4 sm:p-2.5"
           >
             <ChevronRight size={20} />
           </button>

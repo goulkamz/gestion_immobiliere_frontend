@@ -50,7 +50,7 @@ export function PropertyCard({
         )}
         {/* Voile de bas d'image (dégradé opaque) : garantit la lisibilité du titre même si le texte et l'image partagent la même teinte */}
         <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-slate-950/95 via-slate-950/60 to-transparent px-4 pb-3 pt-12">
-          <h3 className="font-heading text-base font-semibold text-white [text-shadow:0_1px_3px_rgb(0_0_0/0.6)]">{title}</h3>
+          <h3 className="font-heading text-base font-semibold text-white [text-shadow:0_1px_3px_rgb(0_0_0/0.6)] line-clamp-2">{title}</h3>
           <p className="mt-0.5 line-clamp-1 text-xs text-white/90">{description}</p>
         </div>
       </div>
@@ -58,15 +58,15 @@ export function PropertyCard({
       <div className="flex flex-1 flex-col gap-3 p-4">
         <p className="font-semibold text-primary-700">{priceLabel}</p>
         <div className="mt-auto flex gap-2">
-          <Link to={detailHref} className="flex-1">
-            <Button variant="outline" size="sm" fullWidth icon={<Eye size={14} />}>
+          <Link to={detailHref} className="min-w-0 flex-1">
+            <Button variant="outline" size="sm" fullWidth className="px-2" icon={<Eye size={14} />}>
               Détail
             </Button>
           </Link>
           <Button
             variant="accent"
             size="sm"
-            className="flex-1"
+            className="min-w-0 flex-1 px-2"
             icon={actionKind === "contacter" ? <MessageCircle size={14} /> : <CalendarCheck size={14} />}
             onClick={onReserve}
           >

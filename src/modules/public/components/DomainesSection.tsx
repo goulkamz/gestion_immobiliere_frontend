@@ -14,7 +14,7 @@ export function DomainesSection() {
 
   return (
     <section
-      className="relative mt-8 overflow-hidden rounded-3xl bg-white p-6 shadow-sm ring-1 ring-primary-100/60 sm:p-8"
+      className="relative mt-8 overflow-hidden sm:rounded-3xl sm:bg-white sm:p-8 sm:shadow-sm sm:ring-1 sm:ring-primary-100/60"
       aria-labelledby="domaines-title"
     >
       <div className="relative mb-8 text-center">

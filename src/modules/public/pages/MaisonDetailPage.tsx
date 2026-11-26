@@ -51,7 +51,7 @@ export function MaisonDetailPage() {
 
         <MediaGallery items={medias.isLoading ? [] : medias.items.length > 0 ? medias.items : getMaisonGallery(maison.idMaison)} alt={title} />
 
-        <div className="mt-6 rounded-2xl border border-primary-100/60 bg-white p-6 shadow-sm">
+        <div className="mt-6 sm:rounded-2xl sm:border sm:border-primary-100/60 sm:bg-white sm:p-6 sm:shadow-sm">
           <StatutBadge statut={maison.statut} />
           <h1 className="mt-2 font-heading text-2xl font-bold text-slate-900 md:text-3xl">{title}</h1>
           <p className="text-slate-500">

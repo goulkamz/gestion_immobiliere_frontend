@@ -174,7 +174,7 @@ export function HeroCarousel({ slides, children }: HeroCarouselProps) {
       )}
 
       <div className="absolute inset-0 flex flex-col justify-center">
-        <div className="mx-auto w-full max-w-[1600px] px-6 sm:px-10 lg:px-16">
+        <div className="mx-auto w-full max-w-[1864px] px-4 sm:px-6 lg:px-8">
           <div
             key={index}
             className="w-full rounded-2xl bg-slate-950/25 p-6 text-center backdrop-blur-sm md:bg-transparent md:p-0 md:backdrop-blur-none"

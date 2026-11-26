@@ -146,7 +146,7 @@ export function HomePage() {
       </HeroCarousel>
 
       {/* Statistiques clés : cartes flottantes qui chevauchent le bas du hero */}
-      <div className="relative z-10 mx-auto -mt-10 max-w-[1600px] px-6 sm:-mt-14 sm:px-10 lg:px-16">
+      <div className="relative z-10 mx-auto -mt-10 max-w-[1864px] px-4 sm:-mt-14 sm:px-6 lg:px-8">
         <section aria-labelledby="stats-title">
           <h2 id="stats-title" className="sr-only">
             Chiffres clés
@@ -168,7 +168,7 @@ export function HomePage() {
 
       <PageLayout>
         {/* Annonces à la une */}
-        <section className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-primary-100/60 sm:p-8" aria-labelledby="annonces-title">
+        <section className="sm:rounded-3xl sm:bg-white sm:p-8 sm:shadow-sm sm:ring-1 sm:ring-primary-100/60" aria-labelledby="annonces-title">
           <SectionHeader
             kicker="Actualité"
             title="Annonces à la une"
@@ -200,7 +200,7 @@ export function HomePage() {
         {/* Catégories populaires */}
         {categoryGroups.length > 0 && (
           <section
-            className="mt-8 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-primary-100/60 sm:p-8"
+            className="mt-8 sm:rounded-3xl sm:bg-white sm:p-8 sm:shadow-sm sm:ring-1 sm:ring-primary-100/60"
             aria-labelledby="categories-title"
           >
             <SectionHeader
@@ -213,14 +213,14 @@ export function HomePage() {
         )}
 
         {/* Comment ça marche */}
-        <section className="mt-8 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-primary-100/60 sm:p-8" aria-labelledby="steps-title">
+        <section className="mt-8 sm:rounded-3xl sm:bg-white sm:p-8 sm:shadow-sm sm:ring-1 sm:ring-primary-100/60" aria-labelledby="steps-title">
           <SectionHeader kicker="Processus" title="Comment ça marche" />
           <HowItWorks steps={STEPS} />
         </section>
 
         {/* Derniers biens ajoutés */}
         <section
-          className="mt-8 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-primary-100/60 sm:p-8"
+          className="mt-8 sm:rounded-3xl sm:bg-white sm:p-8 sm:shadow-sm sm:ring-1 sm:ring-primary-100/60"
           aria-labelledby="derniers-title"
         >
           <SectionHeader

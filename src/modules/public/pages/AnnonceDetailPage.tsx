@@ -32,7 +32,7 @@ export function AnnonceDetailPage() {
 
       <MediaGallery items={medias.isLoading ? [] : medias.items.length > 0 ? medias.items : getAnnonceGallery(annonce.idAnnonce)} alt={annonce.titre} />
 
-      <div className="mt-6 rounded-2xl border border-primary-100/60 bg-white p-6 shadow-sm">
+      <div className="mt-6 sm:rounded-2xl sm:border sm:border-primary-100/60 sm:bg-white sm:p-6 sm:shadow-sm">
         <Badge variant={statutToBadgeVariant(annonce.statut)}>{annonce.statut}</Badge>
         <h1 className="mt-2 font-heading text-2xl font-bold text-slate-900 md:text-3xl">{annonce.titre}</h1>
         {annonce.localisation && <p className="text-slate-500">{annonce.localisation}</p>}

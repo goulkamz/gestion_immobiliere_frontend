@@ -91,7 +91,7 @@ export function Modal({ isOpen, onClose, title, size = "md", footer, closeOnOver
       className="fixed inset-0 z-40 overflow-y-auto bg-slate-900/50"
       onClick={closeOnOverlay ? onClose : undefined}
     >
-      <div className="flex min-h-full items-center justify-center p-4">
+      <div className="flex min-h-full items-center justify-center p-2 sm:p-4">
       <div
         ref={dialogRef}
         role="dialog"
@@ -102,7 +102,7 @@ export function Modal({ isOpen, onClose, title, size = "md", footer, closeOnOver
         className={`w-full ${SIZE_CLASSES[size]} rounded-xl bg-white shadow-xl`}
       >
         <div
-          className={`flex items-center justify-between px-5 py-4 ${
+          className={`flex items-center justify-between px-4 py-4 sm:px-5 ${
             titleTone === "indigo"
               ? "rounded-t-xl bg-linear-to-br from-primary-700 to-primary-900"
               : "border-b border-slate-100"
@@ -127,8 +127,8 @@ export function Modal({ isOpen, onClose, title, size = "md", footer, closeOnOver
             <X size={20} />
           </button>
         </div>
-        <div className="px-5 py-4">{children}</div>
-        {footer && <div className="flex justify-end gap-3 border-t border-slate-100 px-5 py-4">{footer}</div>}
+        <div className="px-4 py-4 sm:px-5">{children}</div>
+        {footer && <div className="flex justify-end gap-3 border-t border-slate-100 px-4 py-4 sm:px-5">{footer}</div>}
       </div>
       </div>
     </div>

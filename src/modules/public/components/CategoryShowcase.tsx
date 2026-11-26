@@ -30,15 +30,15 @@ export function CategoryShowcase({ groups }: CategoryShowcaseProps) {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {groups.map((group) => (
-        <div key={group.label} className="rounded-2xl border border-primary-100/60 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex items-end justify-between">
-            <div>
+        <div key={group.label} className="rounded-2xl border border-primary-100/60 bg-white p-3 shadow-sm sm:p-5">
+          <div className="mb-4 flex items-end justify-between gap-3">
+            <div className="min-w-0">
               <h3 className="font-heading text-lg font-semibold text-slate-900">{group.label}</h3>
               <p className="text-sm text-slate-500">
                 {group.items.length} bien{group.items.length > 1 ? "s" : ""} disponible{group.items.length > 1 ? "s" : ""}
               </p>
             </div>
-            <ArrowLink to="/catalogue?tab=biens-services">Voir tout</ArrowLink>
+            <ArrowLink to="/catalogue?tab=biens-services" className="shrink-0 whitespace-nowrap">Voir tout</ArrowLink>
           </div>
           <Carousel ariaLabel={`Catégorie ${group.label}`} autoplayMs={2800}>
             {group.items.map((bien) => (

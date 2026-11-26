@@ -17,7 +17,7 @@ export function Footer() {
 
   return (
     <footer className="bg-linear-to-br from-primary-800 via-primary-900 to-primary-950 text-primary-100">
-      <div className="mx-auto grid max-w-[1600px] gap-8 px-5 py-12 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="mx-auto grid max-w-[1864px] gap-8 px-4 py-12 sm:px-6 lg:px-8 sm:grid-cols-2 lg:grid-cols-5">
         <div>
           <div className="flex items-center gap-2 font-heading text-lg font-bold text-white">
             <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-linear-to-br from-primary-500 to-primary-700 text-white shadow-sm">
@@ -161,7 +161,7 @@ export function Footer() {
       {/* Partenaires */}
       {partenaires.length > 0 && (
         <div className="border-t border-white/10">
-          <div className="mx-auto max-w-[1600px] px-5 py-8">
+          <div className="mx-auto max-w-[1864px] px-4 py-8 sm:px-6 lg:px-8">
             <h2 className="text-center text-[13px] font-semibold uppercase tracking-wider text-white">
               Nos partenaires
             </h2>
@@ -178,8 +178,8 @@ export function Footer() {
         </div>
       )}
 
-      <div className="border-t border-white/10 px-5 py-4">
-        <div className="mx-auto flex max-w-[1600px] flex-col items-center gap-2 sm:flex-row sm:justify-between">
+      <div className="border-t border-white/10 px-4 py-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[1864px] flex-col items-center gap-2 sm:flex-row sm:justify-between">
           <p className="text-[13px] text-white/80">
             © {year} GestImmo. Tous droits réservés.
           </p>

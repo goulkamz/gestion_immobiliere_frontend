@@ -74,6 +74,6 @@ interface CarouselItemProps {
   widthClassName?: string;
 }
 
-export function CarouselItem({ children, widthClassName = "w-[78%] sm:w-[45%] lg:w-[31%]" }: CarouselItemProps) {
+export function CarouselItem({ children, widthClassName = "w-[85%] sm:w-[45%] lg:w-[31%]" }: CarouselItemProps) {
   return <div className={`shrink-0 snap-start ${widthClassName}`}>{children}</div>;
 }

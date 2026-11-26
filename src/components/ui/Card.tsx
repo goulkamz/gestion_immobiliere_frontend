@@ -18,7 +18,7 @@ export function Card({ title, subtitle, icon, footer, hoverable, clickable, onCl
     <Component
       onClick={onClick}
       type={clickable ? "button" : undefined}
-      className={`w-full rounded-xl border border-slate-200 bg-white p-5 text-left shadow-sm transition-shadow ${
+      className={`w-full rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm sm:p-5 transition-shadow ${
         hoverable || clickable ? "hover:shadow-md" : ""
       } ${className}`}
     >

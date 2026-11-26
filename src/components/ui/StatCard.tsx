@@ -24,17 +24,17 @@ const TONE_CLASSES: Record<StatCardTone, string> = {
 /** Carte statistique façon tableau de bord : badge d'icône circulaire plein, valeur en avant, libellé discret en dessous. */
 export function StatCard({ label, value, icon, tone = "primary", detail, compact = false }: StatCardProps) {
   return (
-    <div className={`flex items-center rounded-2xl border border-primary-100/60 bg-white shadow-sm ${compact ? "gap-3 p-4" : "gap-4 p-5"}`}>
+    <div className={`flex items-center rounded-2xl border border-primary-100/60 bg-white shadow-sm ${compact ? "gap-3 p-4" : "gap-3 p-4 sm:gap-4 sm:p-5"}`}>
       {icon && (
         <span
-          className={`flex shrink-0 items-center justify-center rounded-full text-white ${compact ? "h-10 w-10" : "h-12 w-12"} ${TONE_CLASSES[tone]}`}
+          className={`flex shrink-0 items-center justify-center rounded-full text-white ${compact ? "h-10 w-10" : "h-10 w-10 sm:h-12 sm:w-12"} ${TONE_CLASSES[tone]}`}
         >
           {icon}
         </span>
       )}
       <div className="min-w-0">
         <p className={`font-heading font-bold text-slate-900 ${String(value).length > 10 ? "text-xl" : "text-2xl"}`}>{value}</p>
-        <p className={`text-xs text-slate-500 ${compact ? "leading-tight" : "truncate"}`}>{label}</p>
+        <p className={`text-xs leading-tight text-slate-500`}>{label}</p>
         {detail && <p className="text-xs font-medium text-accent-700">{detail}</p>}
       </div>
     </div>

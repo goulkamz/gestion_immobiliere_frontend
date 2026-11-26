@@ -26,7 +26,7 @@ export function HowItWorks({ steps }: HowItWorksProps) {
         return (
           <div
             key={step.title}
-            className={`relative overflow-hidden rounded-2xl border-t-4 bg-white p-6 shadow-sm ${accent.border}`}
+            className={`relative overflow-hidden rounded-2xl border-t-4 bg-white p-5 shadow-sm sm:p-6 ${accent.border}`}
           >
             <span
               className={`pointer-events-none absolute -right-2 -top-6 font-heading text-8xl font-black leading-none ${accent.ghost}`}

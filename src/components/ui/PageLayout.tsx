@@ -14,7 +14,7 @@ export function PageLayout({ children, narrow = false, decorated = false, backgr
   return (
     <main
       id="main-content"
-      className={`relative grow px-6 py-12 sm:px-10 lg:px-16 ${
+      className={`relative grow px-4 py-8 sm:px-6 sm:py-10 lg:px-8 ${
         decorated ? "overflow-hidden bg-white" : "bg-slate-50"
       }`}
     >
@@ -28,7 +28,7 @@ export function PageLayout({ children, narrow = false, decorated = false, backgr
           <div className="absolute inset-0 bg-white/60" />
         </div>
       )}
-      <div className={`relative mx-auto w-full ${narrow ? "max-w-3xl" : "max-w-[1600px]"}`}>{children}</div>
+      <div className={`relative mx-auto w-full ${narrow ? "max-w-3xl" : "max-w-[1800px]"}`}>{children}</div>
     </main>
   );
 }
